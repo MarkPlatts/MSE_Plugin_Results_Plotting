@@ -13,40 +13,6 @@ plot_type = function(type2plot) {
   
   params = initialise_params()
   
-  #OBSELETE ================================================================================================
-  #mods  <- (unique(results$Model))                  # 294 models
-  #gnames<- as.character(unique(results$GroupName))# 77 groups: 1=Baleen whales, 65=Phytoplankton. 66-77 fleets, n-1 AllGroups, n AllFleets
-  #gnames<- as.character(results$GroupName[c(14,18,16,29,31)])
-  #gnames<- c(gnames, "AllGroups", "AllFleets")
-  #vars  <- as.character(unique(results$Variable)) # 6 Variables: "BiomassMin" "BiomassEnd" "Landings" "DiscardMortalities" "DiscardSurvivals" "TotalEndValue"
-  #OBSELETE ================================================================================================
-
-  #OBSELETE ================================================================================================
-  ###Trajectories by MODEL run
-  #m<-mods[1]
-  #read a model
-  #setwd(paste(params$RootPath,"\\Biomass",sep=''))
-  #biomass.filenames = list.files("Biomass")
-  
-  #path<-paste("Biomass\\",biomass.filenames[m],sep='')
-  #mod<-read.csv(path,skip=6, head=T, fill=T)              #monthly time-series
-  #mod<-read.table(path, skip=7, header = TRUE, fill = TRUE,sep=",",as.is =T)
-  #nyrs <- (ncol(mod)-4)/12 # num yrs
-  
-  #take only january values
-  #mod<-mod[,c(1:4,4+seq(1,nyrs*12,12))]          #dec values would be  mod[,3+seq(12,nyrs*12,12)]
-  #mod[62:67,1:5] #inspect
-  #mod[1:2,1:5] #info
-  
-  #### mortalities
-  #setwd("Y:\\WP1 Tradeoffs in mixed fisheries\\NSea Multiannual Plan\\Evaluation\\STECF Results 1000_30 years_SR_final\\")
-  #setwd("Y:\\WP1 Tradeoffs in mixed fisheries\\NSea Multiannual Plan\\Evaluation\\STECF Results 1000_30 years_SR\\")
-  #setwd("params$RootPath"); g <- list.files("Trajectories2"); params$strats<- c("HCR_HighF_Highest value","HCR_LowF_Highest value")
-  #OBSELETE ================================================================================================
-  
-  
-
-  
   if(type2plot==1){
     params$MORT_HCRF_Cons <- T;  if(params$MORT_HCRF_Cons) {setwd("HCRF_Cons");params$YLAB<-"F";print("Plotting MORT_HCRF_Cons")} # what are these?
   }
@@ -105,10 +71,6 @@ plot_type = function(type2plot) {
     strat2name = strat[strtoi(strat2)]
     print(strat1name)
     print(strat2name)
-    #params$Groups2Plot = c(14,16,18,29, 78)
-    #params$Groups2Plot = 14
-    #params$Fleets2Plot = c(67:77, 79)
-    #params$Fleets2Plot = c(67:68)
     print("Comparing for groups: ")
     print(params$Groups2Plot)
     print("Compare for fleets: ")

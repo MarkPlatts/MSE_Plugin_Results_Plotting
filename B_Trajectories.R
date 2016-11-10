@@ -13,59 +13,6 @@ plot_biomass_trajectories <- function(params){
   #Create a vector of x vals at either yearly or monthly intervals
   TimeStepVals = get_timestep_vals(params$plot_each_timestep, params$StartRun_Year, params$EndRun_Year)
 
-  #This is used to figure out how many years to plot for
-  #params$nYrs <- (ncol(groupdat)-4)/12 # num yrs
-  
-  #setwd("Y:\\WP1 Tradeoffs in mixed fisheries\\NSea Multiannual Plan\\Evaluation\\STECF Results 1000_30 years_SR\\")
-  # Model Strategy  X1...months
-  #take jans   BIOMASS is 1991+forecast, RealisedF is just forecast
-  # if (!params$plot_each_timestep && !params$Plot_yearly_files) {groupdat<-groupdat[,c(1:4,4+seq(1,params$nYrs*12,12))]}          #dec values would be  groupdat[,3+seq(12,params$params$nYrs*12,12)]
-  # if (params$plot_each_timestep && !params$Plot_yearly_files) {groupdat<-groupdat[,c(1:4,4+seq(1,params$nYrs*12,1))]}
-  # groupdat[,-c(1:4)] <- groupdat[,-c(1:4)]*570000
-  # groupdat <- groupdat[,-which(names(groupdat)=="ResultType")]
-  # groupdat <- groupdat[,-which(names(groupdat)=="GroupName")]
-  # groupdat <- groupdat[,-which(names(groupdat)=="ModelID")]
-  #names(groupdat)[names(groupdat)=="StrategyName"]  <- "Strategy"
-  
-  #groupdat[62:66,1:5] #inspect
-  #groupdat[1:5,1:5] #info
-  
-  #plot group above for strategies
-  #strat_i <-1     #strat[1] is "CFP_TargetF_Highest value"
-  #data2plot<- groupdat[groupdat$Strategy %in% params$strats[strat_i],2:ncol(groupdat)]
-  #ymax = max(data2plot)
-  #colourful plot
-  # plot mean line
-  #browser()
-
-  # plot(TimeStepVals,apply(data2plot,2,mean),type='l',lwd=2,ylim=c(0,ymax*1.2),
-  #      main=paste(FILENAME,params$strats[strat_i],sep=' '),xlab='years',ylab="biomass (t)")
-  # # add all sims
-  # for(s in 1:nrow(data2plot)) lines(TimeStepVals,data2plot[s,],lwd=1,col=s)  
-  
-  #biomass trajectories
-  #graphics.off() #par(mfrow=c(5,6),mar=c(2,2,4,2),oma=c(1,1,3,1))
-  
-  ## Strategies to plot
-  #3          CFP_FIXEDTargetF_Highest value
-  #5          CFP_FIXEDTargetF_Weakest stock
-  #8          HCR_HighF_Weakest stock
-  #9          HCR_LowF_Weakest stock
-  #10        HCR_TargetF_Highest value
-  #12        HCR_TargetF_Weakest stock
-  #params$strats<- params$strats
-  #params$strats<- strat[c(3,5,8,9,10,12)]
-  #all biomass trajectories
-  #WRITE<-F
-  #SAVE<-T
-  #graphics.off()#par(mfrow=c(5,6),mar=c(2,2,4,2),oma=c(1,1,3,1))
-  #COL = rep(1:8,10)[1:length(params$strat)]
-  #LTY<- c(rep(1,8),rep(2,8),rep(3,8),rep(4,8),rep(5,8),rep(6,8))[1:length(params$strats)]; #params$LTY[1:6] <- params$COL[6:1]
-  #params$LEGEND<-T
-  #params$strats <- as.character(unique(params$strats))  # 10 strategies
-  #setwd(params$RootPath)
-  #setwd("Y:\\WP1 Tradeoffs in mixed fisheries\\NSea Multiannual Plan\\Evaluation\\STECF Results 1000_30 years_SR_additionalruns\\"); g <- list.files("Trajectories2"); params$strat<- c("HCR_HighF_Highest value","HCR_LowF_Highest value")
-  
   for(G in g){
     
     #Get the filename to be used to check whether yearly in name, to name files of plots and to add text to plots
@@ -180,27 +127,17 @@ plot_biomass_trajectories <- function(params){
     }
     
     title(c("Biomass trajectory (mean) by strategy",FILENAME),font.main=20)#only individual plots
-    #       if(params$LEGEND){
-    #         if(FILENAME %in% c("Blue whiting_GroupNo22","Seabirds_GroupNo4","Gurnards_GroupNo27")){
-    #           legend('bottomleft',strat,col = params$COL,lty =params$LTY,inset=0,cex=0.65,lwd=1,text.font=20)
-    #         } else { legend('bottomright',strat,col = params$COL,lty =params$LTY,inset=0,cex=0.65,lwd=1,text.font=20) }
-    #       }
     if(params$LEGEND){
       if (params$COMPARE_STRATEGIES) {
         legend('topright',c(strat1name,strat2name),col = params$COL,lty =params$LTY,inset=c(-0.72,0),pt.cex = 1,cex=0.5,lwd=1,text.font=3)
       } else {
         legend('topright',params$strats,col = params$COL,lty =params$LTY,inset=c(-0.72,-0.2),lwd=1,text.font=3,pt.cex = 1,cex=0.5)
       }
-      #legend("topright",legend=params$strats,inset=c(-0.2,0), pch=c(1,3), title="Group")
-      #legend('bottomright',params$strats,col = params$COL,lty =params$LTY,inset=c(-0.4,0),cex=0.65,lwd=1,text.font=3)
     }
     
-    
-    #if(params$SAVE) savePlot(paste("OUTPUT_GROUP_FIGS//",FILENAME,"_PERCS.pdf",sep=""),type='pdf')
     graphics.off()
     
     if(params$WRITE) write.csv(PERCS[,-1],paste("OUTPUT_percentiles//",FILENAME,"_PERCS.csv",sep=""))
   }
-  #if(!params$SAVE) dev.off()
   graphics.off()
 }

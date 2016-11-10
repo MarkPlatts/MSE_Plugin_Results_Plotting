@@ -8,15 +8,9 @@ plot_effort_trajectories <- function(params){
   TimeStepVals = get_timestep_vals(params$plot_each_timestep, params$StartRun_Year, params$EndRun_Year)
   
   g <- list.files()     # which groups are there?
-  #gnum <- 2    #g[6] is "Cod (adult)_GroupNo14.csv"
-  #FILENAME <- substr(g[gnum],1,nchar(g[gnum])-4)
-  #groupdat <- read.csv(g[gnum],skip=6, head=T)
   
   SUMMARYPLOT<-T
   SAVE_ONLY_SUMMARY<-F
-  
-  
-  ###Fleet Trajectories
   
   for (G in g){
     
@@ -47,11 +41,6 @@ plot_effort_trajectories <- function(params){
     names(effortdat)[names(effortdat)=="StrategyName"]  <- "Strategy"
     
     graphics.off()
-    
-
-    
-    
-    #effortdat <- effort[effort$FleetName == GROUP,c(1,3:ncol(effort))]
 
     PERCS<-MDNS<- LOWS<- UPPS<- MEANS<- data.frame(year=TimeStepVals,row.names =TimeStepVals)
     if(!SUMMARYPLOT) par(mfrow=c(3,4),mar=c(2,2,4,1),oma=c(1,1,3,1))
@@ -80,19 +69,6 @@ plot_effort_trajectories <- function(params){
       perc<-apply(data2plot,2, FUN=function(x){quantile(x,probs=c(0.025,0.5,0.975),na.rm=T)})
       #for(i in 1:2) lines(params$StartRun_Year:End,perc[i,],lwd=4,col='dark blue',lty=1) 
       perc<-rbind(perc, apply(data2plot,2, FUN=mean) )
-      
-      #           if(!SUMMARYPLOT){#do all
-      #             #grey poly
-      #             if(strat_i==1) YMAX<- 1.25*(max(perc))
-      #             plot(params$params$StartRun_YearRun_Year:(params$EndRun_Year-1),perc[4,],type='l',lwd=2,ylim=c(0,YMAX),
-      #                  main=STRAT,xlab='years',ylab="relative effort (mean)")
-      #             polygon(c(params$params$StartRun_YearRun_Year:(params$EndRun_Year-1),params$StartRun_Year:(params$EndRun_Year-1)), c(perc[1,],perc[3,ncol(perc):1]),
-      #                     col=c("grey"), border=c("grey"), lwd=1, lty=c("solid"))
-      #             # add heavy mean line
-      #             lines(params$StartRun_Year:(params$EndRun_Year-1),perc[4,],lwd=2,col=COL[strat_i],lty=LTY[strat_i])
-      #           }
-      
-      #save percs
       
       LOWS<- cbind(LOWS,perc[1,]);   names(LOWS)[ncol(LOWS)]<-STRAT
       MDNS<- cbind(MDNS,perc[2,]);   names(MDNS)[ncol(MDNS)]<-STRAT
@@ -138,8 +114,6 @@ plot_effort_trajectories <- function(params){
         #legend('topright',params$strats,col = params$COL,lty =params$LTY,inset=c(-0.5,0),lwd=1,text.font=3,pt.cex = 1,cex=0.5)
         legend('topright',params$strats,col = params$COL,lty =params$LTY,inset=c(params$legend_x_inset2,-0.2),lwd=1,text.font=3,pt.cex = 1,cex=0.5)
       }
-      #legend("topright",legend=params$strats,inset=c(-0.2,0), pch=c(1,3), title="Group")
-      #legend('bottomright',params$strats,col = params$COL,lty =params$LTY,inset=c(-0.4,0),cex=0.65,lwd=1,text.font=3)
     }
     
     if(params$SAVE & !SUMMARYPLOT){
@@ -157,13 +131,6 @@ plot_effort_trajectories <- function(params){
     if(!params$SAVE & !SUMMARYPLOT) title(FILENAME,font.main=20)
     
     if(params$WRITE) write.csv(PERCS[,-1],paste("OUTPUT_GEARSbySTRATEGIES//",FILENAME,"_PERCS.csv",sep=""))
-    
-    #         if(params$SAVE & SUMMARYPLOT & !SAVE_ONLY_SUMMARY){  title(FILENAME,font.main=20)
-    #           mtext("effort trajectory (median) by strategy",side=3,outer=T,font=20)
-    #           plot(0,0,axes=F,col="white",ylab="",xlab="")
-    #           legend('bottomright',params$strats,col = params$COL,lty =params$LTY,inset=0,cex=.6,lwd=1,text.font=20)
-    #           #savePlot(paste("OUTPUT_GEARSbySTRATEGIES//FLEET_summary.pdf",sep=""),type='pdf')
-    #         }
     
     graphics.off()
     
