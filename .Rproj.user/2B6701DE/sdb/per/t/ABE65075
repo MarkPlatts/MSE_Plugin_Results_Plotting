@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "create.plot.dirs = function(){\n  FolderNames = c(\"OUTPUT_GEARSGROUPSbySTRATEGIES\", \"OUTPUT_GROUP_FIGS\", \"OUTPUT_COMPARE_STRATS\", \n                  \"OUTPUT_GEARSbySTRATEGIES\", \"OUTPUT_HIGHEST_CHOKE_FIGS\", \"OUTPUT_percentiles\")\n  for (iFolder in FolderNames){\n    #browser()\n    if (!dir.exists(paste(plot.path,iFolder,sep=\"\"))){\n      dir.create(paste(plot.path,iFolder,sep=\"\"))\n    }\n  }\n}\n\nread_biom_refs = function(biom_refs, group, ref_type)\n{\n  group = as.character(group)\n  e_blim = 2\n  e_bpa = 3\n  #load up the file with the values in\n  for(iRow in 1:(dim(biom_refs)[1])){\n    if(group == biom_refs[iRow,1]){\n      if (ref_type == \"blim\") return (biom_refs[iRow, e_blim])\n      if (ref_type == \"bpa\") return (biom_refs[iRow, e_bpa])\n      break\n    }\n    if (iRow == (dim(biom_refs)[1])){\n      print (\"Did not find the group specified\")\n      return (NA)\n    }\n  }\n}",
+    "created" : 1478670532367.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1754023507",
+    "id" : "ABE65075",
+    "lastKnownWriteTime" : 1478518487,
+    "last_content_update" : 1478518487,
+    "path" : "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/R Code/Plotting Trajectories post Jan 2016/Plotting_Trajectores_Project_2016/plot_tools.R",
+    "project_path" : "plot_tools.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 7,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
