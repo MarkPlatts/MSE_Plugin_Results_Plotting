@@ -1,14 +1,14 @@
-setwd("C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting/")
-source("B_Trajectories.R")
-source("F_Trajectories.R")
-source("Value_Trajectories.R")
-source("Effort_Trajectories.R")
-source("ChokePie.R")
-source("HighestValuePie.R")
-source("plot_tools.R")
-source("share_tools.R")
-
 plot_type = function(type2plot) {
+  
+  setwd("C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting/")
+  source("B_Trajectories.R")
+  source("F_Trajectories.R")
+  source("Value_Trajectories.R")
+  source("Effort_Trajectories.R")
+  source("ChokePie.R")
+  source("HighestValuePie.R")
+  source("plot_tools.R")
+  source("share_tools.R")
   
   params = initialise_params()
 
@@ -104,7 +104,7 @@ plot_type = function(type2plot) {
 
 }  
 
-for(iplot in c(13)){
+for(iplot in c(11,13)){
   print(paste("Currently plotting type", iplot))
   plot_type(iplot)
 }

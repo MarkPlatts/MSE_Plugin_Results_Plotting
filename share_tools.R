@@ -1,3 +1,17 @@
+initialise_plotting = function(folder_name, params){
+  #init plotting params
+  plotting_params = list()
+  
+  #reset the director
+  setwd(paste(params$RootPath,"\\",folder_name, sep=''))
+  
+  #get a list of all the files in the Biomass folder
+  plotting_params$g <- list.files()
+  
+  return(plotting_params)
+}
+
+
 get_timestep_vals = function(plotmonthly, start_year, end_year){
   if (plotmonthly){
     xvals=seq(start_year,end_year-1/12,1/12)
@@ -5,6 +19,7 @@ get_timestep_vals = function(plotmonthly, start_year, end_year){
     xvals = start_year:(end_year-1)
   }
 }
+
 
 IsIncorrectFileType_YearlyMonthly = function(FileName, plot_yearly){
   #Checks whether the filename given is incorrect given setting to either plot yearly or none yearly values
@@ -54,8 +69,8 @@ initialise_params = function(params){
   params$PLOT_CONFIDENCE_INTERVALS = F;
   params$Plot_yearly_files = T
   
-  params$plot.path = "C://Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/Yearly_Results HCR type1 and 3/Plots/"
-  params$RootPath =  "C://Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/Yearly_Results HCR type1 and 3/Results"
+  params$plot.path = "C://Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/withBiomassForcing_Yearly_Results HCR type1 and 3/Plots/"
+  params$RootPath =  "C://Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/withBiomassForcing_Yearly_Results HCR type1 and 3/Results"
   
   params$Base_NYears = 23
   params$Projected_NYears = 20
@@ -66,16 +81,16 @@ initialise_params = function(params){
   params$EndRun_Year = params$StartRun_Year + params$nYrs
   
   #Select groups and fleets to plot
-  # params$Groups2Plot = c("GroupNo16")
-  params$Groups2Plot = c("GroupNo16","GroupNo14","GroupNo18","GroupNo20","GroupNo21","GroupNo23","GroupNo29","GroupNo30",
-                  "GroupNo31","GroupNo33","GroupNo34","GroupNo38","GroupNo42","GroupNo22","GroupNo26","GroupNo32",
-                  "GroupNo35","GroupNo39","GroupNo41","GroupNo55")
-  #params$Fleets2Plot = c("FleetNo1")
-  params$Fleets2Plot = c("AllFleets", "FleetNo1", "FleetNo2", "FleetNo3", "FleetNo4", "FleetNo5", "FleetNo6", "FleetNo7",
-                 "FleetNo8", "FleetNo9", "FleetNo10", "FleetNo11", "FleetNo12")
+  params$Groups2Plot = c("GroupNo14")
+  #params$Groups2Plot = c("GroupNo16","GroupNo14","GroupNo18","GroupNo20","GroupNo21","GroupNo23","GroupNo29","GroupNo30",
+                  # "GroupNo31","GroupNo33","GroupNo34","GroupNo38","GroupNo42","GroupNo22","GroupNo26","GroupNo32",
+                  # "GroupNo35","GroupNo39","GroupNo41","GroupNo55")
+  params$Fleets2Plot = c("FleetNo2")
+  #params$Fleets2Plot = c("AllFleets", "FleetNo1", "FleetNo2", "FleetNo3", "FleetNo4", "FleetNo5", "FleetNo6", "FleetNo7",
+                 #"FleetNo8", "FleetNo9", "FleetNo10", "FleetNo11", "FleetNo12")
   
   setwd(params$RootPath)
-  
+
   ### Load results files to get unique strats
   results<-read.table("Results.csv",sep=',',skip=8,col.names=c("Model","Strategy","GroupID","GroupName","Variable","Value"), fill=T)
   results<-results[results$Strategy!="Z",]#odd one in _SR_final

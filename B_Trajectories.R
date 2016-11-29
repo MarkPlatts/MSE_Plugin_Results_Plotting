@@ -63,7 +63,10 @@ plot_biomass_trajectories <- function(params){
       
     }
     
-
+    #Extract reference points
+    GroupName = dat[1,1]
+    bpa = read_biom_refs(biom_refs, GroupName, "bpa") * 570
+    blim = read_biom_refs(biom_refs, GroupName, "blim") * 570
     
     #now summary plot
     #par(mar=c(5.1, 4.1, 4.1, 20), xpd=TRUE)
@@ -95,11 +98,6 @@ plot_biomass_trajectories <- function(params){
     }
     
     #plot the reference points
-    #read_biom_refs = function(biom_refs, group, ref_type)
-    GroupName = dat[1,1]
-    bpa = read_biom_refs(biom_refs, GroupName, "bpa") * 570
-    blim = read_biom_refs(biom_refs, GroupName, "blim") * 570
-    
     if(!is.na(bpa)){
       lines(c(TimeStepVals[1],TimeStepVals[length(TimeStepVals)]),c(bpa,bpa),col=1,lwd=0.5, lty=3)
       text(TimeStepVals[1]+1, bpa+0.05*y_upper, "Bpa", cex=0.5)
