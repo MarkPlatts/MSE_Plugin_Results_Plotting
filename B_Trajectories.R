@@ -53,12 +53,7 @@ plot_biomass_trajectories <- function(params){
       
       STRAT<-paste(params$strats[strat_i],sep=' ')
       
-      if(params$COMPARE_STRATEGIES){
-        if(strat1name!=STRAT && strat2name!=STRAT) next
-      }
-      
       #select subset of data
-      #browser()
       data2plot<- dat[dat$Strategy %in% STRAT,5:ncol(dat)]
       
       #quantiles for polygon plot
@@ -71,9 +66,6 @@ plot_biomass_trajectories <- function(params){
       UPPS<- cbind(UPPS,perc[3,]);   names(UPPS)[ncol(UPPS)]<-STRAT
       MEANS<- cbind(MEANS,perc[4,]);   names(MEANS)[ncol(MEANS)]<-STRAT
       
-      PERC<-data.frame(t(perc))
-      names(PERC) <- c(paste(STRAT,"LOW"),paste(STRAT,"MDN"),paste(STRAT,"UPP"),paste(STRAT,"MEAN"))
-      PERCS<- cbind(PERCS, PERC)
     }
     
     #plot the reference points
@@ -131,7 +123,6 @@ plot_biomass_trajectories <- function(params){
     
     graphics.off()
     
-    if(params$WRITE) write.csv(PERCS[,-1],paste("OUTPUT_percentiles//",FILENAME,"_PERCS.csv",sep=""))
   }
   graphics.off()
 }
