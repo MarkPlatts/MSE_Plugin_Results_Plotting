@@ -55,7 +55,7 @@ initialise_params = function(params){
   params$Plot_yearly_files = T
   
   params$plot.path = "C://Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/Yearly_Results HCR type1 and 3/Plots/"
-  params$RootPath = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/Yearly_Results HCR type1 and 3/Results"
+  params$RootPath =  "C://Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/Yearly_Results HCR type1 and 3/Results"
   
   params$Base_NYears = 23
   params$Projected_NYears = 20
@@ -66,15 +66,15 @@ initialise_params = function(params){
   params$EndRun_Year = params$StartRun_Year + params$nYrs
   
   #Select groups and fleets to plot
-  params$Groups2Plot = c("GroupNo16")
-  # params$Groups2Plot = c("GroupNo16","GroupNo14","GroupNo18","GroupNo20","GroupNo21","GroupNo23","GroupNo29","GroupNo30",
-  #                 "GroupNo31","GroupNo33","GroupNo34","GroupNo38","GroupNo42","GroupNo22","GroupNo26","GroupNo32",
-  #                 "GroupNo35","GroupNo39","GroupNo41","GroupNo55")
-  params$Fleets2Plot = c("FleetNo1")
-  #params$Fleets2Plot = c("AllFleets", "FleetNo1", "FleetNo2", "FleetNo3", "FleetNo4", "FleetNo5", "FleetNo6", "FleetNo7", 
-  #                "FleetNo8", "FleetNo9", "FleetNo10", "FleetNo11", "FleetNo12")
+  # params$Groups2Plot = c("GroupNo16")
+  params$Groups2Plot = c("GroupNo16","GroupNo14","GroupNo18","GroupNo20","GroupNo21","GroupNo23","GroupNo29","GroupNo30",
+                  "GroupNo31","GroupNo33","GroupNo34","GroupNo38","GroupNo42","GroupNo22","GroupNo26","GroupNo32",
+                  "GroupNo35","GroupNo39","GroupNo41","GroupNo55")
+  #params$Fleets2Plot = c("FleetNo1")
+  params$Fleets2Plot = c("AllFleets", "FleetNo1", "FleetNo2", "FleetNo3", "FleetNo4", "FleetNo5", "FleetNo6", "FleetNo7",
+                 "FleetNo8", "FleetNo9", "FleetNo10", "FleetNo11", "FleetNo12")
   
-  setwd(params$Root)
+  setwd(params$RootPath)
   
   ### Load results files to get unique strats
   results<-read.table("Results.csv",sep=',',skip=8,col.names=c("Model","Strategy","GroupID","GroupName","Variable","Value"), fill=T)

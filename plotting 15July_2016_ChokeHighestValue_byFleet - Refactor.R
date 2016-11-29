@@ -1,3 +1,4 @@
+setwd("C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting/")
 source("B_Trajectories.R")
 source("F_Trajectories.R")
 source("Value_Trajectories.R")
@@ -9,9 +10,9 @@ source("share_tools.R")
 
 plot_type = function(type2plot) {
   
-  create.plot.dirs()
-  
   params = initialise_params()
+
+  create.plot.dirs(params)
   
   if(type2plot==1){
     params$MORT_HCRF_Cons <- T;  if(params$MORT_HCRF_Cons) {setwd("HCRF_Cons");params$YLAB<-"F";print("Plotting MORT_HCRF_Cons")} # what are these?
@@ -103,7 +104,7 @@ plot_type = function(type2plot) {
 
 }  
 
-for(iplot in c(1:15)){
+for(iplot in c(13)){
   print(paste("Currently plotting type", iplot))
   plot_type(iplot)
 }

@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "source(\"C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting/share_tools.R\")\n\n### Generate tables for the risk-reward plots\n#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\ncreate_riskreward_table <- function(params){\n  \n  \n  \n}",
+    "created" : 1480349803680.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1279796550",
+    "id" : "D5F118DA",
+    "lastKnownWriteTime" : 1480390610,
+    "last_content_update" : 1480390610154,
+    "path" : "C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting/riskrewardtable.R",
+    "project_path" : "riskrewardtable.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

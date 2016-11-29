@@ -1,13 +1,17 @@
-source("C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/R Code/Plotting Trajectories post Jan 2016/Plotting_Trajectores_Project_2016/share_tools.R")
+source("C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting/share_tools.R")
 
 ###Value Trajectories
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 plot_effort_trajectories <- function(params){
+  
+  #reset the director
   setwd(paste(params$RootPath,"\\Effort", sep=''))
   
+  #Create a vector of x vals at either yearly or monthly intervals
   TimeStepVals = get_timestep_vals(params$plot_each_timestep, params$StartRun_Year, params$EndRun_Year)
   
-  g <- list.files()     # which groups are there?
+  #get a list of all the files in the Biomass folder
+  g <- list.files()
   
   SUMMARYPLOT<-T
   SAVE_ONLY_SUMMARY<-F

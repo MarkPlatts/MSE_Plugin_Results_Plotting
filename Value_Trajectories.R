@@ -1,18 +1,22 @@
-source("C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/R Code/Plotting Trajectories post Jan 2016/Plotting_Trajectores_Project_2016/share_tools.R")
-
+source("C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting/share_tools.R")
 ###Value Trajectories
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 plot_value_trajectories <- function(params){
+  
+  #reset the director
   setwd(paste(params$RootPath,"\\ValueTrajectories", sep=''))
   
-  g <- list.files()     # which groups are there?
+  #Create a vector of x vals at either yearly or monthly intervals
+  TimeStepVals = get_timestep_vals(params$plot_each_timestep, params$StartProjection_Year, params$EndRun_Year)
+  
+  #get a list of all the files in the Biomass folder
+  g <- list.files()
+  
+  
   gnum <- 2    #g[6] is "Cod (adult)_GroupNo14.csv"
   FILENAME <- substr(g[gnum],1,nchar(g[gnum])-4)
   
   groupdat <- read.csv(g[gnum],skip=6, head=T)
-  
-  #Create a vector of x vals at either yearly or monthly intervals
-  TimeStepVals = get_timestep_vals(params$plot_each_timestep, params$StartProjection_Year, params$EndRun_Year)
   
   COL = rep(1:8,10)[1:length(params$strat)]
   LTY<- c(rep(1,8),rep(2,8),rep(3,8),rep(4,8),rep(5,8),rep(6,8))[1:length(params$strat)] #LTY[1:6] <- COL[6:1]

@@ -1,4 +1,4 @@
-source("C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/R Code/Plotting Trajectories post Jan 2016/Plotting_Trajectores_Project_2016/share_tools.R")
+source("C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting/share_tools.R")
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 plot_fishing_trajectories <- function(params){
@@ -197,7 +197,7 @@ plot_fishing_trajectories <- function(params){
           lines(TimeStepVals,MEANS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)],lwd=params$lineweight)
         }
       }
-      Changed all the source paths from absolute path to relative path
+      #Changed all the source paths from absolute path to relative path
       if(any(params$MORT_REAL_F,params$MORT_REAL_LandF,params$MORT_REAL_DiscF)) title(c("F trajectory (mean) by strategy",FILENAME),font.main=20)#only individual plots   
       if(any(params$CATCH,params$DISCARD,params$LANDING))   title(c("Catch (mean) by strategy",FILENAME),font.main=20)
       if(any(params$MORT_HCRF_Cons,params$MORT_HCRF_Targ,params$QUOTA_HCRF_Cons,params$QUOTA_HCRF_Targ)) title(FILENAME,font.main=20)
