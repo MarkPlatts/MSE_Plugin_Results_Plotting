@@ -13,10 +13,10 @@ plot_effort_trajectories <- function(params){
   #get a list of all the files in the Biomass folder
   g <- list.files()
   
-  SUMMARYPLOT<-T
-  SAVE_ONLY_SUMMARY<-F
+  #SUMMARYPLOT<-T
+  #SAVE_ONLY_SUMMARY<-F
   
-  for (G in g){
+  for(G in g){
     
     #Get the filename to be used to check whether yearly in name, to name files of plots and to add text to plots
     FILENAME = substr(G,1,nchar(G)-4)
@@ -47,8 +47,8 @@ plot_effort_trajectories <- function(params){
     graphics.off()
 
     PERCS<-MDNS<- LOWS<- UPPS<- MEANS<- data.frame(year=TimeStepVals,row.names =TimeStepVals)
-    if(!SUMMARYPLOT) par(mfrow=c(3,4),mar=c(2,2,4,1),oma=c(1,1,3,1))
-    if(SAVE_ONLY_SUMMARY) par(mfrow=c(2,1),mar=c(1,4,3,1),oma=c(1,1,3,1))
+    #if(!SUMMARYPLOT) par(mfrow=c(3,4),mar=c(2,2,4,1),oma=c(1,1,3,1))
+    #if(SAVE_ONLY_SUMMARY) par(mfrow=c(2,1),mar=c(1,4,3,1),oma=c(1,1,3,1))
     
     if (params$SAVE) {
       if(!params$COMPARE_STRATEGIES) {
@@ -84,7 +84,7 @@ plot_effort_trajectories <- function(params){
       PERCS<- cbind(PERCS, PERC)
       
     } 
-    if(!SUMMARYPLOT) mtext(FILENAME, outer=T,side=3,font=2)
+    #if(!SUMMARYPLOT) mtext(FILENAME, outer=T,side=3,font=2)
     
     #summary plot
     par(mar=c(5.1, 4.1, 4.1, 12), xpd=TRUE)
@@ -93,7 +93,8 @@ plot_effort_trajectories <- function(params){
     for(i in 3:ncol(MEANS)) {
       lines(TimeStepVals,MEANS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)], lwd=1)
     }
-    if(params$SAVE & SUMMARYPLOT)  title(FILENAME,font.main=20)
+    #if(params$SAVE & SUMMARYPLOT)  title(FILENAME,font.main=20)
+    title(FILENAME,font.main=20)
     
     if(params$PLOT_CONFIDENCE_INTERVALS){
       plot(TimeStepVals,MEANS[,2],type='l',ylim=c(0,1.25*(max(MEANS[,-1],UPPS[,-1]))),lty=params$LTY[1],col=params$COL[1],ylab="relative effort (t)",xlab="year",font=20,lwd=params$lineweight)
@@ -120,21 +121,21 @@ plot_effort_trajectories <- function(params){
       }
     }
     
-    if(params$SAVE & !SUMMARYPLOT){
-      if(params$LEGEND) {plot(0,0,axes=F,col="white",ylab="",xlab="")
-        legend('bottomright',params$strats,col = params$COL,lty =params$LTY,inset=0,lwd=1,text.font=20,pt.cex = 1,cex=0.5)}
-      title("effort trajectory (mean) by strategy")
-      #savePlot(paste("OUTPUT_GEARSbySTRATEGIES//",FILENAME,"_PERCS.png",sep=""),type='png')
-    }
+    # if(params$SAVE & !SUMMARYPLOT){
+    #   if(params$LEGEND) {plot(0,0,axes=F,col="white",ylab="",xlab="")
+    #     legend('bottomright',params$strats,col = params$COL,lty =params$LTY,inset=0,lwd=1,text.font=20,pt.cex = 1,cex=0.5)}
+    #   title("effort trajectory (mean) by strategy")
+    #   #savePlot(paste("OUTPUT_GEARSbySTRATEGIES//",FILENAME,"_PERCS.png",sep=""),type='png')
+    # }
     
-    if(SAVE_ONLY_SUMMARY){
-      plot(0,0,axes=F,col="white",ylab="",xlab="")
-      legend('topright',params$strats,col = params$COL,lty =params$LTY,inset=0,lwd=1,text.font=20,pt.cex = 1,cex=0.5)
-      #savePlot(paste("OUTPUT_GEARSbySTRATEGIES//",FILENAME,"_SUMMARY.pdf",sep=""),type='pdf')
-    }
-    if(!params$SAVE & !SUMMARYPLOT) title(FILENAME,font.main=20)
+    # if(SAVE_ONLY_SUMMARY){
+    #   plot(0,0,axes=F,col="white",ylab="",xlab="")
+    #   legend('topright',params$strats,col = params$COL,lty =params$LTY,inset=0,lwd=1,text.font=20,pt.cex = 1,cex=0.5)
+    #   #savePlot(paste("OUTPUT_GEARSbySTRATEGIES//",FILENAME,"_SUMMARY.pdf",sep=""),type='pdf')
+    # }
+    #if(!params$SAVE & !SUMMARYPLOT) title(FILENAME,font.main=20)
     
-    if(params$WRITE) write.csv(PERCS[,-1],paste("OUTPUT_GEARSbySTRATEGIES//",FILENAME,"_PERCS.csv",sep=""))
+    #if(params$WRITE) write.csv(PERCS[,-1],paste("OUTPUT_GEARSbySTRATEGIES//",FILENAME,"_PERCS.csv",sep=""))
     
     graphics.off()
     
