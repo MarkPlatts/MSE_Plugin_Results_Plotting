@@ -36,13 +36,14 @@ plot_effort_trajectories <- function(params){
     
     
     #Load the data from the file represented by G
-    effortdat<-read.csv(G,skip=6, head=T)
+    dat<-read.csv(G,skip=7, head=T)
+    
     #Get the name of the fleet
-    FLEET<- as.character(unique(effortdat$FleetName))
+    #GroupName<- as.character(unique(dat$FleetName))
     
     #timeseries of FLEET effort by FleetNumber 1:12 for the 10 strategies
-    if(!params$plot_each_timestep & !params$Plot_yearly_files) effortdat<-effortdat[,c(1:3,4+seq(1,params$nyrs*12,12))] 
-    names(effortdat)[names(effortdat)=="StrategyName"]  <- "Strategy"
+    if(!params$plot_each_timestep & !params$Plot_yearly_files) dat<-dat[,c(1:3,4+seq(1,params$nyrs*12,12))] 
+    names(dat)[names(dat)=="StrategyName"]  <- "Strategy"
     
     graphics.off()
 
@@ -67,7 +68,7 @@ plot_effort_trajectories <- function(params){
       }
       
       #select subset of data
-      data2plot<- effortdat[effortdat$Strategy %in% STRAT,5:ncol(effortdat)]
+      data2plot<- dat[dat$Strategy %in% STRAT,5:ncol(dat)]
       
       #quantiles for polygon plot
       perc<-apply(data2plot,2, FUN=function(x){quantile(x,probs=c(0.025,0.5,0.975),na.rm=T)})

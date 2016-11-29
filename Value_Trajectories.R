@@ -16,7 +16,7 @@ plot_value_trajectories <- function(params){
   gnum <- 2    #g[6] is "Cod (adult)_GroupNo14.csv"
   FILENAME <- substr(g[gnum],1,nchar(g[gnum])-4)
   
-  groupdat <- read.csv(g[gnum],skip=6, head=T)
+  dat <- read.csv(g[gnum],skip=6, head=T)
   
   COL = rep(1:8,10)[1:length(params$strat)]
   LTY<- c(rep(1,8),rep(2,8),rep(3,8),rep(4,8),rep(5,8),rep(6,8))[1:length(params$strat)] #LTY[1:6] <- COL[6:1]
@@ -58,14 +58,14 @@ plot_value_trajectories <- function(params){
     }
     if (DontPlot==TRUE) next
     
-    groupdat<-read.csv(G,skip=6, head=T)
-    FLEET<- as.character(unique(groupdat$FleetName))
+    dat<-read.csv(G,skip=6, head=T)
+    FLEET<- as.character(unique(dat$FleetName))
     
     #timeseries of FLEET effort by FleetNumber 1:12 for the 10 strategies
-    if (!params$plot_each_timestep && !params$Plot_yearly_files) groupdat<-groupdat[,c(1:5,5+seq(1,params$Projected_NYears*12,12))] 
-    if (params$plot_each_timestep && !params$Plot_yearly_files) groupdat<-groupdat[,c(1:5,5+seq(1,params$Projected_NYears*12,1))] 
+    if (!params$plot_each_timestep && !params$Plot_yearly_files) dat<-dat[,c(1:5,5+seq(1,params$Projected_NYears*12,12))] 
+    if (params$plot_each_timestep && !params$Plot_yearly_files) dat<-dat[,c(1:5,5+seq(1,params$Projected_NYears*12,1))] 
     
-    names(groupdat)[names(groupdat)=="StrategyName"]  <- "Strategy"
+    names(dat)[names(dat)=="StrategyName"]  <- "Strategy"
     
     graphics.off()
     
@@ -98,7 +98,7 @@ plot_value_trajectories <- function(params){
       }
       
       #select subset of data
-      data2plot<- groupdat[groupdat$Strategy %in% STRAT,6:ncol(groupdat)]*570000
+      data2plot<- dat[dat$Strategy %in% STRAT,6:ncol(dat)]*570000
       
       #quantiles for polygon plot
       perc<-apply(data2plot,2, FUN=function(x){quantile(x,probs=c(0.025,0.5,0.975),na.rm=T)})

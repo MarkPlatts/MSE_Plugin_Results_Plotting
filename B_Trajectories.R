@@ -34,8 +34,8 @@ plot_biomass_trajectories <- function(params){
     if (DontPlot==TRUE) next
     
     #browser()
-    groupdat <- read.csv(paste(G,sep=''),skip=7, head=T)
-    GroupName = groupdat[1,1]
+    dat <- read.csv(paste(G,sep=''),skip=7, head=T)
+    GroupName = dat[1,1]
     
     
     if (params$SAVE) {
@@ -47,12 +47,12 @@ plot_biomass_trajectories <- function(params){
     }
     
     if(!params$plot_each_timestep && !params$Plot_yearly_files){
-      groupdat<-groupdat[,c(1:4,4+seq(1,params$params$nYrs*12,12))] 
+      dat<-dat[,c(1:4,4+seq(1,params$params$nYrs*12,12))] 
     } else if (params$plot_each_timestep && !params$Plot_yearly_files){
-      groupdat<-groupdat[,c(1:4,4+seq(1,params$params$nYrs*12,1))] 
+      dat<-dat[,c(1:4,4+seq(1,params$params$nYrs*12,1))] 
     }
-    #dec values would be  groupdat[,3+seq(12,params$params$nYrs*12,12)]
-    groupdat[,-c(1:4)] <- groupdat[,-c(1:4)]*570000
+    #dec values would be  dat[,3+seq(12,params$params$nYrs*12,12)]
+    dat[,-c(1:4)] <- dat[,-c(1:4)]*570000
     
     PERCS<-MDNS<- LOWS<- UPPS<- MEANS<- data.frame(year=TimeStepVals,row.names =TimeStepVals)
     for(strat_i in 1:length(params$strats)){
@@ -65,7 +65,7 @@ plot_biomass_trajectories <- function(params){
       
       #select subset of data
       #browser()
-      data2plot<- groupdat[groupdat$Strategy %in% STRAT,5:ncol(groupdat)]
+      data2plot<- dat[dat$Strategy %in% STRAT,5:ncol(dat)]
       
       #quantiles for polygon plot
       perc<-apply(data2plot,2, FUN=function(x){quantile(x,probs=c(0.025,0.5,0.975),na.rm=T)})
