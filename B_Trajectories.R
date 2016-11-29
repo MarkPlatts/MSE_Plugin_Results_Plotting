@@ -6,6 +6,7 @@ plot_biomass_trajectories <- function(params){
   
   #Load up biomass reference file
   biom_refs = read.csv(paste(params$plot.path,"/Biom_refs.csv",sep=''))
+  
   #reset the director
   setwd(paste(params$RootPath,"\\Biomass", sep=''))
   
@@ -13,9 +14,11 @@ plot_biomass_trajectories <- function(params){
   TimeStepVals = get_timestep_vals(params$plot_each_timestep, params$StartRun_Year, params$EndRun_Year)
   
   #get a list of all the files in the Biomass folder
-  g <- list.files()
+  #g <- list.files()
+  
+  plotting_params = initialise_plotting("Biomass", params)
 
-  for(G in g){
+  for(G in plotting_params$g){
     
     #Get the filename to be used to check whether yearly in name, to name files of plots and to add text to plots
     FILENAME = substr(G,1,nchar(G)-4)
@@ -41,7 +44,7 @@ plot_biomass_trajectories <- function(params){
     #Modify the values so that they are for the entire region
     dat[,-c(1:4)] <- dat[,-c(1:4)]*570000
     
-    PERCS<-MDNS<- LOWS<- UPPS<- MEANS<- data.frame(year=TimeStepVals,row.names =TimeStepVals)
+    MDNS<- LOWS<- UPPS<- MEANS<- data.frame(year=TimeStepVals,row.names =TimeStepVals)
     
     
     for(strat_i in 1:length(params$strats)){
