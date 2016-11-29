@@ -33,14 +33,7 @@ plot_biomass_trajectories <- function(params){
     }
     if (DontPlot==TRUE) next
 
-    
-    if (params$SAVE) {
-      if(!params$COMPARE_STRATEGIES) {
-        png(filename = paste(params$plot.path,"\\OUTPUT_GROUP_FIGS\\",FILENAME,"_PERCS.png",sep=""), res=900, width=8, height=4, units='in')
-      } else {
-        png(filename = paste(params$plot.path,"\\OUTPUT_COMPARE_STRATS\\",FILENAME,"_COMP.png",sep=""), res=900, width=8, height=4, units='in')
-      }
-    }
+    png(filename = paste(params$plot.path,"\\OUTPUT_GROUP_FIGS\\",FILENAME,"_PERCS.png",sep=""), res=900, width=8, height=4, units='in')
     
     #Load the data from file
     dat <- read.csv(G,skip=7, head=T)
@@ -49,6 +42,8 @@ plot_biomass_trajectories <- function(params){
     dat[,-c(1:4)] <- dat[,-c(1:4)]*570000
     
     PERCS<-MDNS<- LOWS<- UPPS<- MEANS<- data.frame(year=TimeStepVals,row.names =TimeStepVals)
+    
+    
     for(strat_i in 1:length(params$strats)){
       
       STRAT<-paste(params$strats[strat_i],sep=' ')
@@ -68,11 +63,7 @@ plot_biomass_trajectories <- function(params){
       
     }
     
-    #plot the reference points
-    #read_biom_refs = function(biom_refs, group, ref_type)
-    GroupName = dat[1,1]
-    bpa = read_biom_refs(biom_refs, GroupName, "bpa") * 570
-    blim = read_biom_refs(biom_refs, GroupName, "blim") * 570
+
     
     #now summary plot
     #par(mar=c(5.1, 4.1, 4.1, 20), xpd=TRUE)
@@ -85,6 +76,7 @@ plot_biomass_trajectories <- function(params){
       y_upper = max(MEANS[,-1],UPPS[,-1])
     }
 
+    #Plot a strategy results
     if(params$PLOT_CONFIDENCE_INTERVALS){
       plot(TimeStepVals,MEANS[,2],type='l',ylim=c(0,1.25*y_upper),lty=params$LTY[1],col=params$COL[1],ylab="relative biomass (t)",xlab="year",font=20,lwd=params$lineweight)
       for(i in 3:ncol(MEANS)) {
@@ -102,7 +94,12 @@ plot_biomass_trajectories <- function(params){
       }
     }
     
-    #plot reference levels
+    #plot the reference points
+    #read_biom_refs = function(biom_refs, group, ref_type)
+    GroupName = dat[1,1]
+    bpa = read_biom_refs(biom_refs, GroupName, "bpa") * 570
+    blim = read_biom_refs(biom_refs, GroupName, "blim") * 570
+    
     if(!is.na(bpa)){
       lines(c(TimeStepVals[1],TimeStepVals[length(TimeStepVals)]),c(bpa,bpa),col=1,lwd=0.5, lty=3)
       text(TimeStepVals[1]+1, bpa+0.05*y_upper, "Bpa", cex=0.5)
@@ -112,13 +109,10 @@ plot_biomass_trajectories <- function(params){
       text(TimeStepVals[1]+1, blim+0.05*y_upper, "Blim", cex=0.5)
     }
     
+    #Add a title and legend
     title(c("Biomass trajectory (mean) by strategy",FILENAME),font.main=20)#only individual plots
     if(params$LEGEND){
-      if (params$COMPARE_STRATEGIES) {
-        legend('topright',c(strat1name,strat2name),col = params$COL,lty =params$LTY,inset=c(-0.72,0),pt.cex = 1,cex=0.5,lwd=1,text.font=3)
-      } else {
-        legend('topright',params$strats,col = params$COL,lty =params$LTY,inset=c(-0.72,-0.2),lwd=1,text.font=3,pt.cex = 1,cex=0.5)
-      }
+      legend('topright',params$strats,col = params$COL,lty =params$LTY,inset=c(-0.72,-0.2),lwd=1,text.font=3,pt.cex = 1,cex=0.5)
     }
     
     graphics.off()
