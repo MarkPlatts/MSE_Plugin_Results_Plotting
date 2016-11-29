@@ -32,10 +32,8 @@ plot_biomass_trajectories <- function(params){
       }
     }
     if (DontPlot==TRUE) next
-    
-    #browser()
-    dat <- read.csv(G,skip=7, head=T)
 
+    
     if (params$SAVE) {
       if(!params$COMPARE_STRATEGIES) {
         png(filename = paste(params$plot.path,"\\OUTPUT_GROUP_FIGS\\",FILENAME,"_PERCS.png",sep=""), res=900, width=8, height=4, units='in')
@@ -44,12 +42,10 @@ plot_biomass_trajectories <- function(params){
       }
     }
     
-    if(!params$plot_each_timestep && !params$Plot_yearly_files){
-      dat<-dat[,c(1:4,4+seq(1,params$params$nYrs*12,12))] 
-    } else if (params$plot_each_timestep && !params$Plot_yearly_files){
-      dat<-dat[,c(1:4,4+seq(1,params$params$nYrs*12,1))] 
-    }
-    #dec values would be  dat[,3+seq(12,params$params$nYrs*12,12)]
+    #Load the data from file
+    dat <- read.csv(G,skip=7, head=T)
+    
+    #Modify the values so that they are for the entire region
     dat[,-c(1:4)] <- dat[,-c(1:4)]*570000
     
     PERCS<-MDNS<- LOWS<- UPPS<- MEANS<- data.frame(year=TimeStepVals,row.names =TimeStepVals)
