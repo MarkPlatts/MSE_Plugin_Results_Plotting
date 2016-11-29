@@ -4,7 +4,18 @@ source("C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting/share_tools.R")
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 plot_effort_trajectories <- function(params){
   
-  for(G in g){
+  #reset the director
+  setwd(paste(params$RootPath,"\\Effort", sep=''))
+  
+  #Create a vector of x vals at either yearly or monthly intervals
+  #TimeStepVals = get_timestep_vals(params$plot_each_timestep, params$StartRun_Year, params$EndRun_Year)
+  
+  #get a list of all the files in the Biomass folder
+  #g <- list.files()
+  
+  plotting_params = initialise_plotting_params("Effort", params)
+  
+  for(G in plotting_params$g){
     
     #Get the filename to be used to check whether yearly in name, to name files of plots and to add text to plots
     FILENAME = substr(G,1,nchar(G)-4)
@@ -32,7 +43,7 @@ plot_effort_trajectories <- function(params){
     names(dat)[names(dat)=="StrategyName"]  <- "Strategy"
     
 
-    PERCS<-MDNS<- LOWS<- UPPS<- MEANS<- data.frame(year=TimeStepVals,row.names =TimeStepVals)
+    PERCS<-MDNS<- LOWS<- UPPS<- MEANS<- data.frame(year=plotting_params$TimeStepVals,row.names =plotting_params$TimeStepVals)
     for(strat_i in 1:length(params$strats)){
       
       STRAT<-paste(params$strats[strat_i],sep=' ')
@@ -55,26 +66,26 @@ plot_effort_trajectories <- function(params){
     #summary plot
     par(mar=c(5.1, 4.1, 4.1, 12), xpd=TRUE)
     
-    plot(TimeStepVals,MEANS[,2],type='l',ylim=c(0,1.25*(max(MEANS[,-1]))),col=params$COL[1],lty=params$LTY[1],ylab="relative effort",xlab="year",font=20)
+    plot(plotting_params$TimeStepVals,MEANS[,2],type='l',ylim=c(0,1.25*(max(MEANS[,-1]))),col=params$COL[1],lty=params$LTY[1],ylab="relative effort",xlab="year",font=20)
     for(i in 3:ncol(MEANS)) {
-      lines(TimeStepVals,MEANS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)], lwd=1)
+      lines(plotting_params$TimeStepVals,MEANS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)], lwd=1)
     }
     
     title(FILENAME,font.main=20)
     
     if(params$PLOT_CONFIDENCE_INTERVALS){
-      plot(TimeStepVals,MEANS[,2],type='l',ylim=c(0,1.25*(max(MEANS[,-1],UPPS[,-1]))),lty=params$LTY[1],col=params$COL[1],ylab="relative effort (t)",xlab="year",font=20,lwd=params$lineweight)
+      plot(plotting_params$TimeStepVals,MEANS[,2],type='l',ylim=c(0,1.25*(max(MEANS[,-1],UPPS[,-1]))),lty=params$LTY[1],col=params$COL[1],ylab="relative effort (t)",xlab="year",font=20,lwd=params$lineweight)
       for(i in 3:ncol(MEANS)) {
-        lines(TimeStepVals,MEANS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)],lwd=params$lineweight)
+        lines(plotting_params$TimeStepVals,MEANS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)],lwd=params$lineweight)
       }
       for(i in 2:ncol(LOWS)) {
-        lines(TimeStepVals,LOWS[,i],lty=params$LTY[(i)],col=params$COL[(i-1)],lwd=params$lineweight*0.5)
-        lines(TimeStepVals,UPPS[,i],lty=params$LTY[(i)],col=params$COL[(i-1)],lwd=params$lineweight*0.5)
+        lines(plotting_params$TimeStepVals,LOWS[,i],lty=params$LTY[(i)],col=params$COL[(i-1)],lwd=params$lineweight*0.5)
+        lines(plotting_params$TimeStepVals,UPPS[,i],lty=params$LTY[(i)],col=params$COL[(i-1)],lwd=params$lineweight*0.5)
       }
     } else {
-      plot(TimeStepVals,MEANS[,2],type='l',ylim=c(0,1.25*(max(MEANS[,-1]))),lty=params$LTY[1],col=params$COL[1],ylab="relative effort (t)",xlab="year",font=20,lwd=params$lineweight)
+      plot(plotting_params$TimeStepVals,MEANS[,2],type='l',ylim=c(0,1.25*(max(MEANS[,-1]))),lty=params$LTY[1],col=params$COL[1],ylab="relative effort (t)",xlab="year",font=20,lwd=params$lineweight)
       for(i in 3:ncol(MEANS)) {
-        lines(TimeStepVals,MEANS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)],lwd=params$lineweight)
+        lines(plotting_params$TimeStepVals,MEANS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)],lwd=params$lineweight)
       }
     }
     

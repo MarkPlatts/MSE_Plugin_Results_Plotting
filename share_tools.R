@@ -1,6 +1,9 @@
-initialise_plotting = function(folder_name, params){
+initialise_plotting_params = function(folder_name, params){
   #init plotting params
   plotting_params = list()
+  
+  #Create a vector of x vals at either yearly or monthly intervals
+  plotting_params$TimeStepVals = get_timestep_vals(params$plot_each_timestep, params$StartRun_Year, params$EndRun_Year)
   
   #reset the director
   setwd(paste(params$RootPath,"\\",folder_name, sep=''))

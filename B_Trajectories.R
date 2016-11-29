@@ -10,13 +10,11 @@ plot_biomass_trajectories <- function(params){
   #reset the director
   setwd(paste(params$RootPath,"\\Biomass", sep=''))
   
-  #Create a vector of x vals at either yearly or monthly intervals
-  TimeStepVals = get_timestep_vals(params$plot_each_timestep, params$StartRun_Year, params$EndRun_Year)
-  
+
   #get a list of all the files in the Biomass folder
   #g <- list.files()
   
-  plotting_params = initialise_plotting("Biomass", params)
+  plotting_params = initialise_plotting_params("Biomass", params)
 
   for(G in plotting_params$g){
     
@@ -44,9 +42,8 @@ plot_biomass_trajectories <- function(params){
     #Modify the values so that they are for the entire region
     dat[,-c(1:4)] <- dat[,-c(1:4)]*570000
     
-    MDNS<- LOWS<- UPPS<- MEANS<- data.frame(year=TimeStepVals,row.names =TimeStepVals)
     
-    
+    MDNS<- LOWS<- UPPS<- MEANS<- data.frame(year=plotting_params$TimeStepVals,row.names =plotting_params$TimeStepVals)
     for(strat_i in 1:length(params$strats)){
       
       STRAT<-paste(params$strats[strat_i],sep=' ')
@@ -84,30 +81,30 @@ plot_biomass_trajectories <- function(params){
 
     #Plot a strategy results
     if(params$PLOT_CONFIDENCE_INTERVALS){
-      plot(TimeStepVals,MEANS[,2],type='l',ylim=c(0,1.25*y_upper),lty=params$LTY[1],col=params$COL[1],ylab="relative biomass (t)",xlab="year",font=20,lwd=params$lineweight)
+      plot(plotting_params$TimeStepVals,MEANS[,2],type='l',ylim=c(0,1.25*y_upper),lty=params$LTY[1],col=params$COL[1],ylab="relative biomass (t)",xlab="year",font=20,lwd=params$lineweight)
       for(i in 3:ncol(MEANS)) {
-        lines(TimeStepVals,MEANS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)],lwd=params$lineweight)
+        lines(plotting_params$TimeStepVals,MEANS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)],lwd=params$lineweight)
       }
       for(i in 2:(ncol(LOWS)-1)) {
         #browser()
-        lines(TimeStepVals,LOWS[,i],lty=params$LTY[(i)],col=params$COL[(i-1)],lwd=params$lineweight*0.5)
-        lines(TimeStepVals,UPPS[,i],lty=params$LTY[(i)],col=params$COL[(i-1)],lwd=params$lineweight*0.5)
+        lines(plotting_params$TimeStepVals,LOWS[,i],lty=params$LTY[(i)],col=params$COL[(i-1)],lwd=params$lineweight*0.5)
+        lines(plotting_params$TimeStepVals,UPPS[,i],lty=params$LTY[(i)],col=params$COL[(i-1)],lwd=params$lineweight*0.5)
       }
     } else {
-      plot(TimeStepVals,MEANS[,2],type='l',ylim=c(0,1.25*y_upper),lty=params$LTY[1],col=params$COL[1],ylab="relative biomass (t)",xlab="year",font=20,lwd=params$lineweight)
+      plot(plotting_params$TimeStepVals,MEANS[,2],type='l',ylim=c(0,1.25*y_upper),lty=params$LTY[1],col=params$COL[1],ylab="relative biomass (t)",xlab="year",font=20,lwd=params$lineweight)
       for(i in 2:ncol(MEANS)) {
-        lines(TimeStepVals,MEANS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)],lwd=params$lineweight)
+        lines(plotting_params$TimeStepVals,MEANS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)],lwd=params$lineweight)
       }
     }
     
     #plot the reference points
     if(!is.na(bpa)){
-      lines(c(TimeStepVals[1],TimeStepVals[length(TimeStepVals)]),c(bpa,bpa),col=1,lwd=0.5, lty=3)
-      text(TimeStepVals[1]+1, bpa+0.05*y_upper, "Bpa", cex=0.5)
+      lines(c(plotting_params$TimeStepVals[1],plotting_params$TimeStepVals[length(plotting_params$TimeStepVals)]),c(bpa,bpa),col=1,lwd=0.5, lty=3)
+      text(plotting_params$TimeStepVals[1]+1, bpa+0.05*y_upper, "Bpa", cex=0.5)
     }
     if(!is.na(blim)){
-      lines(c(TimeStepVals[1],TimeStepVals[length(TimeStepVals)]),c(blim,blim),col=1,lwd=0.5, lty=3)
-      text(TimeStepVals[1]+1, blim+0.05*y_upper, "Blim", cex=0.5)
+      lines(c(plotting_params$TimeStepVals[1],plotting_params$TimeStepVals[length(plotting_params$TimeStepVals)]),c(blim,blim),col=1,lwd=0.5, lty=3)
+      text(plotting_params$TimeStepVals[1]+1, blim+0.05*y_upper, "Blim", cex=0.5)
     }
     
     #Add a title and legend
