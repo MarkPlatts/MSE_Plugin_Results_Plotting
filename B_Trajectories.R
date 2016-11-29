@@ -34,10 +34,8 @@ plot_biomass_trajectories <- function(params){
     if (DontPlot==TRUE) next
     
     #browser()
-    dat <- read.csv(paste(G,sep=''),skip=7, head=T)
-    GroupName = dat[1,1]
-    
-    
+    dat <- read.csv(G,skip=7, head=T)
+
     if (params$SAVE) {
       if(!params$COMPARE_STRATEGIES) {
         png(filename = paste(params$plot.path,"\\OUTPUT_GROUP_FIGS\\",FILENAME,"_PERCS.png",sep=""), res=900, width=8, height=4, units='in')
@@ -84,6 +82,7 @@ plot_biomass_trajectories <- function(params){
     
     #plot the reference points
     #read_biom_refs = function(biom_refs, group, ref_type)
+    GroupName = dat[1,1]
     bpa = read_biom_refs(biom_refs, GroupName, "bpa") * 570
     blim = read_biom_refs(biom_refs, GroupName, "blim") * 570
     
