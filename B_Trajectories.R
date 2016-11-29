@@ -53,9 +53,6 @@ plot_biomass_trajectories <- function(params){
     }
     #dec values would be  groupdat[,3+seq(12,params$params$nYrs*12,12)]
     groupdat[,-c(1:4)] <- groupdat[,-c(1:4)]*570000
-    groupdat <- groupdat[,-which(names(groupdat)=="ResultType")]
-    groupdat <- groupdat[,-which(names(groupdat)=="GroupName")]
-    groupdat <- groupdat[,-which(names(groupdat)=="ModelID")]
     
     PERCS<-MDNS<- LOWS<- UPPS<- MEANS<- data.frame(year=TimeStepVals,row.names =TimeStepVals)
     for(strat_i in 1:length(params$strats)){
@@ -68,7 +65,7 @@ plot_biomass_trajectories <- function(params){
       
       #select subset of data
       #browser()
-      data2plot<- groupdat[groupdat$Strategy %in% STRAT,2:ncol(groupdat)]
+      data2plot<- groupdat[groupdat$Strategy %in% STRAT,5:ncol(groupdat)]
       
       #quantiles for polygon plot
       perc<-apply(data2plot,2, FUN=function(x){quantile(x,probs=c(0.025,0.5,0.975),na.rm=T)})
