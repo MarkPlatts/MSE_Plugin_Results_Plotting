@@ -15,6 +15,35 @@ initialise_plotting_params = function(folder_name, params){
 }
 
 
+# calculating the upper and lower confidence intervals and median ---------
+calc_vals_for_plotting = function(params, plotting_params){
+
+  
+  plotting_params$MDNS<- plotting_params$LOWS<- plotting_params$UPPS<- plotting_params$MEANS<- data.frame(year=plotting_params$TimeStepVals,row.names =plotting_params$TimeStepVals)
+  for(strat_i in 1:length(params$strats)){
+
+    STRAT<-paste(params$strats[strat_i],sep=' ')
+    
+    #select subset of data
+    data2plot<- plotting_params$dat[plotting_params$dat$Strategy %in% STRAT,5:ncol(plotting_params$dat)]
+    
+    #quantiles for polygon plot
+    perc<-apply(data2plot,2, FUN=function(x){quantile(x,probs=c(0.025,0.5,0.975),na.rm=T)})
+    perc<-rbind(perc, apply(data2plot,2, FUN=mean) )
+    
+    #save percs
+    plotting_params$LOWS<- cbind(plotting_params$LOWS,perc[1,]);   names(plotting_params$LOWS)[ncol(plotting_params$LOWS)]<-STRAT
+    plotting_params$MDNS<- cbind(plotting_params$MDNS,perc[2,]);   names(plotting_params$MDNS)[ncol(plotting_params$MDNS)]<-STRAT
+    plotting_params$UPPS<- cbind(plotting_params$UPPS,perc[3,]);   names(plotting_params$UPPS)[ncol(plotting_params$UPPS)]<-STRAT
+    plotting_params$MEANS<- cbind(plotting_params$MEANS,perc[4,]); names(plotting_params$MEANS)[ncol(plotting_params$MEANS)]<-STRAT
+
+  }
+  
+  return(plotting_params)
+  
+}
+
+
 get_timestep_vals = function(plotmonthly, start_year, end_year){
   if (plotmonthly){
     xvals=seq(start_year,end_year-1/12,1/12)

@@ -10,10 +10,7 @@ plot_biomass_trajectories <- function(params){
   #reset the director
   setwd(paste(params$RootPath,"\\Biomass", sep=''))
   
-
-  #get a list of all the files in the Biomass folder
-  #g <- list.files()
-  
+  #initialise plotting params
   plotting_params = initialise_plotting_params("Biomass", params)
 
   for(G in plotting_params$g){
@@ -37,34 +34,16 @@ plot_biomass_trajectories <- function(params){
     png(filename = paste(params$plot.path,"\\OUTPUT_GROUP_FIGS\\",FILENAME,"_PERCS.png",sep=""), res=900, width=8, height=4, units='in')
     
     #Load the data from file
-    dat <- read.csv(G,skip=7, head=T)
+    plotting_params$dat <- read.csv(G,skip=7, head=T)
     
     #Modify the values so that they are for the entire region
-    dat[,-c(1:4)] <- dat[,-c(1:4)]*570000
+    plotting_params$dat[,-c(1:4)] <- plotting_params$dat[,-c(1:4)]*570000
     
-    
-    MDNS<- LOWS<- UPPS<- MEANS<- data.frame(year=plotting_params$TimeStepVals,row.names =plotting_params$TimeStepVals)
-    for(strat_i in 1:length(params$strats)){
-      
-      STRAT<-paste(params$strats[strat_i],sep=' ')
-      
-      #select subset of data
-      data2plot<- dat[dat$Strategy %in% STRAT,5:ncol(dat)]
-      
-      #quantiles for polygon plot
-      perc<-apply(data2plot,2, FUN=function(x){quantile(x,probs=c(0.025,0.5,0.975),na.rm=T)})
-      perc<-rbind(perc, apply(data2plot,2, FUN=mean) )
-      
-      #save percs
-      LOWS<- cbind(LOWS,perc[1,]);   names(LOWS)[ncol(LOWS)]<-STRAT
-      MDNS<- cbind(MDNS,perc[2,]);   names(MDNS)[ncol(MDNS)]<-STRAT
-      UPPS<- cbind(UPPS,perc[3,]);   names(UPPS)[ncol(UPPS)]<-STRAT
-      MEANS<- cbind(MEANS,perc[4,]);   names(MEANS)[ncol(MEANS)]<-STRAT
-      
-    }
+    #Calculate the values to be plotted
+    plotting_params = calc_vals_for_plotting(params, plotting_params)
     
     #Extract reference points
-    GroupName = dat[1,1]
+    GroupName = plotting_params$dat[1,1]
     bpa = read_biom_refs(biom_refs, GroupName, "bpa") * 570
     blim = read_biom_refs(biom_refs, GroupName, "blim") * 570
     
@@ -74,26 +53,26 @@ plot_biomass_trajectories <- function(params){
     
     #figure out what the highest value the y-axis needs to be
     if(!is.na(bpa)){
-      y_upper = max(MEANS[,-1],UPPS[,-1],bpa)
+      y_upper = max(plotting_params$MEANS[,-1],plotting_params$UPPS[,-1],bpa)
     } else {
-      y_upper = max(MEANS[,-1],UPPS[,-1])
+      y_upper = max(plotting_params$MEANS[,-1],plotting_params$UPPS[,-1])
     }
 
     #Plot a strategy results
     if(params$PLOT_CONFIDENCE_INTERVALS){
-      plot(plotting_params$TimeStepVals,MEANS[,2],type='l',ylim=c(0,1.25*y_upper),lty=params$LTY[1],col=params$COL[1],ylab="relative biomass (t)",xlab="year",font=20,lwd=params$lineweight)
-      for(i in 3:ncol(MEANS)) {
-        lines(plotting_params$TimeStepVals,MEANS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)],lwd=params$lineweight)
+      plot(plotting_params$TimeStepVals,plotting_params$MEANS[,2],type='l',ylim=c(0,1.25*y_upper),lty=params$LTY[1],col=params$COL[1],ylab="relative biomass (t)",xlab="year",font=20,lwd=params$lineweight)
+      for(i in 3:ncol(plotting_params$MEANS)) {
+        lines(plotting_params$TimeStepVals,plotting_params$MEANS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)],lwd=params$lineweight)
       }
-      for(i in 2:(ncol(LOWS)-1)) {
+      for(i in 2:(ncol(plotting_params$LOWS)-1)) {
         #browser()
-        lines(plotting_params$TimeStepVals,LOWS[,i],lty=params$LTY[(i)],col=params$COL[(i-1)],lwd=params$lineweight*0.5)
-        lines(plotting_params$TimeStepVals,UPPS[,i],lty=params$LTY[(i)],col=params$COL[(i-1)],lwd=params$lineweight*0.5)
+        lines(plotting_params$TimeStepVals,plotting_params$LOWS[,i],lty=params$LTY[(i)],col=params$COL[(i-1)],lwd=params$lineweight*0.5)
+        lines(plotting_params$TimeStepVals,plotting_params$UPPS[,i],lty=params$LTY[(i)],col=params$COL[(i-1)],lwd=params$lineweight*0.5)
       }
     } else {
-      plot(plotting_params$TimeStepVals,MEANS[,2],type='l',ylim=c(0,1.25*y_upper),lty=params$LTY[1],col=params$COL[1],ylab="relative biomass (t)",xlab="year",font=20,lwd=params$lineweight)
-      for(i in 2:ncol(MEANS)) {
-        lines(plotting_params$TimeStepVals,MEANS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)],lwd=params$lineweight)
+      plot(plotting_params$TimeStepVals,plotting_params$MEANS[,2],type='l',ylim=c(0,1.25*y_upper),lty=params$LTY[1],col=params$COL[1],ylab="relative biomass (t)",xlab="year",font=20,lwd=params$lineweight)
+      for(i in 2:ncol(plotting_params$MEANS)) {
+        lines(plotting_params$TimeStepVals,plotting_params$MEANS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)],lwd=params$lineweight)
       }
     }
     

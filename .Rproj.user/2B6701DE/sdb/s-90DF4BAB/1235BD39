@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "\n#Calculate/load basic info  =======================================================================================\n#Need to put what info this is here\n\nExtract_BasicInfo = function(params)\n{\n  #change this to params$RootPath and plot_path when completed testing and it works\n  test_rootpath = \"C://Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/withBiomassForcing_Yearly_Results HCR type1 and 3/Results\"\n  test_plotpath = \"C://Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/withBiomassForcing_Yearly_Results HCR type1 and 3/Plots/\"\n  \n  BasicInfoFile_Exists = file.exists(paste(test_plotpath,\"BasicInfo.csv\",sep=''))\n  \n  #Check where the file should exist for storing this info\n  if(BasicInfoFile_Exists){\n    #Load up the file and check that it is up-to-date with the result files\n    BasicInfo = read.csv(paste(test_plotpath,\"BasicInfo.csv\",sep=''))\n    \n    #read the date of the Results.csv file\n    file_info = file.info(paste(test_rootpath,\"Results.csv\",sep=''))\n    \n    if (TRUE){ #todo need to check whether info is correct\n\n    }\n\n  } else {\n    ### Load results files to get unique strats\n    results<-read.table(paste(test_rootpath,\"Results.csv\",sep=''),sep=',',skip=8,col.names=c(\"Model\",\"Strategy\",\"GroupID\",\"GroupName\",\"Variable\",\"Value\"), fill=T)\n    results<-results[results$Strategy!=\"Z\",]#odd one in _SR_final\n    params$strats <- as.character(unique(results$Strategy))  # 10/15 strategies\n    #params$strats <- params$strats[params$strats != \"NONE\"]\n    \n    df_output = data.frame()\n    #write the values to file\n    df_output = rbind(df_output, c(\"Date_time\"))\n    for (iStrat in params$strats){\n      df_output = rbind(df_output,c(\"Strategy\", iStrat))\n    }\n    write.csv(df_output,paste(test_plotpath,\"BasicInfo.csv\",sep=''), )\n  }\n\n\n  \n}\n\n#Do this by checking whether a file exists with this information\n#If the file exists check within the file that the time/date of the files used to extract this\n#information are the same as the current files time/dates\n#If they are then extract the info from the file\n#If not then recalculate and save the info in this file",
+    "created" : 1480393591712.000,
+    "dirty" : true,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "930554528",
+    "id" : "1235BD39",
+    "lastKnownWriteTime" : 1480456536,
+    "last_content_update" : 1480456659678,
+    "path" : "C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting/Extract_BasicInfo.R",
+    "project_path" : "Extract_BasicInfo.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 6,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
