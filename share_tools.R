@@ -17,7 +17,6 @@ initialise_plotting_params = function(folder_name, params){
 
 # calculating the upper and lower confidence intervals and median ---------
 calc_vals_for_plotting = function(params, plotting_params){
-
   
   plotting_params$MDNS<- plotting_params$LOWS<- plotting_params$UPPS<- plotting_params$MEANS<- data.frame(year=plotting_params$TimeStepVals,row.names =plotting_params$TimeStepVals)
   for(strat_i in 1:length(params$strats)){
@@ -44,6 +43,8 @@ calc_vals_for_plotting = function(params, plotting_params){
 }
 
 
+# Calculate all the x-values for plotting ---------------------------------
+
 get_timestep_vals = function(plotmonthly, start_year, end_year){
   if (plotmonthly){
     xvals=seq(start_year,end_year-1/12,1/12)
@@ -53,14 +54,18 @@ get_timestep_vals = function(plotmonthly, start_year, end_year){
 }
 
 
+
+#Checks whether the filename given is incorrect given setting to either plot yearly or none yearly values
 IsIncorrectFileType_YearlyMonthly = function(FileName, plot_yearly){
-  #Checks whether the filename given is incorrect given setting to either plot yearly or none yearly values
+  
   
   if(length(grep("Yearly", FileName, fixed=TRUE))>0 & !plot_yearly) return(TRUE)
   if(length(grep("Yearly", FileName, fixed=TRUE))==0 & plot_yearly) return(TRUE)
   return(FALSE)
 
 }
+
+
 
 FileIsForACompareGroup = function(params, FILENAME){
   nNotGroups2Compare=0
