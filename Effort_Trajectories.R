@@ -7,12 +7,7 @@ plot_effort_trajectories <- function(params){
   #reset the director
   setwd(paste(params$RootPath,"\\Effort", sep=''))
   
-  #Create a vector of x vals at either yearly or monthly intervals
-  #TimeStepVals = get_timestep_vals(params$plot_each_timestep, params$StartRun_Year, params$EndRun_Year)
-  
-  #get a list of all the files in the Biomass folder
-  #g <- list.files()
-  
+  #initialise plotting params
   plotting_params = initialise_plotting_params("Effort", params)
   
   for(G in plotting_params$g){
@@ -36,59 +31,51 @@ plot_effort_trajectories <- function(params){
     png(filename = paste(params$plot.path,"\\OUTPUT_GEARSbySTRATEGIES\\",FILENAME,"_PERCS.png",sep=""), res=900, width=8, height=4, units='in')
     
     #Load the data from the file represented by G
-    dat<-read.csv(G,skip=7, head=T)
+    plotting_params$dat<-read.csv(G,skip=7, head=T)
     
     #timeseries of FLEET effort by FleetNumber 1:12 for the 10 strategies
     #if(!params$plot_each_timestep & !params$Plot_yearly_files) dat<-dat[,c(1:3,4+seq(1,params$nyrs*12,12))] 
-    names(dat)[names(dat)=="StrategyName"]  <- "Strategy"
+    names(plotting_params$dat)[names(plotting_params$dat)=="StrategyName"]  <- "Strategy"
     
-
-    PERCS<-MDNS<- LOWS<- UPPS<- MEANS<- data.frame(year=plotting_params$TimeStepVals,row.names =plotting_params$TimeStepVals)
-    for(strat_i in 1:length(params$strats)){
-      
-      STRAT<-paste(params$strats[strat_i],sep=' ')
-      
-      #select subset of data
-      data2plot<- dat[dat$Strategy %in% STRAT,5:ncol(dat)]
-      
-      #quantiles for polygon plot
-      perc<-apply(data2plot,2, FUN=function(x){quantile(x,probs=c(0.025,0.5,0.975),na.rm=T)})
-      #for(i in 1:2) lines(params$StartRun_Year:End,perc[i,],lwd=4,col='dark blue',lty=1) 
-      perc<-rbind(perc, apply(data2plot,2, FUN=mean) )
-      
-      LOWS<- cbind(LOWS,perc[1,]);   names(LOWS)[ncol(LOWS)]<-STRAT
-      MDNS<- cbind(MDNS,perc[2,]);   names(MDNS)[ncol(MDNS)]<-STRAT
-      UPPS<- cbind(UPPS,perc[3,]);   names(UPPS)[ncol(UPPS)]<-STRAT
-      MEANS<- cbind(MEANS,perc[4,]);   names(MEANS)[ncol(MEANS)]<-STRAT
-      
-    } 
+    #Calculate the values to be plotted
+    plotting_params = calc_vals_for_plotting(params, plotting_params)
+    
+    #Calculate the values to be plotted
+    #plotting_params = calc_vals_for_plotting(params, plotting_params)
+    
+    # MDNS<- LOWS<- UPPS<- MEANS<- data.frame(year=plotting_params$TimeStepVals,row.names =plotting_params$TimeStepVals)
+    # for(strat_i in 1:length(params$strats)){
+    #   
+    #   STRAT<-paste(params$strats[strat_i],sep=' ')
+    #   
+    #   #select subset of data
+    #   data2plot<- plotting_params$dat[plotting_params$dat$Strategy %in% STRAT,5:ncol(plotting_params$dat)]
+    #   
+    #   #quantiles for polygon plot
+    #   perc<-apply(data2plot,2, FUN=function(x){quantile(x,probs=c(0.025,0.5,0.975),na.rm=T)})
+    #   #for(i in 1:2) lines(params$StartRun_Year:End,perc[i,],lwd=4,col='dark blue',lty=1) 
+    #   perc<-rbind(perc, apply(data2plot,2, FUN=mean) )
+    #   
+    #   LOWS<- cbind(LOWS,perc[1,]);   names(LOWS)[ncol(LOWS)]<-STRAT
+    #   MDNS<- cbind(MDNS,perc[2,]);   names(MDNS)[ncol(MDNS)]<-STRAT
+    #   UPPS<- cbind(UPPS,perc[3,]);   names(UPPS)[ncol(UPPS)]<-STRAT
+    #   MEANS<- cbind(MEANS,perc[4,]);   names(MEANS)[ncol(MEANS)]<-STRAT
+    #   
+    # } 
     
     #summary plot
     par(mar=c(5.1, 4.1, 4.1, 12), xpd=TRUE)
+    # plot(plotting_params$TimeStepVals,MEANS[,2],type='l',ylim=c(0,1.25*(max(MEANS[,-1]))),col=params$COL[1],lty=params$LTY[1],ylab="relative effort",xlab="year",font=20)
+    # for(i in 3:ncol(MEANS)) {
+    #   lines(plotting_params$TimeStepVals,MEANS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)], lwd=1)
+    # }
     
-    plot(plotting_params$TimeStepVals,MEANS[,2],type='l',ylim=c(0,1.25*(max(MEANS[,-1]))),col=params$COL[1],lty=params$LTY[1],ylab="relative effort",xlab="year",font=20)
-    for(i in 3:ncol(MEANS)) {
-      lines(plotting_params$TimeStepVals,MEANS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)], lwd=1)
+    #Do the plotting and add annotation
+    plot(plotting_params$TimeStepVals,plotting_params$MEANS[,2],type='l',ylim=c(0,1.25*(max(plotting_params$MEANS[,-1]))),lty=params$LTY[1],col=params$COL[1],ylab="relative effort (t)",xlab="year",font=20,lwd=params$lineweight)
+    for(i in 3:ncol(plotting_params$MEANS)) {
+      lines(plotting_params$TimeStepVals,plotting_params$MEANS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)],lwd=params$lineweight)
     }
-    
     title(FILENAME,font.main=20)
-    
-    if(params$PLOT_CONFIDENCE_INTERVALS){
-      plot(plotting_params$TimeStepVals,MEANS[,2],type='l',ylim=c(0,1.25*(max(MEANS[,-1],UPPS[,-1]))),lty=params$LTY[1],col=params$COL[1],ylab="relative effort (t)",xlab="year",font=20,lwd=params$lineweight)
-      for(i in 3:ncol(MEANS)) {
-        lines(plotting_params$TimeStepVals,MEANS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)],lwd=params$lineweight)
-      }
-      for(i in 2:ncol(LOWS)) {
-        lines(plotting_params$TimeStepVals,LOWS[,i],lty=params$LTY[(i)],col=params$COL[(i-1)],lwd=params$lineweight*0.5)
-        lines(plotting_params$TimeStepVals,UPPS[,i],lty=params$LTY[(i)],col=params$COL[(i-1)],lwd=params$lineweight*0.5)
-      }
-    } else {
-      plot(plotting_params$TimeStepVals,MEANS[,2],type='l',ylim=c(0,1.25*(max(MEANS[,-1]))),lty=params$LTY[1],col=params$COL[1],ylab="relative effort (t)",xlab="year",font=20,lwd=params$lineweight)
-      for(i in 3:ncol(MEANS)) {
-        lines(plotting_params$TimeStepVals,MEANS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)],lwd=params$lineweight)
-      }
-    }
-    
     if(params$LEGEND){
         #legend('topright',params$strats,col = params$COL,lty =params$LTY,inset=c(-0.5,0),lwd=1,text.font=3,pt.cex = 1,cex=0.5)
         legend('topright',params$strats,col = params$COL,lty =params$LTY,inset=c(params$legend_x_inset2,-0.2),lwd=1,text.font=3,pt.cex = 1,cex=0.5)
