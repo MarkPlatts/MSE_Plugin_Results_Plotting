@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "###CHOKE Pie chart\n#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\nplot_choke_pies <- function(params){\n  \n  \nsetwd(paste(params$RootPath,\"/ChokeGroup\", sep=''))\n\nPlotData = vector()\n\ng <- list.files()     # which groups are there?\n\nfor (G in g){\n  \n  FILENAME <- substr(G,1,nchar(G)-4)\n  \n  FleetData = read.csv(G, skip=6, head=T)\n  FleetData = as.vector(as.matrix(FleetData[!is.na(FleetData$X1),][,5:ncol(FleetData)]))\n  if(length(FleetData)==0) next\n  \n  Groups = unique(FleetData)\n  slices = vector()\n  \n  for(iGroup in Groups){\n    slices = c(slices,length(FleetData[FleetData==iGroup]))\n  }\n  \n  png(filename = paste(params$plot.path,\"/OUTPUT_HIGHEST_CHOKE_FIGS/\",FILENAME,\".png\",sep=\"\"), res=900, width=9, height=8, units='in')\n  \n  pct <- round(slices/sum(slices)*100,1)\n  \n  Groups <- paste(Groups, \" \", pct, \"%\", sep='') # add percents to labels\n  \n  pie(slices, labels = Groups, main = \"Choke Groups: percentage of time across all models\", col=rainbow(length(Groups)))\n  mtext(G)\n  \n  graphics.off()\n  \n}    \n}",
+    "created" : 1480688608369.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1016524741",
+    "id" : "915E03DD",
+    "lastKnownWriteTime" : 1480689084,
+    "last_content_update" : 1480689084970,
+    "path" : "C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting/ChokePie.R",
+    "project_path" : "ChokePie.R",
+    "properties" : {
+    },
+    "relative_order" : 11,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

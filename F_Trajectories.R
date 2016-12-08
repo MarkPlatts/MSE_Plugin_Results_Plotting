@@ -12,7 +12,7 @@ plot_fishing_trajectories <- function(params){
   }
     g <- list.files()     # which groups are there?
 
-    if(!params$SAVE) pdf(file =paste(plot.path,"\\OUTPUT_GROUP_FIGS\\",TITLE," plots by group and strategy.pdf",sep=""),width=14,height=7,paper="a4r")
+    if(!params$SAVE) pdf(file =paste(params$plot.path,"\\OUTPUT_GROUP_FIGS\\",TITLE," plots by group and strategy.pdf",sep=""),width=14,height=7,paper="a4r")
     
     for(G in g){
 
@@ -72,12 +72,12 @@ plot_fishing_trajectories <- function(params){
       if (params$SAVE) {
         if(!params$COMPARE_STRATEGIES) {
           if(any(params$QUOTA_HCRF_Cons,params$QUOTA_HCRF_Targ,params$CATCH,params$DISCARD,params$LANDING)){
-            png(filename = paste(plot.path,"\\OUTPUT_GEARSGROUPSbySTRATEGIES\\",FILENAME,"_.png",sep=""), res=900, width=10, height=4, units='in')              
+            png(filename = paste(params$plot.path,"\\OUTPUT_GEARSGROUPSbySTRATEGIES\\",FILENAME,"_.png",sep=""), res=900, width=10, height=4, units='in')              
           } else {
-            png(filename = paste(plot.path,"\\OUTPUT_GROUP_FIGS\\",FILENAME,"_.png",sep=""), res=900, width=10, height=4, units='in')              
+            png(filename = paste(params$plot.path,"\\OUTPUT_GROUP_FIGS\\",FILENAME,"_.png",sep=""), res=900, width=10, height=4, units='in')              
           }
         } else {
-          png(filename = paste(plot.path,"\\OUTPUT_COMPARE_STRATS\\",FILENAME,"_COMP.png",sep=""), res=900, width=10, height=4, units='in')
+          png(filename = paste(params$plot.path,"\\OUTPUT_COMPARE_STRATS\\",FILENAME,"_COMP.png",sep=""), res=900, width=10, height=4, units='in')
         }
       }
       
@@ -210,7 +210,7 @@ plot_fishing_trajectories <- function(params){
         }
       }
       if (any(params$MORT_REAL_F,params$MORT_REAL_LandF,params$MORT_REAL_DiscF)){
-        if(params$WRITE) write.csv(PERCS[,-1],paste(plot.path,"\\OUTPUT_FcatchBySTRATEGIES\\",FILENAME,".csv",sep=""))
+        if(params$WRITE) write.csv(PERCS[,-1],paste(params$plot.path,"\\OUTPUT_FcatchBySTRATEGIES\\",FILENAME,".csv",sep=""))
       } else if (any(params$CATCH,params$DISCARD,params$LANDING)) {
         
       } else if (any(params$MORT_HCRF_Cons,params$MORT_HCRF_Targ, params$QUOTA_HCRF_Cons,params$QUOTA_HCRF_Targ)) {

@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "###HIGHEST_VALUE Pie chart\n#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\nplot_highestvalue_pies <- function(params)\n{\n  \n  \n  #setwd(paste(params$RootPath,\"\\\\HighestValueGroup\", sep=''))\n  \n  PlotData = vector()\n  \n  #g <- list.files()     # which groups are there?\n  g <- list.files(paste(params$RootPath,\"/HighestValueGroup\", sep=''))\n  \n  for (G in g){\n    \n    FILENAME <- substr(G,1,nchar(G)-4)\n    \n    #FleetData = read.csv(G, skip=6, head=T)\n    FleetData = read.csv(paste(params$RootPath,\"/HighestValueGroup/\",G, sep=''),skip=7, head=T)\n    \n    FleetData = as.vector(as.matrix(FleetData[!is.na(FleetData$X1),][,5:ncol(FleetData)]))\n    if(length(FleetData)==0) next\n    \n    Groups = unique(FleetData)\n    slices = vector()\n    \n    for(iGroup in Groups){\n      slices = c(slices,length(FleetData[FleetData==iGroup]))\n    }\n    \n    png(filename = paste(params$plot.path,\"\\\\OUTPUT_HIGHEST_CHOKE_FIGS\\\\\",FILENAME,\".png\",sep=\"\"), res=900, width=9, height=8, units='in')\n    \n    pct <- round(slices/sum(slices)*100,1)\n    \n    Groups <- paste(Groups, \" \", pct, \"%\", sep='') # add percents to labels\n    \n    pie(slices, labels = Groups, main = \"Highest value: percentage of years across all models\", col=rainbow(length(Groups)))\n    mtext(FILENAME)\n    \n    graphics.off()\n    \n  }\n}",
+    "created" : 1480688119315.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4240378256",
+    "id" : "B6A70693",
+    "lastKnownWriteTime" : 1480689068,
+    "last_content_update" : 1480689068947,
+    "path" : "C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting/HighestValuePie.R",
+    "project_path" : "HighestValuePie.R",
+    "properties" : {
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
