@@ -45,8 +45,8 @@ plot_biomass_trajectories <- function(params){
     
     #Extract reference points
     GroupName = plotting_params$dat[1,1]
-    bpa = read_biom_refs(biom_refs, GroupName, "bpa") * 570
-    blim = read_biom_refs(biom_refs, GroupName, "blim") * 570
+    bpa = read_biom_refs(biom_refs, GroupName, "bpa") * 1000
+    blim = read_biom_refs(biom_refs, GroupName, "blim") * 1000
     
     #now summary plot
     #par(mar=c(5.1, 4.1, 4.1, 20), xpd=TRUE)
