@@ -64,6 +64,10 @@ plot_type = function(type2plot) {
     params$CHOKE_GROUPS <- T;print("Plotting CHOKE_GROUPS")
   }
   
+  if(type2plot==16){
+    params$AverageQuota_EachFleet<- T;  setwd("AverageQuota_EachFleet");params$YLAB<-"t";print("Plotting AverageQuota_EachFleet")} # what are these?
+  }
+  
   if (params$COMPARE_STRATEGIES){
     print(params$strats)
     print("")
@@ -102,10 +106,13 @@ plot_type = function(type2plot) {
   ###CHOKE SPECIES Pie chart
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   if(params$CHOKE_GROUPS) plot_choke_pies(params)
+  
+  ###AverageQuota_EachFleet
+  
 
 }  
 
-for(iplot in c(1:15)){
+for(iplot in c(13)){
   print(paste("Currently plotting type", iplot))
   plot_type(iplot)
 }

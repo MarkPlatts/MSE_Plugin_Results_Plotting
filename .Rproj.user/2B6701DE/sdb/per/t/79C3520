@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "#Test\nCalc_Average_Quota_across_models_Test = function()\n{\n  Group_Cod = \"Cod (adult)\"\n  Fleet_DemersalTrawl = \"Fleet1\"\n  StrategyType_Highest_Value = \"Highest value\"\n  Test_Path = \"C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/R Code/TestFolder_R_Plotting_MSE_Plugin/withBiomassForcing_Yearly_Results HCR type1 and 3/Results/HCRF_Targ\"\n  Cod_adult_Average_Across_Quota = Calc_Average_Quota_across_models(Group_Cod,StrategyType_Highest_Value,Test_Path)\n  Correct = c(0.0562363408,\t0.0691622814,\t0.0740509911,\t0.0683924373,\t0.0587781737,\t0.0484810997,\t0.0413565884,\t0.0390158918,\t0.0417923933,\t0.0486157672,\t0.0489791314,\t0.0408512426,\t0.0334640422,\t0.028770516,\t0.0250194448,\t0.0224817797,\t0.0219612043,\t0.021143502,\t0.0180477091,\t0.0148551648)\n  if(sum(Cod_adult_Average_Across_Quota!=Correct))\n}\n\nCalc_Average_Quota_across_models = function(Groups, StrategyType, ResultsPath)\n{\n  \n  Allfiles <- list.files(paste(ResultsPath,\"/HCRQuota_Targ\", sep=''))\n  \n  #Need to loop across all files so that we can extract\n  for (iFile in AllFiles){\n    #Check that current iFile is for the grou\n  }\n  \n}",
+    "created" : 1481557037737.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3225329187",
+    "id" : "79C3520",
+    "lastKnownWriteTime" : 1481638458,
+    "last_content_update" : 1481638458725,
+    "path" : "C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting/Calc_average_quota_quotavalue_per_fleet_group_strategy.R",
+    "project_path" : "Calc_average_quota_quotavalue_per_fleet_group_strategy.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 13,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
