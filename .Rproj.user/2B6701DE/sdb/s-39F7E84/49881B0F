@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "library(dplyr)\n\nsetwd(\"C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting/\")\nsource(\"share_tools.R\")\n\n\n#Loads the file in folder specified containing all the strings in vector of strings\nLoadFile_ContainsListStrings = function(Dir.Path, StringsInFileName)\n{\n  #Get a list of all the files\n  AllFiles <- list.files(Dir.Path)\n  \n  #Need to loop across all files so that we can extract\n  for (iFile in AllFiles){\n    #Find and load file that contains values for selected group and fleet\n    FoundFile = StringContains_AllStrings(ContainingString=iFile, MultipleStrings2Check=StringsInFileName)\n    if(FoundFile) {\n      iFile.data <- read.csv(paste(Dir.Path,iFile, sep=''),skip=7, head=T)\n      return (iFile.data)\n    } else {\n      return(NA)\n    }\n  }\n  \n}\n\n\nAverage_Quota_Across_Models_And_RegTypes = function(Group, Fleet, RegulationType, ResultsPath)\n{\n  FileData = LoadFile_ContainsListStrings(Dir.Path = paste(ResultsPath,\"/HCRQuota_Targ/\",sep=''), StringsInFileName = c(Group, Fleet))\n  \n  UniqueStrategies = LoadUniqueStrategies(ResultsPath)\n  \n  Strategies_OfRegType = SubsetVectorStrings_ContainingString(UniqueStrategies, RegulationType)\n\n  FileData = filter(FileData, StrategyName %in% Strategies_OfRegType)\n\n}\n\nResultPath = \"C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/R Code/TestFolder_R_Plotting_MSE_Plugin/withBiomassForcing_Yearly_Results HCR type1 and 3/Results\"\nAverage_Quota_Across_Models_And_RegTypes(\"Cod (adult\", \"FleetNo2\", \"Highest value\", ResultPath)\n\n",
+    "created" : 1481650207712.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2760317314",
+    "id" : "49881B0F",
+    "lastKnownWriteTime" : 1481662641,
+    "last_content_update" : 1481662641584,
+    "path" : "C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting/Calc_average_quota_per_fleet_group_regulation.R",
+    "project_path" : "Calc_average_quota_per_fleet_group_regulation.R",
+    "properties" : {
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

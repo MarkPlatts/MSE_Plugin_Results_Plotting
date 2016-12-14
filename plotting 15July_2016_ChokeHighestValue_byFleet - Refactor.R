@@ -107,9 +107,6 @@ plot_type = function(type2plot) {
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   if(params$CHOKE_GROUPS) plot_choke_pies(params)
   
-  ###AverageQuota_EachFleet
-  
-
 }  
 
 for(iplot in c(13)){

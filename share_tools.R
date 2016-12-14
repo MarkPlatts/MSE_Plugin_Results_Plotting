@@ -15,6 +15,8 @@ initialise_plotting_params = function(folder_name, params){
 }
 
 
+
+
 # calculating the upper and lower confidence intervals and median ---------
 calc_vals_for_plotting = function(params, plotting_params){
   
@@ -53,7 +55,18 @@ get_timestep_vals = function(plotmonthly, start_year, end_year){
   }
 }
 
+LoadUniqueStrategies = function(path){
+  
+  file.path = paste(path,"/ValueTrajectories/ValueYearly_AllGroups_FleetNo8.csv", sep="")
+  file.data = read.csv(file.path, skip=7, header = TRUE)
+  UniqueStrategies = as.matrix(unique(file.data$StrategyName))
+  return(UniqueStrategies)
+}
 
+SubsetVectorStrings_ContainingString = function(VectorStrings, String2Find){
+  SubsetIndices = grep(String2Find, VectorStrings, fixed=TRUE)
+  return(VectorStrings[SubsetIndices])
+}
 
 #Checks whether the filename given is incorrect given setting to either plot yearly or none yearly values
 IsIncorrectFileType_YearlyMonthly = function(FileName, plot_yearly){
@@ -65,6 +78,23 @@ IsIncorrectFileType_YearlyMonthly = function(FileName, plot_yearly){
 
 }
 
+#Find a string within another string
+#This can be done in a single line but it is fairly unreadable
+StringContains = function(ContainingString, String2Check)
+{
+  return(length(grep(String2Check, ContainingString, fixed=TRUE))>0)
+}
+
+
+#Check that multiple strings all exist within another string
+StringContains_AllStrings = function(ContainingString, MultipleStrings2Check)
+{
+  for(iString in MultipleStrings2Check){
+    if(StringContains(ContainingString, iString)==FALSE) 
+      return(FALSE)
+  }
+  return(TRUE)
+}
 
 
 FileIsForACompareGroup = function(params, FILENAME){
