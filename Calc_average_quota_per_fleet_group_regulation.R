@@ -9,7 +9,6 @@ LoadFile_ContainsListStrings = function(Dir.Path, StringsInFileName)
 {
   #Get a list of all the files
   AllFiles <- list.files(Dir.Path)
-  
   #Need to loop across all files so that we can extract
   for (iFile in AllFiles){
     #Find and load file that contains values for selected group and fleet
@@ -17,16 +16,16 @@ LoadFile_ContainsListStrings = function(Dir.Path, StringsInFileName)
     if(FoundFile) {
       iFile.data <- read.csv(paste(Dir.Path,iFile, sep=''),skip=7, head=T)
       return (iFile.data)
-    } else {
-      return(NA)
     }
   }
+  return(NA)
   
 }
 
 
 Average_Quota_Across_Models_And_RegTypes = function(Group, Fleet, RegulationType, ResultsPath)
 {
+  
   FileData = LoadFile_ContainsListStrings(Dir.Path = paste(ResultsPath,"/HCRQuota_Targ/",sep=''), StringsInFileName = c(Group, Fleet))
   
   UniqueStrategies = LoadUniqueStrategies(ResultsPath)
@@ -34,9 +33,11 @@ Average_Quota_Across_Models_And_RegTypes = function(Group, Fleet, RegulationType
   Strategies_OfRegType = SubsetVectorStrings_ContainingString(UniqueStrategies, RegulationType)
 
   FileData = filter(FileData, StrategyName %in% Strategies_OfRegType)
+  
+  return(as.numeric(colMeans(FileData[,6:25])))
 
 }
 
-ResultPath = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/R Code/TestFolder_R_Plotting_MSE_Plugin/withBiomassForcing_Yearly_Results HCR type1 and 3/Results"
-Average_Quota_Across_Models_And_RegTypes("Cod (adult", "FleetNo2", "Highest value", ResultPath)
+# ResultPath = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/R Code/TestFolder_R_Plotting_MSE_Plugin/withBiomassForcing_Yearly_Results HCR type1 and 3/Results"
+# Average_Quota_Across_Models_And_RegTypes("Cod (adult", "FleetNo2", "Highest value", ResultPath)
 
