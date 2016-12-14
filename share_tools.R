@@ -59,7 +59,7 @@ LoadUniqueStrategies = function(path){
   
   file.path = paste(path,"/ValueTrajectories/ValueYearly_AllGroups_FleetNo8.csv", sep="")
   file.data = read.csv(file.path, skip=7, header = TRUE)
-  UniqueStrategies = as.matrix(unique(file.data$StrategyName))
+  UniqueStrategies = as.vector(as.matrix(unique(file.data$StrategyName)))
   return(UniqueStrategies)
 }
 
