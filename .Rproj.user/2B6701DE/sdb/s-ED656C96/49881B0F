@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "library(dplyr)\n\nsetwd(\"C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting/\")\nsource(\"share_tools.R\")\n\n\n#Loads the file in folder specified containing all the strings in vector of strings\nLoadFile_ContainsListStrings = function(Dir.Path, StringsInFileName)\n{\n  #Get a list of all the files\n  AllFiles <- list.files(Dir.Path)\n  #Need to loop across all files so that we can extract\n  for (iFile in AllFiles){\n    #Find and load file that contains values for selected group and fleet\n    FoundFile = StringContains_AllStrings(ContainingString=iFile, MultipleStrings2Check=StringsInFileName)\n    if(FoundFile) {\n      iFile.data <- read.csv(paste(Dir.Path,iFile, sep=''),skip=7, head=T)\n      return (iFile.data)\n    }\n  }\n  return(NA)\n  \n}\n\n\nAverage_Quota_Across_Models_And_RegTypes = function(Group, Fleet, RegulationType, ResultsPath)\n{\n  \n  FileData = LoadFile_ContainsListStrings(Dir.Path = paste(ResultsPath,\"/HCRQuota_Targ/\",sep=''), StringsInFileName = c(Group, Fleet))\n  \n  UniqueStrategies = LoadUniqueStrategies(ResultsPath)\n  \n  Strategies_OfRegType = SubsetVectorStrings_ContainingString(UniqueStrategies, RegulationType)\n\n  FileData = filter(FileData, StrategyName %in% Strategies_OfRegType)\n  \n  return(as.numeric(colMeans(FileData[,6:ncol(FileData)])))\n\n}\n\nplot_average_quotas = function(params)\n{\n  #specify the regulation types to plot\n  RegulationTypes = c(\"Highest value\", \"Weakest stock\", \"Selective\", \"NONE\")\n  \n  #Get all the groups to plot\n  \n  \n  #Cycle across all groups to plot and extract the results putting them in a dataframe\n  \n  #melt the data frame down\n  \n  #use ggplot to plot results - specify legends to be species and a column of different regulation types\n}\n\n\n",
+    "created" : 1481650207712.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3180664782",
+    "id" : "49881B0F",
+    "lastKnownWriteTime" : 1481720289,
+    "last_content_update" : 1481720289206,
+    "path" : "C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting/Calc_average_quota_per_fleet_group_regulation.R",
+    "project_path" : "Calc_average_quota_per_fleet_group_regulation.R",
+    "properties" : {
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

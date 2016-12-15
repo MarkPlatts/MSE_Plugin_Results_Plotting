@@ -1,5 +1,8 @@
+rm(list=ls())
+
 setwd("C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting/")
 source("Calc_average_quota_per_fleet_group_regulation.R")
+source("share_tools.R")
 
 print(Sys.time())
 
@@ -23,6 +26,7 @@ Test__Check_Average_Quota_across_models_4_AdultCod_Fleet1_HighestValue = functio
     print("PASSED")
   } else{
     print("FAILED")
+    
   }
 }
 
@@ -46,6 +50,7 @@ Test__LoadFile_ContainsListStrings = function()
     print("PASSED")
   } else {
     print("FAILED")
+    
   }
 }
 
@@ -64,6 +69,7 @@ Test__StringContains_StringDoesNotExist = function()
   #Results
   if (Outcome==TRUE){
     print("FAILED!")
+    
   }
   if (Outcome==FALSE){
     print("PASSED!")
@@ -89,6 +95,7 @@ Test__StringContains_StringDoesExist = function()
   }
   if (Outcome==FALSE){
     print("FAILED!")
+    
   }
 }
 
@@ -107,6 +114,7 @@ Test__StringContains_AllStrings_StringsDoExist_FindsThem = function()
   #Result:
   if(Outcome == FALSE){
     print("FAILED!")
+    
   }
   if(Outcome == TRUE){
     print("PASSED!")
@@ -127,6 +135,7 @@ Test__StringContains_AllStrings_StringsDontExist_DoesNotFindThem = function()
   #Result:
   if(Outcome == TRUE){
     print("FAILED!")
+    
   }
   if(Outcome == FALSE){
     print("PASSED!")
@@ -150,6 +159,7 @@ Test__SubsetVectorStrings_ContainingString__Finds_All_Highest_Value = function()
     print("PASSED!")
   } else {
     print("FAILED!")
+    
   }
 }
 
@@ -163,16 +173,86 @@ Test__LoadUniqueStrategies__SameUniqueFile = function()
   
   #Test:
   CorrectStrategies = as.vector(Load_Strategies("../TestInput/UniqueStrategies.csv"))
+  
   #Result:
   if(all.equal(Outcome, CorrectStrategies)){
+    print("PASSED!")
+  } else {
+    print("FAILED!")
+    
+  }
+}
+
+
+Test__LoadUniqueGroups__Loads_when_file_exists = function()
+{
+  print("Test__LoadUniqueGroups__Loads_when_file_exists")
+  
+  #Input
+  Correct_First_Group = "Baleen whales"
+  Correct_30th_Group = "Sprat"
+  Correct_Last_Group = "Phytoplankton"
+  
+  #Test:
+  Outcome = LoadUniqueGroups(paste(GetResultsLocation(),"../TestInput/LoadsUniqueGroupsWhenExists/",sep=""))
+  
+  #Result:
+  if(Outcome[1] == Correct_First_Group & Outcome[30] == Correct_30th_Group & tail(Outcome, n=1) == Correct_Last_Group){
+    print("PASSED!")
+  } else {
+    print("FAILED!")
+    
+  }
+}
+
+
+Test__LoadUniqueGroups__Creates_from_results.csv_when_doesnt_exist = function()
+{
+  print("Test__LoadUniqueGroups__Creates_from_results.csv_when_doesnt_exist")
+  
+  #Input
+  Correct_First_Group = "Baleen whales"
+  Correct_30th_Group = "Sprat"
+  Correct_Last_Group = "Phytoplankton"
+  #Get rid of old file if exists
+  if(file.exists(paste(GetResultsLocation(),"../TestInput/CreatesUniqueGroupsWhenDoesntExist/UniqueGroups.csv",sep=""))) 
+  {
+    file.remove(paste(GetResultsLocation(),"../TestInput/CreatesUniqueGroupsWhenDoesntExist/UniqueGroups.csv",sep=""))
+  }           
+  
+  #Test:
+  Outcome = LoadUniqueGroups(paste(GetResultsLocation(),"../TestInput/CreatesUniqueGroupsWhenDoesntExist/",sep=""))
+
+  #Result:
+  if(Outcome[1] == Correct_First_Group & Outcome[30] == Correct_30th_Group & tail(Outcome, n=1) == Correct_Last_Group){
     print("PASSED!")
   } else {
     print("FAILED!")
   }
 }
 
+Test__Plot_Average_Quotas = function()
+{
 
+  print("Test__Plot_Average_Quotas")
+  
+  #Input
+  Path = GetResultsLocation()
+  Groups = c("Cod (adult)", "Haddock (adult)", "Herring (adult)")
+  TimeSteps = 1:20
+  RegulationTypes = c("Highest value", "Weakest stock", "Selective")
+  Fleet = "FleetNo1"
 
+  #Test:
+  Plot_Average_Quotas(Path, Groups, Fleet, TimeSteps, RegulationTypes)
+  
+  #Result:
+  # if(Outcome[1] == Correct_First_Group & Outcome[30] == Correct_30th_Group & tail(Outcome, n=1) == Correct_Last_Group){
+  #   print("PASSED!")
+  # } else {
+  #   print("FAILED!")
+  # }
+}
 
 
 # Testing_Helper_Methods --------------------------------------------------
@@ -195,13 +275,17 @@ GetResultsLocation = function()
 }
 
 
+
 # Run Tests ---------------------------------------------------------------
-Test__Check_Average_Quota_across_models_4_AdultCod_Fleet1_HighestValue()
-Test__LoadUniqueStrategies__SameUniqueFile()
-Test__SubsetVectorStrings_ContainingString__Finds_All_Highest_Value()
-Test__StringContains_AllStrings_StringsDontExist_DoesNotFindThem()
-Test__StringContains_AllStrings_StringsDoExist_FindsThem()
-Test__LoadFile_ContainsListStrings()
-Test__StringContains_StringDoesNotExist()
-Test__StringContains_StringDoesExist()
+# Test__Check_Average_Quota_across_models_4_AdultCod_Fleet1_HighestValue()
+# Test__LoadUniqueStrategies__SameUniqueFile()
+# Test__SubsetVectorStrings_ContainingString__Finds_All_Highest_Value()
+# Test__StringContains_AllStrings_StringsDontExist_DoesNotFindThem()
+# Test__StringContains_AllStrings_StringsDoExist_FindsThem()
+# Test__LoadFile_ContainsListStrings()
+# Test__StringContains_StringDoesNotExist()
+# Test__StringContains_StringDoesExist()
+# Test__LoadUniqueGroups__Loads_when_file_exists()
+#Test__LoadUniqueGroups__Creates_from_results.csv_when_doesnt_exist()
+Test__Plot_Average_Quotas()
 
