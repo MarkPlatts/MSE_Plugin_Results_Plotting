@@ -10,6 +10,7 @@ plot_type = function(type2plot) {
   source("HighestValuePie.R")
   source("plot_tools.R")
   source("share_tools.R")
+  source("Calc_average_quota_per_fleet_group_regulation.R")
   
   params = initialise_params()
 
@@ -36,7 +37,6 @@ plot_type = function(type2plot) {
   if(type2plot==7){
     params$MORT_REAL_F <- T;     if(params$MORT_REAL_F) {setwd("RealisedF");params$YLAB<-"F";print("Plotting MORT_REAL_F")}
   }
-  #params$YLAB<-"catch (t)"
   if(type2plot==8){
     params$CATCH <-T;    if(params$CATCH) {setwd("CatchTrajectories"); params$YLAB<-"catch (t/year)";print("Plotting CATCH")}
   }
@@ -65,7 +65,7 @@ plot_type = function(type2plot) {
   }
   
   if(type2plot==16){
-    params$AverageQuota_EachFleet<- T;  setwd("AverageQuota_EachFleet");params$YLAB<-"t";print("Plotting AverageQuota_EachFleet")} # what are these?
+    params$AverageQuota_EachFleet<- T; params$YLAB<-"t/km2";print("Plotting AverageQuota_EachFleet")
   }
   
   if (params$COMPARE_STRATEGIES){
@@ -106,10 +106,13 @@ plot_type = function(type2plot) {
   ###CHOKE SPECIES Pie chart
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   if(params$CHOKE_GROUPS) plot_choke_pies(params)
-  
-}  
 
-for(iplot in c(13)){
+  ###Plot average target quota across a regulation type and models
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  if(params$AverageQuota_EachFleet) Plot_Average_Quotas(params$RootPath)
+}
+
+for(iplot in c(16)){
   print(paste("Currently plotting type", iplot))
   plot_type(iplot)
 }
