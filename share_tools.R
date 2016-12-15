@@ -1,3 +1,5 @@
+library(dplyr)
+
 initialise_plotting_params = function(folder_name, params){
   #init plotting params
   plotting_params = list()
@@ -61,9 +63,25 @@ LoadUniqueStrategies = function(path){
   file.data = read.csv(file.path, skip=7, header = TRUE)
   UniqueStrategies = as.vector(as.matrix(unique(file.data$StrategyName)))
   return(UniqueStrategies)
+  
 }
 
-SubsetVectorStrings_ContainingString = function(VectorStrings, String2Find){
+LoadUniqueGroups = function(path)
+{
+  if(file.exists(paste(path,"UniqueGroups.csv",sep=""))){
+    UniqueGroups = as.matrix(read.csv(paste(path,"UniqueGroups.csv", sep=""),header = T))
+  } else {
+    file.path = paste(path,"/Results.csv", sep="")
+    file.data = read.csv(file.path, skip=7, header = TRUE)
+    file.data = filter(file.data, ResultName == "BiomassMin")
+    UniqueGroups = as.vector(as.matrix(unique(file.data$GroupName)))
+    write.csv(UniqueGroups,paste(path,"UniqueGroups.csv",sep=""), row.names = F)
+  }
+  return(UniqueGroups)
+}
+
+SubsetVectorStrings_ContainingString = function(VectorStrings, String2Find)
+{
   SubsetIndices = grep(String2Find, VectorStrings, fixed=TRUE)
   return(VectorStrings[SubsetIndices])
 }
