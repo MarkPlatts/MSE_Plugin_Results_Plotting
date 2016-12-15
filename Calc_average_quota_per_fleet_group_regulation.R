@@ -1,4 +1,6 @@
 library(dplyr)
+library(reshape)
+library(ggplot2)
 
 setwd("C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting/")
 source("share_tools.R")
@@ -25,7 +27,7 @@ LoadFile_ContainsListStrings = function(Dir.Path, StringsInFileName)
 
 Average_Quota_Across_Models_And_RegTypes = function(Group, Fleet, RegulationType, ResultsPath)
 {
-  
+
   FileData = LoadFile_ContainsListStrings(Dir.Path = paste(ResultsPath,"/HCRQuota_Targ/",sep=''), StringsInFileName = c(Group, Fleet))
   
   UniqueStrategies = LoadUniqueStrategies(ResultsPath)
@@ -34,10 +36,30 @@ Average_Quota_Across_Models_And_RegTypes = function(Group, Fleet, RegulationType
 
   FileData = filter(FileData, StrategyName %in% Strategies_OfRegType)
   
-  return(as.numeric(colMeans(FileData[,6:25])))
+  return(as.numeric(colMeans(FileData[,6:ncol(FileData)])))
 
 }
 
-# ResultPath = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/R Code/TestFolder_R_Plotting_MSE_Plugin/withBiomassForcing_Yearly_Results HCR type1 and 3/Results"
-# Average_Quota_Across_Models_And_RegTypes("Cod (adult", "FleetNo2", "Highest value", ResultPath)
+Plot_Average_Quotas = function(Path, Groups, Fleet, TimeStep, RegulationTypes)
+{
+  #Get all the groups to plot
+  #UniqueGroups = LoadUniqueGroups(Path)
+  
+  df_Average_Quota = data.frame()
+  
+  #Cycle across all groups to plot and extract the results putting them in a dataframe
+  for(iGroup in Groups)
+  {
+  print(iGroup)
+    for(iRegulation in RegulationTypes)
+    {
+      temp_mean_vals = Average_Quota_Across_Models_And_RegTypes(iGroup,Fleet,iRegulation,Path)
+      df_Average_Quota = rbind(df_Average_Quota, data.frame(TimeStep = TimeStep, GroupName = iGroup, Regulation = iRegulation, AverageQuota = temp_mean_vals))
+    }
+  }
+  
+  #use ggplot to plot results - specify legends to be species and a column of different regulation types
+  print(qplot(TimeStep, AverageQuota, data=df_Average_Quota, geom=c("line"), color=GroupName, facets=Regulation~., main=Fleet))
+}
+
 
