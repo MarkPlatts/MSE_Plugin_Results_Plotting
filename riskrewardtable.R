@@ -1,8 +1,6 @@
-rm(list = ls())
-
 library(reshape)
-library(plyr)
-library(data.table)
+library(dplyr)
+#library(data.table)
 
 source("C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting/share_tools.R")
 
@@ -11,47 +9,53 @@ source("C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting/share_tools.R")
 create_riskreward_table <- function(){
 
   plot.path = "C://Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/Yearly_Results HCR type1 and 3/Plots/"
-  RootPath =  "C://Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/Yearly_Results HCR type1 and 3/Results"
+  RootPath =  "C://Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/Yearly_Results HCR type1 and 3/Results/"
   
   #Create folder to store the results in
-  dir.create("C://Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/Yearly_Results HCR type1 and 3/Plots/RISK_REWARD_TABLES")
-  dir.create("C://Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/Yearly_Results HCR type1 and 3/Plots/RISK_REWARD_TABLES/byGroup")
+  dir.create("C://Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/Yearly_Results HCR type1 and 3/Plots/RISK_REWARD_TABLES", showWarnings = FALSE)
+  dir.create("C://Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/Yearly_Results HCR type1 and 3/Plots/RISK_REWARD_TABLES/byGroup", showWarnings = FALSE)
   
-    
   #get a list of all the files in the Biomass folder
-  g.biomass <- list.files(paste(RootPath,"\\Biomass", sep=''), full.names=TRUE)
-  g.catch <- list.files(paste(RootPath,"\\CatchTrajectories", sep=''), full.names=TRUE)
-  g.landings <- list.files(paste(RootPath,"\\LandingsTrajectories", sep=''), full.names=TRUE)
+  g.biomass.filenames <- list.files(paste(RootPath,"\\Biomass", sep=''), full.names=TRUE)
+  g.catch.filenames <- list.files(paste(RootPath,"\\CatchTrajectories", sep=''), full.names=TRUE)
+  g.landings.filenames <- list.files(paste(RootPath,"\\LandingsTrajectories", sep=''), full.names=TRUE)
+  g.value.filenames <- list.files(paste(RootPath, "\\ValueTrajectories", sep=''), full.names=TRUE)
+  
+  GroupsOnly_Vars2MeltBy = c("GroupName","ModelID","StrategyName","ResultType")
+  GroupFleet_Vars2MeltBy = c("GroupName","FleetName","ModelID","StrategyName","ResultType")
+  
+  Biomass_StartAverageAtTimeStep = 39
+  Biomass_StartTimeStep = 23
+  CatchTrajectories_StartAverageAtTimeStep = 16
   
   total = data.table()
   
-  for(G.biomass in g.biomass){
-
-    #Get the filename to be used to check whether yearly in name, to name files of plots and to add text to plots
-    FILENAME = substr(G.biomass,1,nchar(G.biomass)-4)
+  UniqueGroups = LoadUniqueGroups(RootPath)
+  
+  for(iGroup in UniqueGroups){
     
-    #dat <- read.csv(G.biomass,skip=7, head=T)
-    dat <- fread(G.biomass,skip=7, head=T)
-    #names(dat) = c(names(dat)[1:4],1:43)
+    biomass_filename = GetFileName_ContainsStrings(paste(RootPath,"\\Biomass", sep=''), c(iGroup), WithPath=TRUE)
+    dat_biomass = Calc_Last5YearMean(biomass_filename, "Biomass_Last5YearMean", GroupsOnly_Vars2MeltBy, Biomass_StartAverageAtTimeStep)
+    dat_biomass_start = Get_StartBiomass(biomass_filename, "Biomass_Start", GroupsOnly_Vars2MeltBy, Biomass_StartTimeStep)
     
-    dat <- melt(dat, id=c("GroupName","ModelID","StrategyName","ResultType"))
-    dat$variable = as.numeric(dat$variable)
-    GroupName = dat[1,GroupName]
+    catch_filename = GetFileName_ContainsStrings(paste(RootPath,"\\CatchTrajectories", sep=''), c(iGroup, "AllFleets"), WithPath=TRUE)
+    dat_catch = Calc_Last5YearMean(catch_filename, "Catch_Last5YearMean", GroupFleet_Vars2MeltBy, CatchTrajectories_StartAverageAtTimeStep)
     
-    dat = filter(dat, variable>=39)
-    dat_biomass = ddply(dat, .(GroupName,ModelID,StrategyName),summarise, Biomass5YearMean = mean(value))
-
-    dat_catch = CalcMean_CatchLandings(g.catch, GroupName)
-    dat_landings = CalcMean_CatchLandings(g.landings, GroupName)
-    names(dat_landings)[4]="Landings5YearMean"
-
-    both <- merge(dat_biomass,dat_catch,by=c("ModelID","GroupName","StrategyName"), sort=FALSE)
+    landings_filename = GetFileName_ContainsStrings(paste(RootPath,"\\LandingsTrajectories", sep=''), c(iGroup, "AllFleets"), WithPath=TRUE)
+    dat_landings = Calc_Last5YearMean(landings_filename, "Landings_Last5YearMean", GroupFleet_Vars2MeltBy, CatchTrajectories_StartAverageAtTimeStep)
+    
+    value_filename = GetFileName_ContainsStrings(paste(RootPath,"\\ValueTrajectories", sep=''), c(iGroup, "AllFleets"), WithPath=TRUE)
+    dat_value = Calc_Last5YearMean(value_filename, "Value_Last5YearMean", GroupFleet_Vars2MeltBy, CatchTrajectories_StartAverageAtTimeStep)
+    
+    both <- merge(dat_biomass,dat_biomass_start,by=c("ModelID","GroupName","StrategyName"), sort=FALSE)
+    both <- merge(both,dat_catch, by=c("ModelID","GroupName","StrategyName"), sort=FALSE)
     both <- merge(both,dat_landings, by=c("ModelID","GroupName","StrategyName"), sort=FALSE)
+    both <- merge(both,dat_value, by=c("ModelID","GroupName","StrategyName"), sort=FALSE)
 
     total <- rbind(total,both)
     
     #Save this to risk_reward_tables
-    write.csv(both,paste(plot.path,"RISK_REWARD_TABLES/byGroup/",GroupName,".csv",sep=""))
+    write.csv(both,paste(plot.path,"RISK_REWARD_TABLES/byGroup/",iGroup,".csv",sep=""))
     
   }
   
@@ -59,24 +63,44 @@ create_riskreward_table <- function(){
   
 }
 
-CalcMean_CatchLandings = function(catchlandings, GroupName){
+
+Calc_Last5YearMean = function(GroupFileName, DataName, vars2meltby, StartTimeStep)
+{
   
-  #Find the matching catch trajectory
-  for(G.catchlandings in catchlandings){
-    if (length(grep(GroupName, G.catchlandings, fixed=TRUE))==1){
-      if (length(grep("AllFleets", G.catchlandings, fixed=TRUE))==1){
-        
-        dat <- fread(G.catchlandings,skip=7, head=T)
-        
-        dat <- melt(dat, id=c("GroupName","FleetName","ModelID","StrategyName","ResultType"))
-        dat$variable = as.numeric(dat$variable)
-        
-        dat = filter(dat, variable>=16)
-        dat_catch = ddply(dat, .(GroupName,ModelID,StrategyName),summarise, Catch5YearMean = mean(value))
-        break
-      }
-    }
-  }
-  return(dat_catch)
+  dat = Get_Data_And_Melt(GroupFileName, vars2meltby)
+  
+  dat = filter(dat, variable>=StartTimeStep)
+  dat_Averaged = ddply(dat, .(GroupName,ModelID,StrategyName),summarise, Last5YearMean = mean(value))
+  
+  names(dat_Averaged)[4] = DataName
+  
+  return(dat_Averaged)
+  
 }
+
+Get_StartBiomass = function(GroupFileName, DataName, vars2meltby, StartTimeStep)
+{
+  dat = Get_Data_And_Melt(GroupFileName, vars2meltby)
+  
+  dat = filter(dat, variable==StartTimeStep)
+  dat = select(dat, GroupName, ModelID, StrategyName, value)
+  
+  names(dat)[4] = DataName
+
+  return(dat)
+}
+
+Get_Data_And_Melt = function(GroupFileName, vars2meltby)
+{
+  
+  dat <- fread(GroupFileName, skip=7, head=T)
+  
+  dat <- melt(dat, id=vars2meltby)
+  dat$variable = as.numeric(dat$variable)
+  
+  return(dat)
+  
+}
+
+
 
