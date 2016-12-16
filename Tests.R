@@ -3,6 +3,8 @@ rm(list=ls())
 setwd("C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting/")
 source("Calc_average_quota_per_fleet_group_regulation.R")
 source("share_tools.R")
+source("riskrewardtable.R")
+library("dplyr")
 
 print(Sys.time())
 
@@ -232,6 +234,119 @@ Test__LoadUniqueGroups__Creates_from_results.csv_when_doesnt_exist = function()
 }
 
 
+Test__Calc_Biomass_Last5YearMean__Cod_adult_Model_6_Strat_10_Safegd_LowF_Weakest_stock= function()
+{
+  print("Test__Calc_Biomass_Last5YearMean__Cod_adult_Model_6_Strat_10_Safegd_LowF_Weakest_stock")
+  
+  #Input
+  GroupName = "Cod (adult)"
+  ModelID = 6
+  Biomass_StartAverageAtTimeStep = 39
+  Path_And_FileName = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/R Code/TestFolder_R_Plotting_MSE_Plugin/withBiomassForcing_Yearly_Results HCR type1 and 3/Results/Biomass/BiomassYearly_Cod (adult)_GroupNo14.csv"
+  GroupsOnly_Vars2MeltBy = c("GroupName","ModelID","StrategyName","ResultType")
+  
+  #Test:
+  Averages = Calc_Last5YearMean(Path_And_FileName, "Biomass_Last5YearMean", GroupsOnly_Vars2MeltBy, Biomass_StartAverageAtTimeStep)
+  calculated_value = as.numeric(filter(Averages,ModelID==6 & StrategyName == "10 Safegd_LowF_Weakest stock")[4])
+  
+  #Correct value
+  correct_value = 0.4603413244
+  
+  #Result:
+  if(isTRUE(all.equal(correct_value, calculated_value, 1e-7))){
+    print("PASSED!")
+  } else {
+    print("FAILED!")
+  }
+}
+
+
+Test__Calc_CatchLast5YearMean__Cod_adult_Model_6_Strat_10_Safegd_LowF_Weakest_stock= function()
+{
+  print("Test__Calc_CatchLast5YearMean__Cod_adult_Model_6_Strat_10_Safegd_LowF_Weakest_stock")
+  
+  #Input
+  GroupName = "Cod (adult)"
+  ModelID = 6
+  CatchTrajectories_StartAverageAtTimeStep = 16
+  Path_And_FileName = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/R Code/TestFolder_R_Plotting_MSE_Plugin/withBiomassForcing_Yearly_Results HCR type1 and 3/Results/CatchTrajectories/TotalCatchYearly_Cod (adult)_GroupNo14_AllFleets.csv"
+  GroupFleet_Vars2MeltBy = c("GroupName","FleetName","ModelID","StrategyName","ResultType")
+  
+  #Test:
+  Averages = Calc_Last5YearMean(Path_And_FileName, "Catches_Last5YearMean", GroupFleet_Vars2MeltBy, CatchTrajectories_StartAverageAtTimeStep)
+  calculated_value = as.numeric(filter(Averages,ModelID==6 & StrategyName == "10 Safegd_LowF_Weakest stock")[4])
+  
+  #Correct value
+  correct_value = 0.0587325677
+  
+  #Result:
+  if(isTRUE(all.equal(correct_value, calculated_value, 1e-7))){
+    print("PASSED!")
+  } else {
+    print("FAILED!")
+  }
+}
+
+
+
+Test__Calc_ValueLast5YearMean__Cod_adult_Model_6_Strat_10_Safegd_LowF_Weakest_stock= function()
+{
+  print("Test__Calc_ValueLast5YearMean__Cod_adult_Model_6_Strat_10_Safegd_LowF_Weakest_stock")
+  
+  #Input
+  GroupName = "Cod (adult)"
+  ModelID = 6
+  CatchTrajectories_StartAverageAtTimeStep = 16
+  Path_And_FileName = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/R Code/TestFolder_R_Plotting_MSE_Plugin/withBiomassForcing_Yearly_Results HCR type1 and 3/Results/ValueTrajectories/ValueYearly_Cod (adult)_GroupNo14_AllFleets.csv"
+  GroupFleet_Vars2MeltBy = c("GroupName","FleetName","ModelID","StrategyName","ResultType")
+  
+  #Test:
+  Averages = Calc_Last5YearMean(Path_And_FileName, "Catches_Last5YearMean", GroupFleet_Vars2MeltBy, CatchTrajectories_StartAverageAtTimeStep)
+  calculated_value = as.numeric(filter(Averages,ModelID==6 & StrategyName == "10 Safegd_LowF_Weakest stock")[4])
+  
+  #Correct value
+  correct_value = 0.1355333742
+
+  
+  #Result:
+  if(isTRUE(all.equal(correct_value, calculated_value, 1e-7))){
+    print("PASSED!")
+  } else {
+    print("FAILED!")
+  }
+}
+
+
+
+Test__Calc_StartBiomass__Cod_adult_Model_6_Strat_10_Safegd_LowF_Weakest_stock= function()
+{
+  print("Test__Calc_StartBiomass__Cod_adult_Model_6_Strat_10_Safegd_LowF_Weakest_stock")
+  
+  #Input
+  GroupName = "Cod (adult)"
+  ModelID = 6
+  Biomass_StartTimeStep = 23
+  Path_And_FileName = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/R Code/TestFolder_R_Plotting_MSE_Plugin/withBiomassForcing_Yearly_Results HCR type1 and 3/Results/Biomass/BiomassYearly_Cod (adult)_GroupNo14.csv"
+  GroupsOnly_Vars2MeltBy = c("GroupName","ModelID","StrategyName","ResultType")
+  
+  #Test:
+  BiomassStarts = Get_StartBiomass(Path_And_FileName, "Biomass_Start", GroupsOnly_Vars2MeltBy, Biomass_StartTimeStep)
+  calculated_value = as.numeric(filter(BiomassStarts,ModelID==6 & StrategyName == "10 Safegd_LowF_Weakest stock")[4])
+  
+  #Correct value
+  correct_value = 0.352146329979102
+  
+  #Result:
+  if(isTRUE(all.equal(correct_value, calculated_value, 1e-7))){
+    print("PASSED!")
+  } else {
+    print("FAILED!")
+  }
+}
+
+
+
+
 # Testing_Helper_Methods --------------------------------------------------
 
 #Load the strategies from uniquestrategies file to save having to load a big file up
@@ -251,8 +366,6 @@ GetResultsLocation = function()
   return("C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/R Code/TestFolder_R_Plotting_MSE_Plugin/withBiomassForcing_Yearly_Results HCR type1 and 3/Results/")
 }
 
-
-
 # Run Tests ---------------------------------------------------------------
 # Test__Check_Average_Quota_across_models_4_AdultCod_Fleet1_HighestValue()
 # Test__LoadUniqueStrategies__SameUniqueFile()
@@ -263,6 +376,8 @@ GetResultsLocation = function()
 # Test__StringContains_StringDoesNotExist()
 # Test__StringContains_StringDoesExist()
 # Test__LoadUniqueGroups__Loads_when_file_exists()
-#Test__LoadUniqueGroups__Creates_from_results.csv_when_doesnt_exist()
-Test__Plot_Average_Quotas()
-
+# Test__LoadUniqueGroups__Creates_from_results.csv_when_doesnt_exist()
+Test__Calc_Biomass_Last5YearMean__Cod_adult_Model_6_Strat_10_Safegd_LowF_Weakest_stock()
+Test__Calc_CatchLast5YearMean__Cod_adult_Model_6_Strat_10_Safegd_LowF_Weakest_stock()
+Test__Calc_ValueLast5YearMean__Cod_adult_Model_6_Strat_10_Safegd_LowF_Weakest_stock()
+Test__Calc_StartBiomass__Cod_adult_Model_6_Strat_10_Safegd_LowF_Weakest_stock()
