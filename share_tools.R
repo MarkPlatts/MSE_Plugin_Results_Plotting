@@ -115,6 +115,32 @@ StringContains_AllStrings = function(ContainingString, MultipleStrings2Check)
 }
 
 
+
+Check_FileName_Contains_Strings = function(FileName, MultipleStrings2Check)
+  #This just wraps around StringContains_AllStrings with a name more fitting for the code so easier to read
+{
+  StringContains_AllStrings(FileName, MultipleStrings2Check)
+}
+
+
+
+GetFileName_ContainsStrings = function(FolderPath, Strings, WithPath)
+{
+  #Create a list of files at path
+  AllFileNames = list.files(FolderPath, full.names = WithPath)
+  
+  #cycle through list checking whether file contains the strings
+  for(iFileName in AllFileNames)
+  {
+    if(Check_FileName_Contains_Strings(iFileName,Strings))
+    {
+      return(iFileName)
+    }
+  }
+  
+}
+
+
 FileIsForACompareGroup = function(params, FILENAME){
   nNotGroups2Compare=0
   for (igroup in params$Groups2Plot){
