@@ -42,6 +42,7 @@ Average_Quota_Across_Models_And_RegTypes = function(Group, Fleet, RegulationType
 
 Plot_Average_Quotas = function(Path, Groups, Fleet, TimeStep, RegulationTypes)
 {
+  Area_km2 = 570000
   #Get all the groups to plot
   #UniqueGroups = LoadUniqueGroups(Path)
   
@@ -54,6 +55,7 @@ Plot_Average_Quotas = function(Path, Groups, Fleet, TimeStep, RegulationTypes)
     for(iRegulation in RegulationTypes)
     {
       temp_mean_vals = Average_Quota_Across_Models_And_RegTypes(iGroup,Fleet,iRegulation,Path)
+      temp_mean_vals = temp_mean_vals * Area_km2
       df_Average_Quota = rbind(df_Average_Quota, data.frame(TimeStep = TimeStep, GroupName = iGroup, Regulation = iRegulation, AverageQuota = temp_mean_vals))
     }
   }

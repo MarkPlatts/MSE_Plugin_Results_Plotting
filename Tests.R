@@ -231,29 +231,6 @@ Test__LoadUniqueGroups__Creates_from_results.csv_when_doesnt_exist = function()
   }
 }
 
-Test__Plot_Average_Quotas = function()
-{
-
-  print("Test__Plot_Average_Quotas")
-  
-  #Input
-  Path = GetResultsLocation()
-  Groups = c("Cod (adult)", "Haddock (adult)", "Herring (adult)")
-  TimeSteps = 1:20
-  RegulationTypes = c("Highest value", "Weakest stock", "Selective")
-  Fleet = "FleetNo1"
-
-  #Test:
-  Plot_Average_Quotas(Path, Groups, Fleet, TimeSteps, RegulationTypes)
-  
-  #Result:
-  # if(Outcome[1] == Correct_First_Group & Outcome[30] == Correct_30th_Group & tail(Outcome, n=1) == Correct_Last_Group){
-  #   print("PASSED!")
-  # } else {
-  #   print("FAILED!")
-  # }
-}
-
 
 # Testing_Helper_Methods --------------------------------------------------
 
