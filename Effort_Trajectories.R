@@ -44,7 +44,7 @@ plot_effort_trajectories <- function(params){
     par(mar=c(5.1, 4.1, 4.1, 12), xpd=TRUE)
 
     #Do the plotting and add annotation
-    plot(plotting_params$TimeStepVals,plotting_params$MEANS[,2],type='l',ylim=c(0,1.25*(max(plotting_params$MEANS[,-1]))),lty=params$LTY[1],col=params$COL[1],ylab="relative effort (t)",xlab="year",font=20,lwd=params$lineweight)
+    plot(plotting_params$TimeStepVals,plotting_params$MEANS[,2],type='l',ylim=c(0,1.25*(max(plotting_params$MEANS[,-1]))),lty=params$LTY[1],col=params$COL[1],ylab="Relative effort",xlab="year",font=20,lwd=params$lineweight)
     for(i in 3:ncol(plotting_params$MEANS)) {
       lines(plotting_params$TimeStepVals,plotting_params$MEANS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)],lwd=params$lineweight)
     }

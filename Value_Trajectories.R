@@ -131,7 +131,7 @@ plot_value_trajectories <- function(params){
         lines(TimeStepVals,UPPS[,i],lty=LTY[(i)],col=COL[(i-1)],lwd=params$lineweight*0.5)
       }
     } else {
-      plot(TimeStepVals,MEANS[,2],type='l',ylim=c(0,1.25*(max(MEANS[,-1]))),lty=LTY[1],col=COL[1],ylab="value (EUR/yr)",xlab="year",font=20,lwd=params$lineweight)
+      plot(TimeStepVals,MEANS[,2],type='l',ylim=c(0,1.25*(max(MEANS[,-1]))),lty=LTY[1],col=COL[1],ylab="Value (EUR/yr)",xlab="Year",font=20,lwd=params$lineweight)
       for(i in 3:ncol(MEANS)) {
         lines(TimeStepVals,MEANS[,i],lty=LTY[(i-1)],col=COL[(i-1)],lwd=params$lineweight)
       }

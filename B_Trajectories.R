@@ -38,7 +38,7 @@ plot_biomass_trajectories <- function(params){
     plotting_params$dat <- read.csv(paste(params$RootPath,"/Biomass/",G, sep=''),skip=7, head=T)
 
     #Modify the values so that they are for the entire region
-    plotting_params$dat[,-c(1:4)] <- plotting_params$dat[,-c(1:4)]*570000
+    plotting_params$dat[,-c(1:4)] <- plotting_params$dat[,-c(1:4)]*params$Area/1000
     
     #Calculate the values to be plotted
     plotting_params = calc_vals_for_plotting(params, plotting_params)
@@ -61,7 +61,7 @@ plot_biomass_trajectories <- function(params){
 
     #Plot a strategy results
     if(params$PLOT_CONFIDENCE_INTERVALS){
-      plot(plotting_params$TimeStepVals,plotting_params$MEANS[,2],type='l',ylim=c(0,1.25*y_upper),lty=params$LTY[1],col=params$COL[1],ylab="relative biomass (t)",xlab="year",font=20,lwd=params$lineweight)
+      plot(plotting_params$TimeStepVals,plotting_params$MEANS[,2],type='l',ylim=c(0,1.25*y_upper),lty=params$LTY[1],col=params$COL[1],ylab="relative biomass (Kt)",xlab="year",font=20,lwd=params$lineweight)
       for(i in 3:ncol(plotting_params$MEANS)) {
         lines(plotting_params$TimeStepVals,plotting_params$MEANS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)],lwd=params$lineweight)
       }
@@ -71,7 +71,7 @@ plot_biomass_trajectories <- function(params){
         lines(plotting_params$TimeStepVals,plotting_params$UPPS[,i],lty=params$LTY[(i)],col=params$COL[(i-1)],lwd=params$lineweight*0.5)
       }
     } else {
-      plot(plotting_params$TimeStepVals,plotting_params$MEANS[,2],type='l',ylim=c(0,1.25*y_upper),lty=params$LTY[1],col=params$COL[1],ylab="relative biomass (t)",xlab="year",font=20,lwd=params$lineweight)
+      plot(plotting_params$TimeStepVals,plotting_params$MEANS[,2],type='l',ylim=c(0,1.25*y_upper),lty=params$LTY[1],col=params$COL[1],ylab="relative biomass (Kt)",xlab="year",font=20,lwd=params$lineweight)
       for(i in 2:ncol(plotting_params$MEANS)) {
         lines(plotting_params$TimeStepVals,plotting_params$MEANS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)],lwd=params$lineweight)
       }

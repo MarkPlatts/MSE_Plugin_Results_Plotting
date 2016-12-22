@@ -23,10 +23,10 @@ plot_type = function(type2plot) {
     params$MORT_HCRF_Targ<- T;   if(params$MORT_HCRF_Targ) {setwd("HCRF_Targ");params$YLAB<-"F";print("Plotting HCRF_Targ")} # what are these?
   }
   if(type2plot==3){
-    params$QUOTA_HCRF_Cons<- T;  if(params$QUOTA_HCRF_Cons) {setwd("HCRQuota_Cons");params$YLAB<-"t/km2";print("Plotting HCRQuota_Cons")} # what are these?
+    params$QUOTA_HCRF_Cons<- T;  if(params$QUOTA_HCRF_Cons) {setwd("HCRQuota_Cons");params$YLAB<-"Quota (t)";print("Plotting HCRQuota_Cons")} # what are these?
   }
   if(type2plot==4){
-    params$QUOTA_HCRF_Targ<- T;  if(params$QUOTA_HCRF_Targ) {setwd("HCRQuota_Targ");params$YLAB<-"t";print("Plotting HCRQuota_Targ")} # what are these?
+    params$QUOTA_HCRF_Targ<- T;  if(params$QUOTA_HCRF_Targ) {setwd("HCRQuota_Targ");params$YLAB<-"Quota (t)";print("Plotting HCRQuota_Targ")} # what are these?
   }
   if(type2plot==5){
     params$MORT_REAL_LandF <- T; if(params$MORT_REAL_LandF) {setwd("RealisedLandedF");params$YLAB<-"F";print("Plotting MORT_REAL_LandF")}
@@ -38,13 +38,13 @@ plot_type = function(type2plot) {
     params$MORT_REAL_F <- T;     if(params$MORT_REAL_F) {setwd("RealisedF");params$YLAB<-"F";print("Plotting MORT_REAL_F")}
   }
   if(type2plot==8){
-    params$CATCH <-T;    if(params$CATCH) {setwd("CatchTrajectories"); params$YLAB<-"catch (t/year)";print("Plotting CATCH")}
+    params$CATCH <-T;    if(params$CATCH) {setwd("CatchTrajectories"); params$YLAB<-"Catch (t/year)";print("Plotting CATCH")}
   }
   if(type2plot==9){
-    params$LANDING <- T; if(params$LANDING) {setwd("LandingsTrajectories"); params$YLAB<-"landings (t/year)";print("Plotting LANDING")}
+    params$LANDING <- T; if(params$LANDING) {setwd("LandingsTrajectories"); params$YLAB<-"Landings (t/year)";print("Plotting LANDING")}
   }
   if(type2plot==10){
-    params$DISCARD <- T; if(params$DISCARD) {setwd("DiscardsTrajectories"); params$YLAB<-"discards (t/year)";print("Plotting DISCARD")}
+    params$DISCARD <- T; if(params$DISCARD) {setwd("DiscardsTrajectories"); params$YLAB<-"Discards (t/year)";print("Plotting DISCARD")}
   }
   
   if(type2plot==11){
@@ -94,7 +94,7 @@ plot_type = function(type2plot) {
   ###Value trajectories
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
   if (params$VALUE) plot_value_trajectories(params)
-  
+
   ###Effort trajectories
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
   if (params$EFFORT) plot_effort_trajectories(params)
@@ -112,7 +112,7 @@ plot_type = function(type2plot) {
   if(params$AverageQuota_EachFleet) Plot_Average_Quotas(params$RootPath)
 }
 
-for(iplot in c(16)){
+for(iplot in c(13)){
   print(paste("Currently plotting type", iplot))
   plot_type(iplot)
 }

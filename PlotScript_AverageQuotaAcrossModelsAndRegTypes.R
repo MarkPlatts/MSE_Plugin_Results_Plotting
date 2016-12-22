@@ -17,6 +17,5 @@ RegulationTypes = c("Highest value", "Weakest stock", "Selective")
 Fleet = "FleetNo1"
 
 
-
 #Plot======================================================================================================================================================
 Plot_Average_Quotas(Path, Groups, Fleet, TimeSteps, RegulationTypes)

@@ -17,6 +17,8 @@ initialise_params = function(params){
   params$StartProjection_Year = params$StartRun_Year + params$nYrs - params$Projected_NYears
   params$EndRun_Year = params$StartRun_Year + params$nYrs
   
+  params$Area = 570000
+  
   #Select groups and fleets to plot
   #params$Groups2Plot = c("GroupNo27")
   params$Groups2Plot = c("GroupNo16","GroupNo14","GroupNo18","GroupNo20","GroupNo21","GroupNo23","GroupNo29","GroupNo30",
