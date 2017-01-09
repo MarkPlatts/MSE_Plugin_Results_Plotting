@@ -46,9 +46,30 @@ calc_vals_for_plotting = function(params, plotting_params){
   
 }
 
+#Create a list of user selected strategies ---------------------------------
+create_list_strategies = function(Path2ResultsCSV)
+{
+  path_and_filename = paste(Path2ResultsCSV, "Results.csv", sep='')
+  results<-read.table(path_and_filename,sep=',',skip=8,col.names=c("Model","Strategy","GroupID","GroupName","Variable","Value"), fill=T)
+  results<-results[results$Strategy!="Z",]#odd one in _SR_final
+  strats <- as.character(unique(results$Strategy))  # 10/15 strategies
+  vector_of_strats = vector()
+  repeat {
+    print(strats)
+    nstrats = length(strats)
+    keypress = readline("Press index number for strategy to add to array or e to end")
+    if(keypress == "e") break
+    keypress = strtoi(keypress) # convert to integer so we can check whether in range of indices for strategies
+    if(keypress >= 1 & keypress <= nstrats){
+      vector_of_strats = c(vector_of_strats, strats[keypress])
+    }
+  }
+  return(vector_of_strats)
+  
+}
+
 
 # Calculate all the x-values for plotting ---------------------------------
-
 get_timestep_vals = function(plotmonthly, start_year, end_year){
   if (plotmonthly){
     xvals=seq(start_year,end_year-1/12,1/12)
