@@ -40,7 +40,7 @@ Average_Quota_Across_Models_And_RegTypes = function(Group, Fleet, RegulationType
 
 }
 
-Plot_Average_Quotas = function(Path, Groups, Fleet, TimeStep, RegulationTypes)
+Plot_Average_Quotas = function(Path, Groups, Fleets, TimeSteps, RegulationTypes)
 {
   Area_km2 = 570000
   #Get all the groups to plot
@@ -54,14 +54,14 @@ Plot_Average_Quotas = function(Path, Groups, Fleet, TimeStep, RegulationTypes)
   print(iGroup)
     for(iRegulation in RegulationTypes)
     {
-      temp_mean_vals = Average_Quota_Across_Models_And_RegTypes(iGroup,Fleet,iRegulation,Path)
+      temp_mean_vals = Average_Quota_Across_Models_And_RegTypes(iGroup,Fleets,iRegulation,Path)
       temp_mean_vals = temp_mean_vals * Area_km2
-      df_Average_Quota = rbind(df_Average_Quota, data.frame(TimeStep = TimeStep, GroupName = iGroup, Regulation = iRegulation, AverageQuota = temp_mean_vals))
+      df_Average_Quota = rbind(df_Average_Quota, data.frame(TimeSteps = TimeSteps, GroupName = iGroup, Regulation = iRegulation, AverageQuota = temp_mean_vals))
     }
   }
   
   #use ggplot to plot results - specify legends to be species and a column of different regulation types
-  print(qplot(TimeStep, AverageQuota, data=df_Average_Quota, geom=c("line"), color=GroupName, facets=Regulation~., main=Fleet))
+  print(qplot(TimeSteps, AverageQuota, data=df_Average_Quota, geom=c("line"), color=GroupName, facets=Regulation~., main=Fleets))
 }
 
 
