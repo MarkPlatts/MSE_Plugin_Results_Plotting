@@ -1,19 +1,19 @@
 {
     "collab_server" : "",
     "contents" : "#Average Quota plot script\n\n\n#Initialisation===========================================================================================================================================\nrm(list=ls())\n# Set to directory where this source code is\nthis.dir <- dirname(parent.frame(2)$ofile)\nsetwd(this.dir)\nsource(\"Calc_average_quota_per_fleet_group_regulation.R\")\n\n\n#Input======================================================================================================================================================\nPath = \"C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/R Code/TestFolder_R_Plotting_MSE_Plugin/withBiomassForcing_Yearly_Results HCR type1 and 3/Results\"\nGroups = c(\"Cod (adult)\", \"Haddock (adult)\", \"Whiting (adult)\")\nTimeSteps = 1:20\nRegulationTypes = c(\"Highest value\", \"Weakest stock\", \"Selective\")\nFleet = \"FleetNo1\"\n\n\n#Plot======================================================================================================================================================\nPlot_Average_Quotas(Path, Groups, Fleet, TimeSteps, RegulationTypes)",
-    "created" : 1482232490801.000,
+    "created" : 1483542751600.000,
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
     "hash" : "2549815405",
-    "id" : "96431B90",
+    "id" : "CA1A6FBD",
     "lastKnownWriteTime" : 1481883062,
     "last_content_update" : 1481883062,
     "path" : "C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting/PlotScript_AverageQuotaAcrossModelsAndRegTypes.R",
     "project_path" : "PlotScript_AverageQuotaAcrossModelsAndRegTypes.R",
     "properties" : {
     },
-    "relative_order" : 15,
+    "relative_order" : 8,
     "source_on_save" : false,
     "source_window" : "",
     "type" : "r_source"

@@ -7,9 +7,6 @@ plot_biomass_trajectories <- function(params){
   #Load up biomass reference file
   biom_refs = read.csv(paste(params$plot.path,"/Biom_refs.csv",sep=''))
   
-  #reset the director
-  #setwd(paste(params$RootPath,"\\Biomass", sep=''))
-  
   #initialise plotting params
   plotting_params = initialise_plotting_params("Biomass", params)
 
@@ -38,15 +35,16 @@ plot_biomass_trajectories <- function(params){
     plotting_params$dat <- read.csv(paste(params$RootPath,"/Biomass/",G, sep=''),skip=7, head=T)
 
     #Modify the values so that they are for the entire region
-    plotting_params$dat[,-c(1:4)] <- plotting_params$dat[,-c(1:4)]*params$Area/1000
+    plotting_params$dat[,-c(1:4)] <- plotting_params$dat[,-c(1:4)]*params$Area/1000 #Multiplying it by area gives absolute biomass across area
+                                                                                    #Dividing by 1000 gives value in kt - we do this to prevent scientific units
     
     #Calculate the values to be plotted
     plotting_params = calc_vals_for_plotting(params, plotting_params)
     
     #Extract reference points
     GroupName = plotting_params$dat[1,1]
-    bpa = read_biom_refs(biom_refs, GroupName, "bpa") * 1000
-    blim = read_biom_refs(biom_refs, GroupName, "blim") * 1000
+    bpa = read_biom_refs(biom_refs, GroupName, "bpa")     #Needs to be specified in the file as kt
+    blim = read_biom_refs(biom_refs, GroupName, "blim")   #Needs to be specified in the file as kt
     
     #now summary plot
     #par(mar=c(5.1, 4.1, 4.1, 20), xpd=TRUE)
@@ -61,17 +59,16 @@ plot_biomass_trajectories <- function(params){
 
     #Plot a strategy results
     if(params$PLOT_CONFIDENCE_INTERVALS){
-      plot(plotting_params$TimeStepVals,plotting_params$MEANS[,2],type='l',ylim=c(0,1.25*y_upper),lty=params$LTY[1],col=params$COL[1],ylab="relative biomass (Kt)",xlab="year",font=20,lwd=params$lineweight)
+      plot(plotting_params$TimeStepVals,plotting_params$MEANS[,2],type='l',ylim=c(0,1.25*y_upper),lty=params$LTY[1],col=params$COL[1],ylab="relative biomass (Kt)",xlab="year",font=20,lwd=params$lineweight*3)
       for(i in 3:ncol(plotting_params$MEANS)) {
-        lines(plotting_params$TimeStepVals,plotting_params$MEANS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)],lwd=params$lineweight)
+        lines(plotting_params$TimeStepVals,plotting_params$MEANS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)],lwd=params$lineweight*3)
       }
-      for(i in 2:(ncol(plotting_params$LOWS)-1)) {
-        #browser()
-        lines(plotting_params$TimeStepVals,plotting_params$LOWS[,i],lty=params$LTY[(i)],col=params$COL[(i-1)],lwd=params$lineweight*0.5)
-        lines(plotting_params$TimeStepVals,plotting_params$UPPS[,i],lty=params$LTY[(i)],col=params$COL[(i-1)],lwd=params$lineweight*0.5)
+      for(i in 2:(ncol(plotting_params$LOWS))) {
+        lines(plotting_params$TimeStepVals,plotting_params$LOWS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)],lwd=params$lineweight*0.5)
+        lines(plotting_params$TimeStepVals,plotting_params$UPPS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)],lwd=params$lineweight*0.5)
       }
     } else {
-      plot(plotting_params$TimeStepVals,plotting_params$MEANS[,2],type='l',ylim=c(0,1.25*y_upper),lty=params$LTY[1],col=params$COL[1],ylab="relative biomass (Kt)",xlab="year",font=20,lwd=params$lineweight)
+      plot(plotting_params$TimeStepVals,plotting_params$MEANS[,2],type='l',ylim=c(0,1.25*y_upper),lty=params$LTY[1],col=params$COL[1],ylab="relative biomass (kt)",xlab="year",font=20,lwd=params$lineweight)
       for(i in 2:ncol(plotting_params$MEANS)) {
         lines(plotting_params$TimeStepVals,plotting_params$MEANS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)],lwd=params$lineweight)
       }
