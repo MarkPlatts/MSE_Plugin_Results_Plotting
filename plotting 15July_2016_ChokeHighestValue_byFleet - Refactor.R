@@ -68,21 +68,6 @@ plot_type = function(type2plot) {
     params$AverageQuota_EachFleet <- T; params$YLAB<-"t/km2";print("Plotting AverageQuota_EachFleet")
   }
   
-  if (params$COMPARE_STRATEGIES){
-    print(params$strats)
-    print("")
-    strat1 <- readline(prompt="Select by vector index the 1st Strategy you want to compare:")
-    strat2 <- readline(prompt="Select by vector index the 2nd Strategy you want to compare:")
-    strat1name = strat[strtoi(strat1)]
-    strat2name = strat[strtoi(strat2)]
-    print(strat1name)
-    print(strat2name)
-    print("Comparing for groups: ")
-    print(params$Groups2Plot)
-    print("Compare for fleets: ")
-    print(params$Fleets2Plot)
-  }
-  
   ###F Trajectories
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
   if(any(params$MORT_REAL_F,params$MORT_REAL_LandF,params$MORT_REAL_DiscF,params$MORT_HCRF_Cons,params$MORT_HCRF_Targ,params$QUOTA_HCRF_Cons,params$QUOTA_HCRF_Targ,params$CATCH,params$DISCARD,params$LANDING)) plot_fishing_trajectories(params)

@@ -2,7 +2,6 @@ initialise_params = function(params){
   params = list()
   
   params$plot_each_timestep = FALSE;
-  params$COMPARE_STRATEGIES = FALSE;
   params$PLOT_CONFIDENCE_INTERVALS = TRUE;
   params$Plot_yearly_files = TRUE
   
