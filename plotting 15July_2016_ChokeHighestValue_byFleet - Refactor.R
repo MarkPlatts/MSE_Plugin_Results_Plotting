@@ -65,7 +65,7 @@ plot_type = function(type2plot) {
   }
   
   if(type2plot==16){
-    params$AverageQuota_EachFleet<- T; params$YLAB<-"t/km2";print("Plotting AverageQuota_EachFleet")
+    params$AverageQuota_EachFleet <- T; params$YLAB<-"t/km2";print("Plotting AverageQuota_EachFleet")
   }
   
   if (params$COMPARE_STRATEGIES){
@@ -109,7 +109,9 @@ plot_type = function(type2plot) {
 
   ###Plot average target quota across a regulation type and models
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  if(params$AverageQuota_EachFleet) Plot_Average_Quotas(params$RootPath)
+  if(params$AverageQuota_EachFleet) Plot_Average_Quotas(Path = params$RootPath, Groups = params$Groups2Plot, 
+                                                        Fleets = params$Fleets2Plot, TimeSteps =c(1:20), 
+                                                        RegulationTypes = c("Highest value", "Weakest stock", "Selective"))
 }
 
 for(iplot in c(13)){

@@ -7,9 +7,10 @@ source("C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting/share_tools.R")
 ### Generate tables for the risk-reward plots
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 create_riskreward_table <- function(){
-
-  plot.path = "C://Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/Yearly_Results HCR type1 and 3/Plots/"
-  RootPath =  "C://Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/Yearly_Results HCR type1 and 3/Results/"
+  
+  general.path = "C://Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/Yearly_Results HCR type1 and 3/"
+  plot.path = paste(general.path,"Plots/",sep="")
+  RootPath =  paste(general.path,"Results/",sep="")
   
   #Create folder to store the results in
   dir.create("C://Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/Yearly_Results HCR type1 and 3/Plots/RISK_REWARD_TABLES", showWarnings = FALSE)

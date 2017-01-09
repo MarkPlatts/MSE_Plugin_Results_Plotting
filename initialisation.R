@@ -2,12 +2,12 @@ initialise_params = function(params){
   params = list()
   
   params$plot_each_timestep = FALSE;
-  params$COMPARE_STRATEGIES = F;
-  params$PLOT_CONFIDENCE_INTERVALS = F;
-  params$Plot_yearly_files = T
+  params$COMPARE_STRATEGIES = FALSE;
+  params$PLOT_CONFIDENCE_INTERVALS = TRUE;
+  params$Plot_yearly_files = TRUE
   
-  params$plot.path = "C://Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/Yearly_Results HCR type1 and 3/Plots/"
-  params$RootPath =  "C://Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/Yearly_Results HCR type1 and 3/Results"
+  params$plot.path = "C://Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1 and 3_141216/Plots/"
+  params$RootPath =  "C://Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1 and 3_141216/Results/"
   
   params$Base_NYears = 23
   params$Projected_NYears = 20
@@ -20,22 +20,27 @@ initialise_params = function(params){
   params$Area = 570000
   
   #Select groups and fleets to plot
-  #params$Groups2Plot = c("GroupNo27")
-  params$Groups2Plot = c("GroupNo16","GroupNo14","GroupNo18","GroupNo20","GroupNo21","GroupNo23","GroupNo29","GroupNo30",
-                         "GroupNo31","GroupNo33","GroupNo34","GroupNo38","GroupNo42","GroupNo22","GroupNo26","GroupNo32",
-                         "GroupNo35","GroupNo39","GroupNo41","GroupNo55")
-  #params$Fleets2Plot = c("FleetNo2")
-  params$Fleets2Plot = c("AllFleets", "FleetNo1", "FleetNo2", "FleetNo3", "FleetNo4", "FleetNo5", "FleetNo6", "FleetNo7",
-                         "FleetNo8", "FleetNo9", "FleetNo10", "FleetNo11", "FleetNo12")
-  
+  params$Groups2Plot = c("GroupNo16")
+  # params$Groups2Plot = c("GroupNo16","GroupNo14","GroupNo18","GroupNo20","GroupNo21","GroupNo23","GroupNo29","GroupNo30",
+  #                        "GroupNo31","GroupNo33","GroupNo34","GroupNo38","GroupNo42","GroupNo22","GroupNo26","GroupNo32",
+  #                        "GroupNo35","GroupNo39","GroupNo41","GroupNo55")
+  params$Fleets2Plot = c("AllFleets")
+  # params$Fleets2Plot = c("AllFleets", "FleetNo1", "FleetNo2", "FleetNo3", "FleetNo4", "FleetNo5", "FleetNo6", "FleetNo7",
+                         # "FleetNo8", "FleetNo9", "FleetNo10", "FleetNo11", "FleetNo12")
+
   setwd(params$RootPath)
   
-  ### Load results files to get unique strats
-  results<-read.table("Results.csv",sep=',',skip=8,col.names=c("Model","Strategy","GroupID","GroupName","Variable","Value"), fill=T)
-  results<-results[results$Strategy!="Z",]#odd one in _SR_final
-  params$strats <- as.character(unique(results$Strategy))  # 10/15 strategies
-  params$strats <- params$strats[params$strats != "NONE"] 
-  
+  ### Load results files to get unique strats (comment/uncomment to select method of choosing strategies to plot)
+  #plot all strats
+    # results<-read.table("Results.csv",sep=',',skip=8,col.names=c("Model","Strategy","GroupID","GroupName","Variable","Value"), fill=T)
+    # results<-results[results$Strategy!="Z",]#odd one in _SR_final
+    # params$strats <- as.character(unique(results$Strategy))  # 10/15 strategies
+    # params$strats <- params$strats[params$strats != "NONE"]
+  #plot strats in this vector
+    # params$strats <- c("12 NSMAP 2020_TargetF_Highest value", "T3_14 NSMAP 2020_HighF_Highest value")
+  #plot strats chosen interactively
+    params$strats <- create_list_strategies(params$RootPath)
+    
   params$lineweight = 0.3
   params$legend_x_inset2 = -0.45
   params$COL = rep(1:8,10)[1:length(params$strat)]
@@ -62,6 +67,8 @@ initialise_params = function(params){
   
   params$HIGHEST_VALUE <- F
   params$CHOKE_GROUPS <- F
+  
+  params$AverageQuota_EachFleet <- F
   
   return(params)
 }
