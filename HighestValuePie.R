@@ -4,9 +4,6 @@
 plot_highestvalue_pies <- function(params)
 {
   
-  
-  #setwd(paste(params$RootPath,"\\HighestValueGroup", sep=''))
-  
   PlotData = vector()
   
   #g <- list.files()     # which groups are there?
