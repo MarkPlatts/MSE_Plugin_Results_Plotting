@@ -2,7 +2,7 @@ source("C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting/share_tools.R")
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 plot_fishing_trajectories <- function(params){
-  
+
   #set the x axis values depending on what result type and whether plotting yearly or montly
   if(any(params$QUOTA_HCRF_Cons,params$QUOTA_HCRF_Targ,params$MORT_HCRF_Cons,params$MORT_HCRF_Targ)){
     TimeStepVals = get_timestep_vals(FALSE, params$StartProjection_Year, params$EndRun_Year)
@@ -18,12 +18,12 @@ plot_fishing_trajectories <- function(params){
 
       FILENAME <- substr(G,1,nchar(G)-4)
       print(FILENAME)
-      
+
       #stopifnot(FILENAME!="HCR_F_Cons_Nephrops_GroupsNo55") 
       if (any(params$MORT_REAL_F,params$MORT_REAL_LandF,params$MORT_REAL_DiscF, params$MORT_HCRF_Cons,params$MORT_HCRF_Targ)){
-        if(params$COMPARE_STRATEGIES && !FileIsForACompareGroup(params, FILENAME)) next
+        if(!FileIsForACompareGroup(params, FILENAME)) next
       } else if (any(params$CATCH,params$DISCARD,params$LANDING,params$QUOTA_HCRF_Cons,params$QUOTA_HCRF_Targ)) {
-        if (params$COMPARE_STRATEGIES && !FileIsForACompareGroupFleet(params, FILENAME)) next
+        if (!FileIsForACompareGroupFleet(params, FILENAME)) next
       }
       
       #Need to figure out what to do about types that are yearly but don't have yearly in them
@@ -70,14 +70,10 @@ plot_fishing_trajectories <- function(params){
         if(length(as.matrix(testvaliddata))*-9999==sum(testvaliddata)) {next}
       }
       if (params$SAVE) {
-        if(!params$COMPARE_STRATEGIES) {
-          if(any(params$QUOTA_HCRF_Cons,params$QUOTA_HCRF_Targ,params$CATCH,params$DISCARD,params$LANDING)){
-            png(filename = paste(params$plot.path,"\\OUTPUT_GEARSGROUPSbySTRATEGIES\\",FILENAME,"_.png",sep=""), res=900, width=10, height=4, units='in')              
-          } else {
-            png(filename = paste(params$plot.path,"\\OUTPUT_GROUP_FIGS\\",FILENAME,"_.png",sep=""), res=900, width=10, height=4, units='in')              
-          }
+        if(any(params$QUOTA_HCRF_Cons,params$QUOTA_HCRF_Targ,params$CATCH,params$DISCARD,params$LANDING)){
+          png(filename = paste(params$plot.path,"\\OUTPUT_GEARSGROUPSbySTRATEGIES\\",FILENAME,"_.png",sep=""), res=900, width=10, height=4, units='in')              
         } else {
-          png(filename = paste(params$plot.path,"\\OUTPUT_COMPARE_STRATS\\",FILENAME,"_COMP.png",sep=""), res=900, width=10, height=4, units='in')
+          png(filename = paste(params$plot.path,"\\OUTPUT_GROUP_FIGS\\",FILENAME,"_.png",sep=""), res=900, width=10, height=4, units='in')              
         }
       }
       
@@ -128,12 +124,6 @@ plot_fishing_trajectories <- function(params){
       for(strat_i in 1:length(params$strats)){
         
         STRAT<-paste(params$strats[strat_i],sep=' ')
-        
-        if(params$COMPARE_STRATEGIES){
-          if(strat1name!=STRAT && strat2name!=STRAT) {
-            next
-          }
-        }
         
         #select subset of data
         if(any(params$CATCH,params$DISCARD,params$LANDING)){
@@ -203,11 +193,7 @@ plot_fishing_trajectories <- function(params){
       if(any(params$MORT_HCRF_Cons,params$MORT_HCRF_Targ,params$QUOTA_HCRF_Cons,params$QUOTA_HCRF_Targ)) title(FILENAME,font.main=20)
       
       if(params$LEGEND){
-        if(params$COMPARE_STRATEGIES){
-          legend('bottomright',c(strat1name,strat2name),col = params$COL,lty =params$LTY,inset=c(-0.72,0),pt.cex = 1,cex=0.5,lwd=1,text.font=3)
-        } else {
-          legend('topright',params$strat,col = params$COL,lty =params$LTY,inset=c(params$legend_x_inset2,-0.2),lwd=1,text.font=3,pt.cex = 1,cex=0.5)
-        }
+        legend('topright',params$strat,col = params$COL,lty =params$LTY,inset=c(params$legend_x_inset2,-0.2),lwd=1,text.font=3,pt.cex = 1,cex=0.5)
       }
       if (any(params$MORT_REAL_F,params$MORT_REAL_LandF,params$MORT_REAL_DiscF)){
         if(params$WRITE) write.csv(PERCS[,-1],paste(params$plot.path,"\\OUTPUT_FcatchBySTRATEGIES\\",FILENAME,".csv",sep=""))
