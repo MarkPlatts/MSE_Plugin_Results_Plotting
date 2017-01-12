@@ -2,8 +2,8 @@ create.plot.dirs = function(params){
   if(!dir.exists(params$plot.path)){
     dir.create(params$plot.path)
   }
-  FolderNames = c("OUTPUT_GEARSGROUPSbySTRATEGIES", "OUTPUT_GROUP_FIGS", "OUTPUT_COMPARE_STRATS", 
-                  "OUTPUT_GEARSbySTRATEGIES", "OUTPUT_HIGHEST_CHOKE_FIGS", "OUTPUT_percentiles")
+  FolderNames = c("OUTPUT_GEARSGROUPSbySTRATEGIES", "OUTPUT_GROUP_FIGS", "OUTPUT_END_DISTRIBUTIONS", 
+                  "OUTPUT_GEARSbySTRATEGIES", "OUTPUT_HIGHEST_CHOKE_FIGS")
   for (iFolder in FolderNames){
     if (!dir.exists(paste(params$plot.path,iFolder,sep=""))){
       dir.create(paste(params$plot.path,iFolder,sep=""))

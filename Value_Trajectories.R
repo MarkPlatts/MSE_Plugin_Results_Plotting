@@ -80,22 +80,13 @@ plot_value_trajectories <- function(params){
     if(SAVE_ONLY_SUMMARY) par(mfrow=c(2,1),mar=c(1,4,3,1),oma=c(1,1,3,1))
     
     if (SAVE) {
-      if(!params$COMPARE_STRATEGIES) {
-        png(filename = paste(params$plot.path, "\\OUTPUT_GEARSGROUPSbySTRATEGIES\\",FILENAME,"_PERCS.png",sep=""), res=900, width=8, height=4, units='in')
-      } else {
-        png(filename = paste(params$plot.path,"\\OUTPUT_COMPARE_STRATS\\",FILENAME,"_COMP.png",sep=""), res=900, width=8, height=4, units='in')
-      }
+      png(filename = paste(params$plot.path, "\\OUTPUT_GEARSGROUPSbySTRATEGIES\\",FILENAME,"_PERCS.png",sep=""), res=900, width=8, height=4, units='in')
     }
     
     
     for(strat_i in 1:length(params$strats)){
       
       STRAT<-paste(params$strats[strat_i],sep=' ')
-      
-      #if comparing 2 strategies and this strategy is neither move skip to next strategy in loop
-      if(params$COMPARE_STRATEGIES){
-        if(strat1name!=STRAT && strat2name!=STRAT) next
-      }
       
       #select subset of data
       data2plot<- dat[dat$Strategy %in% STRAT,6:ncol(dat)]*570000
@@ -140,11 +131,7 @@ plot_value_trajectories <- function(params){
     if(SAVE & SUMMARYPLOT)  title(FILENAME,font.main=20)
     
     if(LEGEND){
-      if (params$COMPARE_STRATEGIES) {
-        legend('topright',c(strat1name,strat2name),col = COL,lty =LTY,inset=c(-0.5,-0.2),lwd=1,text.font=3,pt.cex = 1,cex=0.5)
-      } else {
-        legend('topright',params$strats,col = COL,lty =LTY,inset=c(params$legend_x_inset2,-0.2),lwd=1,text.font=3,pt.cex = 1,cex=0.5)
-      }
+      legend('topright',params$strats,col = COL,lty =LTY,inset=c(params$legend_x_inset2,-0.2),lwd=1,text.font=3,pt.cex = 1,cex=0.5)
     }
     
     
