@@ -2,7 +2,7 @@ initialise_params = function(params){
   params = list()
   
   params$plot_each_timestep = FALSE;
-  params$PLOT_CONFIDENCE_INTERVALS = TRUE;
+  params$PLOT_CONFIDENCE_INTERVALS = F;
   params$Plot_yearly_files = TRUE
   
   params$plot.path = "C://Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1 and 3_141216/Plots/"
@@ -23,7 +23,7 @@ initialise_params = function(params){
   # params$Groups2Plot = c("GroupNo16","GroupNo14","GroupNo18","GroupNo20","GroupNo21","GroupNo23","GroupNo29","GroupNo30",
   #                        "GroupNo31","GroupNo33","GroupNo34","GroupNo38","GroupNo42","GroupNo22","GroupNo26","GroupNo32",
   #                        "GroupNo35","GroupNo39","GroupNo41","GroupNo55")
-  params$Fleets2Plot = c("AllFleets")
+  params$Fleets2Plot = c("AllFleets", "FleetNo1")
   # params$Fleets2Plot = c("AllFleets", "FleetNo1", "FleetNo2", "FleetNo3", "FleetNo4", "FleetNo5", "FleetNo6", "FleetNo7",
                          # "FleetNo8", "FleetNo9", "FleetNo10", "FleetNo11", "FleetNo12")
 
@@ -36,9 +36,9 @@ initialise_params = function(params){
     # params$strats <- as.character(unique(results$Strategy))  # 10/15 strategies
     # params$strats <- params$strats[params$strats != "NONE"]
   #plot strats in this vector
-    # params$strats <- c("12 NSMAP 2020_TargetF_Highest value", "T3_14 NSMAP 2020_HighF_Highest value")
+    params$strats <- c("12 NSMAP 2020_TargetF_Highest value", "T3_14 NSMAP 2020_HighF_Highest value")
   #plot strats chosen interactively
-    params$strats <- create_list_strategies(params$RootPath)
+    # params$strats <- create_list_strategies(params$RootPath)
     
   params$lineweight = 0.3
   params$legend_x_inset2 = -0.45
