@@ -1,8 +1,15 @@
 {
     "sourceWindowGeometry" : {
-        "wq0zwakly8gr7" : {
+        "wv6dajntk1e73" : {
+            "height" : 706,
+            "ordinal" : 4,
+            "width" : 1366,
+            "x" : 0,
+            "y" : 22
+        },
+        "wyhre8rc0pses" : {
             "height" : 800,
-            "ordinal" : 1,
+            "ordinal" : 6,
             "width" : 800,
             "x" : 283,
             "y" : 47

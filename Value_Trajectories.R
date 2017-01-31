@@ -18,8 +18,8 @@ plot_value_trajectories <- function(params){
   
   dat <- read.csv(g[gnum],skip=6, head=T)
   
-  COL = rep(1:8,10)[1:length(params$strat)]
-  LTY<- c(rep(1,8),rep(2,8),rep(3,8),rep(4,8),rep(5,8),rep(6,8))[1:length(params$strat)] #LTY[1:6] <- COL[6:1]
+  #params$COL = rep(1:8,10)[1:length(params$strat)]
+  #params$LTY<- c(rep(1,8),rep(2,8),rep(3,8),rep(4,8),rep(5,8),rep(6,8))[1:length(params$strat)] #params$LTY[1:6] <- params$COL[6:1]
   
   WRITE<-F
   SUMMARYPLOT<-T
@@ -111,27 +111,27 @@ plot_value_trajectories <- function(params){
     
     #summary plot
     par(mar=c(5.1, 4.1, 4.1, 12), xpd=TRUE)
-    
+    print(paste("File:", G))
     if(params$PLOT_CONFIDENCE_INTERVALS){
-      plot(TimeStepVals,MEANS[,2],type='l',ylim=c(0,1.25*(max(MEANS[,-1],UPPS[,-1]))),lty=LTY[1],col=COL[1],ylab="relative effort",xlab="year",font=20,lwd=params$lineweight)
+      plot(TimeStepVals,MEANS[,2],type='l',ylim=c(0,1.25*(max(MEANS[,-1],UPPS[,-1]))),lty=params$LTY[1],col=params$COL[1],ylab="relative effort",xlab="year",font=20,lwd=params$lineweight)
       for(i in 3:ncol(MEANS)) {
-        lines(TimeStepVals,MEANS[,i],lty=LTY[(i-1)],col=COL[(i-1)],lwd=params$lineweight)
+        lines(TimeStepVals,MEANS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)],lwd=params$lineweight)
       }
       for(i in 2:ncol(LOWS)) {
-        lines(TimeStepVals,LOWS[,i],lty=LTY[(i)],col=COL[(i-1)],lwd=params$lineweight*0.5)
-        lines(TimeStepVals,UPPS[,i],lty=LTY[(i)],col=COL[(i-1)],lwd=params$lineweight*0.5)
+        lines(TimeStepVals,LOWS[,i],lty=params$LTY[(i)],col=params$COL[(i-1)],lwd=params$lineweight*0.5)
+        lines(TimeStepVals,UPPS[,i],lty=params$LTY[(i)],col=params$COL[(i-1)],lwd=params$lineweight*0.5)
       }
     } else {
-      plot(TimeStepVals,MEANS[,2],type='l',ylim=c(0,1.25*(max(MEANS[,-1]))),lty=LTY[1],col=COL[1],ylab="Value (EUR/yr)",xlab="Year",font=20,lwd=params$lineweight)
+      plot(TimeStepVals,MEANS[,2],type='l',ylim=c(0,1.25*(max(MEANS[,-1]))),lty=params$LTY[1],col=params$COL[1],ylab="Value (EUR/yr)",xlab="Year",font=20,lwd=params$lineweight)
       for(i in 3:ncol(MEANS)) {
-        lines(TimeStepVals,MEANS[,i],lty=LTY[(i-1)],col=COL[(i-1)],lwd=params$lineweight)
+        lines(TimeStepVals,MEANS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)],lwd=params$lineweight)
       }
     }
     
     if(SAVE & SUMMARYPLOT)  title(FILENAME,font.main=20)
     
     if(LEGEND){
-      legend('topright',params$strats,col = COL,lty =LTY,inset=c(params$legend_x_inset2,-0.2),lwd=1,text.font=3,pt.cex = 1,cex=0.5)
+      legend('topright',params$strats,col = params$COL,lty =params$LTY,inset=c(params$legend_x_inset2,-0.2),lwd=1,text.font=3,pt.cex = 1,cex=0.5)
     }
     
     
