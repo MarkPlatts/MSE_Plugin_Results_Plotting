@@ -177,8 +177,8 @@ plot_fishing_trajectories <- function(params){
         graphics.off()
         next
       }
-      par(mar=c(5.1, 4.1, 4.1, 15), xpd=TRUE)
 
+      par(mar=c(5.1, 4.1, 4.1, 15), xpd=TRUE)
       if(params$PLOT_CONFIDENCE_INTERVALS){
         plot(TimeStepVals,MEANS[,2],type='l',ylim=c(0,1.25*(max(MEANS[,-1],UPPS[,-1],na.rm=T))),lty=params$LTY[1],col=params$COL[1],ylab=params$YLAB,xlab="year",font=20,lwd=params$lineweight)
         for(i in 3:ncol(MEANS)) {
