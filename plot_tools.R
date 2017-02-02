@@ -3,7 +3,7 @@ create.plot.dirs = function(params){
     dir.create(params$plot.path)
   }
   FolderNames = c("OUTPUT_GEARSGROUPSbySTRATEGIES", "OUTPUT_GROUP_FIGS", "OUTPUT_END_DISTRIBUTIONS", 
-                  "OUTPUT_GEARSbySTRATEGIES", "OUTPUT_HIGHEST_CHOKE_FIGS")
+                  "OUTPUT_GEARSbySTRATEGIES", "OUTPUT_CHOKE_PIES", "OUTPUT_HIGHEST_PIES", "AVERAGE_REGS")
   for (iFolder in FolderNames){
     if (!dir.exists(paste(params$plot.path,iFolder,sep=""))){
       dir.create(paste(params$plot.path,iFolder,sep=""))
@@ -24,7 +24,7 @@ read_biom_refs = function(biom_refs, group, ref_type)
       break
     }
     if (iRow == (dim(biom_refs)[1])){
-      print ("Did not find the group specified")
+      print (paste("Did not find biomrefs for ", group, "group specified"))
       return (NA)
     }
   }
