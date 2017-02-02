@@ -15,6 +15,8 @@ plot_fishing_trajectories <- function(params){
     if(!params$SAVE) pdf(file =paste(params$plot.path,"\\OUTPUT_GROUP_FIGS\\",TITLE," plots by group and strategy.pdf",sep=""),width=14,height=7,paper="a4r")
     
     for(G in g){
+      
+      #if(G =="HCR_Quota_Cons_Blue whiting_GroupNo22_FleetNo1.csv") browser()
 
       FILENAME <- substr(G,1,nchar(G)-4)
       print(FILENAME)
@@ -56,7 +58,7 @@ plot_fishing_trajectories <- function(params){
       groupdat <- read.table(file=paste(G,sep=''),skip=7, header = TRUE, fill = TRUE,sep=",",as.is =T)
       #if all values in the file are -9999 then we need to skip plotting it
       if(any(params$MORT_HCRF_Cons,params$MORT_HCRF_Targ)){
-        testvaliddata<- groupdat[, 5:ncol(groupdat)]
+        testvaliddata <- groupdat[, 5:ncol(groupdat)]
         if(length(as.matrix(testvaliddata))*-9999==sum(testvaliddata)) {next}
       }
       
@@ -67,13 +69,15 @@ plot_fishing_trajectories <- function(params){
       
       if(any(params$QUOTA_HCRF_Cons,params$QUOTA_HCRF_Targ)){
         testvaliddata<- groupdat[, 6:ncol(groupdat)]
-        if(length(as.matrix(testvaliddata))*-9999==sum(testvaliddata)) {next}
+        #if(length(as.matrix(testvaliddata))*-9999==sum(testvaliddata)) {next}
+        if (sum(testvaliddata!=-9999 & testvaliddata!=0) == 0) next
       }
+
       if (params$SAVE) {
         if(any(params$QUOTA_HCRF_Cons,params$QUOTA_HCRF_Targ,params$CATCH,params$DISCARD,params$LANDING)){
-          png(filename = paste(params$plot.path,"\\OUTPUT_GEARSGROUPSbySTRATEGIES\\",FILENAME,"_.png",sep=""), res=900, width=10, height=4, units='in')              
+          png(filename = paste(params$plot.path,"OUTPUT_GEARSGROUPSbySTRATEGIES/",FILENAME,"_.png",sep=""), res=900, width=10, height=4, units='in')              
         } else {
-          png(filename = paste(params$plot.path,"\\OUTPUT_GROUP_FIGS\\",FILENAME,"_.png",sep=""), res=900, width=10, height=4, units='in')              
+          png(filename = paste(params$plot.path,"OUTPUT_GROUP_FIGS/",FILENAME,"_.png",sep=""), res=900, width=10, height=4, units='in')              
         }
       }
       
@@ -124,6 +128,9 @@ plot_fishing_trajectories <- function(params){
       for(strat_i in 1:length(params$strats)){
         
         STRAT<-paste(params$strats[strat_i],sep=' ')
+
+        #check if all the values for this strategy are -9999
+        if (NumberOfValsNotNA(groupdat[groupdat$Strategy %in% STRAT,], STRAT) == 0) next
         
         #select subset of data
         if(any(params$CATCH,params$DISCARD,params$LANDING)){
