@@ -16,7 +16,12 @@ initialise_plotting_params = function(folder_name, params){
   return(plotting_params)
 }
 
-
+CreateFolderIfDoesntExist = function(folder.name, path){
+  dir2create = paste(path, folder.name, sep="")
+  if(!dir.exists(dir2create)){
+    dir.create(dir2create)
+  }
+}
 
 
 # calculating the upper and lower confidence intervals and median ---------
@@ -124,6 +129,27 @@ StringContains = function(ContainingString, String2Check)
   return(length(grep(String2Check, ContainingString, fixed=TRUE))>0)
 }
 
+plot_pies <- function(plot.path, fleet.data, file.name){
+
+  Groups = unique(fleet.data)
+  slices = vector()
+
+  for(iGroup in Groups){
+    slices = c(slices,length(fleet.data[fleet.data==iGroup]))
+  }
+
+  png(filename = paste(plot.path,file.name,".png",sep=""), res=900, width=9, height=8, units='in')
+
+  pct <- round(slices/sum(slices)*100,1)
+
+  Groups <- paste(Groups, " ", pct, "%", sep='') # add percents to labels
+
+  pie(slices, labels = Groups, main = "Highest value: percentage of years across all models", col=rainbow(length(Groups)))
+  mtext(file.name)
+
+  graphics.off()
+
+}
 
 #Check that multiple strings all exist within another string
 StringContains_AllStrings = function(ContainingString, MultipleStrings2Check)
@@ -136,13 +162,11 @@ StringContains_AllStrings = function(ContainingString, MultipleStrings2Check)
 }
 
 
-
 Check_FileName_Contains_Strings = function(FileName, MultipleStrings2Check)
   #This just wraps around StringContains_AllStrings with a name more fitting for the code so easier to read
 {
   StringContains_AllStrings(FileName, MultipleStrings2Check)
 }
-
 
 
 GetFileName_ContainsStrings = function(FolderPath, Strings, WithPath)
@@ -193,3 +217,8 @@ FileIsForACompareGroupFleet = function(params, FILENAME){
   return (FALSE)
 }
 
+NumberOfValsNotNA = function(object.to.check, STRAT){
+  
+  return(sum(object.to.check[object.to.check$Strategy %in% STRAT,6:ncol(object.to.check)]!=-9999))
+  
+}
