@@ -80,7 +80,7 @@ plot_value_trajectories <- function(params){
     if(SAVE_ONLY_SUMMARY) par(mfrow=c(2,1),mar=c(1,4,3,1),oma=c(1,1,3,1))
     
     if (SAVE) {
-      png(filename = paste(params$plot.path, "\\OUTPUT_GEARSGROUPSbySTRATEGIES\\",FILENAME,"_PERCS.png",sep=""), res=900, width=8, height=4, units='in')
+      png(filename = paste(params$plot.path, "/VALUE/",FILENAME,"_PERCS.png",sep=""), res=900, width=8, height=4, units='in')
     }
     
     

@@ -122,6 +122,7 @@ IsIncorrectFileType_YearlyMonthly = function(FileName, plot_yearly){
 
 }
 
+
 #Find a string within another string
 #This can be done in a single line but it is fairly unreadable
 StringContains = function(ContainingString, String2Check)
@@ -129,27 +130,6 @@ StringContains = function(ContainingString, String2Check)
   return(length(grep(String2Check, ContainingString, fixed=TRUE))>0)
 }
 
-plot_pies <- function(plot.path, fleet.data, file.name){
-
-  Groups = unique(fleet.data)
-  slices = vector()
-
-  for(iGroup in Groups){
-    slices = c(slices,length(fleet.data[fleet.data==iGroup]))
-  }
-
-  png(filename = paste(plot.path,file.name,".png",sep=""), res=900, width=9, height=8, units='in')
-
-  pct <- round(slices/sum(slices)*100,1)
-
-  Groups <- paste(Groups, " ", pct, "%", sep='') # add percents to labels
-
-  pie(slices, labels = Groups, main = "Highest value: percentage of years across all models", col=rainbow(length(Groups)))
-  mtext(file.name)
-
-  graphics.off()
-
-}
 
 #Check that multiple strings all exist within another string
 StringContains_AllStrings = function(ContainingString, MultipleStrings2Check)

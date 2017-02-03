@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "###Pie charts\n#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nplot_pies <- function(plot.path, fleet.data, file.name){\n  \n  Groups = unique(fleet.data)\n  slices = vector()\n  \n  for(iGroup in Groups){\n    slices = c(slices,length(fleet.data[fleet.data==iGroup]))\n  }\n  \n  png(filename = paste(plot.path,file.name,\".png\",sep=\"\"), res=900, width=9, height=8, units='in')\n  \n  pct <- round(slices/sum(slices)*100,1)\n  Groups <- paste(Groups, \" \", pct, \"%\", sep='') # add percents to labels\n  pie(slices, labels = Groups, main = \"Highest value: percentage of years across all models\", col=rainbow(length(Groups)))\n  mtext(file.name)\n  \n  graphics.off()\n  \n}\n\nrun_plot_pies <- function(params, parents.folder.for.plots, \n                                results.folder.name,by.regulations){\n  \n  g <- list.files(paste(params$RootPath,\"/\",results.folder.name, sep=''), full.names = T)     # which groups are there?\n  \n  for (G in g){\n    \n    file.name.without.path = basename(G)\n    file.name.without.ext <- substr(basename(file.name.without.path),1,nchar(file.name.without.path)-4)\n    \n    fleet.data = read.csv(G, skip=6, head=T)\n    \n    fleet.data.whole = as.vector(as.matrix(fleet.data[!is.na(fleet.data$X1),5:ncol(fleet.data)]))\n    if(length(fleet.data.whole)==0) next\n    \n    path = paste(params$plot.path, parents.folder.for.plots, sep=\"\")\n    \n    plot_pies(path, fleet.data.whole, file.name.without.ext)\n    \n    #chop up by strategy and apply=============================\n    strategies = unique(fleet.data$StrategyName)\n    \n    #filter by strategy and plot\n    for(iStrategy in strategies){\n      fleet.data.by.strategy = fleet.data[fleet.data$StrategyName==iStrategy,]\n      fleet.data.by.strategy = as.vector(as.matrix(fleet.data.by.strategy[!is.na(fleet.data.by.strategy$X1),5:ncol(fleet.data.by.strategy)]))\n      if(length(fleet.data.by.strategy)==0) next\n      CreateFolderIfDoesntExist(folder.name = iStrategy, path = paste(params$plot.path,parents.folder.for.plots,sep=\"\"))\n      path = paste(params$plot.path, parents.folder.for.plots, iStrategy, \"/\", sep=\"\")\n      plot_pies(path, fleet.data.by.strategy, file.name.without.ext)\n    }\n    #=============================================\n    if(by.regulations){\n      #filter by regulation type and plot\n      for(iRegulation in params$reg.types){\n        fleet.data.by.regulation = ExtractDataByRegulationType(iRegulation, fleet.data, strategies)\n        fleet.data.by.regulation = as.vector(as.matrix(fleet.data.by.regulation[!is.na(fleet.data.by.regulation$X1),5:ncol(fleet.data.by.regulation)]))\n        if(length(fleet.data.by.regulation)==0) next\n        CreateFolderIfDoesntExist(folder.name = iRegulation, path = paste(params$plot.path,parents.folder.for.plots,sep=\"\"))\n        path = paste(params$plot.path, parents.folder.for.plots, iRegulation, \"/\", sep=\"\")\n        plot_pies(path, fleet.data.by.regulation, file.name.without.ext)\n      }     \n    }\n    \n    \n  }    \n}\n\n\nExtractDataByRegulationType = function(regulation.type, data, unique.strategies)\n{\n\n  strategies.of.reg.type = SubsetVectorStrings_ContainingString(unique.strategies, regulation.type)\n  \n  data.filtered = data[data$StrategyName %in% strategies.of.reg.type,]\n  \n  return(data.filtered)\n  \n}\n\n",
+    "created" : 1486139205219.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "567424301",
+    "id" : "226BC29F",
+    "lastKnownWriteTime" : 1486119043,
+    "last_content_update" : 1486119043,
+    "path" : "C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting/Pies.R",
+    "project_path" : "Pies.R",
+    "properties" : {
+    },
+    "relative_order" : 7,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

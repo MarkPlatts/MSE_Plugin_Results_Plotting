@@ -1,7 +1,7 @@
 source("C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting/share_tools.R")
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-plot_fishing_trajectories <- function(params){
+plot_fishing_trajectories <- function(params, folder.to.save.plot){
 
   #set the x axis values depending on what result type and whether plotting yearly or montly
   if(any(params$QUOTA_HCRF_Cons,params$QUOTA_HCRF_Targ,params$MORT_HCRF_Cons,params$MORT_HCRF_Targ)){
@@ -12,7 +12,7 @@ plot_fishing_trajectories <- function(params){
   }
     g <- list.files()     # which groups are there?
 
-    if(!params$SAVE) pdf(file =paste(params$plot.path,"\\OUTPUT_GROUP_FIGS\\",TITLE," plots by group and strategy.pdf",sep=""),width=14,height=7,paper="a4r")
+    if(!params$SAVE) pdf(file =paste(params$plot.path, "\\", folder.to.save.plot, "\\", TITLE," plots by group and strategy.pdf",sep=""),width=14,height=7,paper="a4r")
     
     for(G in g){
       
@@ -73,13 +73,13 @@ plot_fishing_trajectories <- function(params){
         if (sum(testvaliddata!=-9999 & testvaliddata!=0) == 0) next
       }
 
-      if (params$SAVE) {
-        if(any(params$QUOTA_HCRF_Cons,params$QUOTA_HCRF_Targ,params$CATCH,params$DISCARD,params$LANDING)){
-          png(filename = paste(params$plot.path,"OUTPUT_GEARSGROUPSbySTRATEGIES/",FILENAME,"_.png",sep=""), res=900, width=10, height=4, units='in')              
-        } else {
-          png(filename = paste(params$plot.path,"OUTPUT_GROUP_FIGS/",FILENAME,"_.png",sep=""), res=900, width=10, height=4, units='in')              
-        }
-      }
+      # if (params$SAVE) {
+      #   if(any(params$QUOTA_HCRF_Cons,params$QUOTA_HCRF_Targ,params$CATCH,params$DISCARD,params$LANDING)){
+      png(filename = paste(params$plot.path,folder.to.save.plot, "/", FILENAME,"_.png",sep=""), res=900, width=10, height=4, units='in')              
+      #   } else {
+      #     png(filename = paste(params$plot.path,folder.to.save.plot, FILENAME,"_.png",sep=""), res=900, width=10, height=4, units='in')              
+      #   }
+      # }
       
       
       print(paste("The number of open devices is",length(dev.list())))
