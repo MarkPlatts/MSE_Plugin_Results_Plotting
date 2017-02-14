@@ -167,7 +167,6 @@ plot_fishing_trajectories <- function(params, folder.to.save.plot){
         PERCS<- cbind(PERCS, PERC)
       }
       
-      
       #now summary plot
       if(ncol(MEANS)==1) {
         graphics.off()
@@ -181,8 +180,10 @@ plot_fishing_trajectories <- function(params, folder.to.save.plot){
       par(mar=c(5.1, 4.1, 4.1, 15), xpd=TRUE)
       if(params$PLOT_CONFIDENCE_INTERVALS){
         plot(TimeStepVals,MEANS[,2],type='l',ylim=c(0,1.25*(max(MEANS[,-1],UPPS[,-1],na.rm=T))),lty=params$LTY[1],col=params$COL[1],ylab=params$YLAB,xlab="year",font=20,lwd=params$lineweight)
-        for(i in 3:ncol(MEANS)) {
-          lines(TimeStepVals,MEANS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)],lwd=params$lineweight)
+        if(ncol(MEANS)>2){
+          for(i in 3:ncol(MEANS)) {
+            lines(TimeStepVals,MEANS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)],lwd=params$lineweight)
+          }
         }
         for(i in 2:ncol(LOWS)) {
           lines(TimeStepVals,LOWS[,i],lty=params$LTY[(i)],col=params$COL[(i-1)],lwd=params$lineweight*0.5)
@@ -190,8 +191,10 @@ plot_fishing_trajectories <- function(params, folder.to.save.plot){
         }
       } else {
         plot(TimeStepVals,MEANS[,2],type='l',ylim=c(0,1.25*(max(MEANS[,-1],na.rm = T))),lty=params$LTY[1],col=params$COL[1],ylab=params$YLAB,xlab="year",font=20,lwd=params$lineweight)
-        for(i in 3:ncol(MEANS)) {
-          lines(TimeStepVals,MEANS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)],lwd=params$lineweight)
+        if(ncol(MEANS)>2){
+          for(i in 3:ncol(MEANS)) {
+            lines(TimeStepVals,MEANS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)],lwd=params$lineweight)
+          }
         }
       }
       #Changed all the source paths from absolute path to relative path
