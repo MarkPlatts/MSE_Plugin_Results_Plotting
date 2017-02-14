@@ -65,9 +65,10 @@ Plot_Average_Quotas = function(results.path, plot.path, Groups, Fleets, TimeStep
     #use ggplot to plot results - specify legends to be species and a column of different regulation types  
     #browser()
     #png(filename = paste(plot.path,"/AVERAGE_REGS/",iFleet,".png",sep=""), res=900, width=8, height=12, units='in')
+    df_Average_Quota[]
     Plot2Save = qplot(TimeSteps, AverageQuota, data=df_Average_Quota, geom=c("line"), color=GroupName, facets=Regulation~., main=iFleet)
     
-    ggsave(Plot2Save, file=paste(plot.path,"/AVERAGE_REGS/AverageQuota_",iFleet,".png",sep=""), width=6, height=12, limitsize = FALSE)
+    ggsave(Plot2Save, file=paste(plot.path,"/AverageQuota_EachFleet/AverageQuota_",iFleet,".png",sep=""), width=6, height=12, limitsize = FALSE)
     
   }
   
