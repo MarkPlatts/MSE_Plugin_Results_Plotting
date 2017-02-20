@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "#use data.table because it is more efficient and good practice for big data objects\nlibrary(data.table)\nlibrary(reshape2)\nlibrary(ggplot2)\n\npath2results = \"C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1 and 3_141216/Results/\"\n\nCreateGGPlot = function(realised.f.df){\n  plot = ggplot(realised.f.df,aes(x=Realised_F)) + xlim(0,3)\n  plot = plot + geom_histogram(binwidth =0.02 ,aes(y=..density..))\n  plot = plot + facet_wrap(~StrategyName, ncol=1)\n  return(plot)\n}\n\nPlotEnd_dist_realisedFs = function(path.to.results.folder){\n  \n  path.to.results.folder = \"C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1 and 3_141216/Results/\"\n  \n  #Load the data\n  realised.f.df = fread(paste(path.to.results.folder, \"RealisedF/RealisedTotalFsYearly_Cod (adult)_GroupNo14.csv\", sep=\"\"))\n  \n  #Name columns\n  colnames(realised.f.df) = as.character(realised.f.df[1,])\n  realised.f.df = realised.f.df[-1,]\n  \n  #melt the columns into a better format for analysis etc\n  realised.f.df = melt(realised.f.df, id.vars = colnames(realised.f.df)[1:4])\n  colnames(realised.f.df)[5:6] = c(\"TimeStep\", \"Realised_F\")\n  \n  #Alter variable types of some columns\n  realised.f.df$TimeStep = as.numeric(vals$TimeStep)\n  realised.f.df$StrategyName = as.factor(vals$StrategyName)\n  \n  #Output using GGPlot\n  realised.F.plot = CreateGGPlot(realised.f.df)\n  \n  ggsave(realised.F.plot, file=paste(path.to.results.folder, \"a_test.png\", sep=\"\"), width=6, height=40, limitsize = FALSE)\n\n}\n\nPlotEnd_dist_realisedFs(path2results)\n\n",
+    "created" : 1487598883721.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "69446691",
+    "id" : "7ABDB8C8",
+    "lastKnownWriteTime" : 1484861190,
+    "last_content_update" : 1484861190,
+    "path" : "C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting/PlotEndDistributions_RealisedFs.R",
+    "project_path" : "PlotEndDistributions_RealisedFs.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 11,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

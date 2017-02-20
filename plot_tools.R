@@ -10,7 +10,8 @@ create.plot.dirs = function(params){
                   "CatchTrajectories", "LandingsTrajectories", "DiscardsTrajectories",
                   "EFFORT", "VALUE", "BIOMASS", 
                   "HIGHEST_VALUE", "CHOKE_GROUPS", 
-                  "AverageQuota_EachFleet")
+                  "AverageQuota_EachFleet",
+                  "Tables")
   for (iFolder in FolderNames){
     if (!dir.exists(paste(params$plot.path,iFolder,sep=""))){
       dir.create(paste(params$plot.path,iFolder,sep=""))

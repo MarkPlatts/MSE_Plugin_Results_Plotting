@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "create.plot.dirs = function(params){\n  if(!dir.exists(params$plot.path)){\n    dir.create(params$plot.path)\n  }\n  FolderNames = c(\n    # \"OUTPUT_GEARSGROUPSbySTRATEGIES\", \"OUTPUT_GROUP_FIGS\", \"OUTPUT_END_DISTRIBUTIONS\", \n    #               \"OUTPUT_GEARSbySTRATEGIES\", \"OUTPUT_CHOKE_PIES\", \"OUTPUT_HIGHEST_PIES\", \"AVERAGE_REGS\", \n                  \"HCRF_Cons\", \"HCRF_Targ\", \"HCRQuota_Cons\", \"HCRQuota_Targ\", \n                  \"RealisedLandedF\", \"RealisedDiscardedF\", \"RealisedF\", \n                  \"CatchTrajectories\", \"LandingsTrajectories\", \"DiscardsTrajectories\",\n                  \"EFFORT\", \"VALUE\", \"BIOMASS\", \n                  \"HIGHEST_VALUE\", \"CHOKE_GROUPS\", \n                  \"AverageQuota_EachFleet\",\n                  \"Tables\")\n  for (iFolder in FolderNames){\n    if (!dir.exists(paste(params$plot.path,iFolder,sep=\"\"))){\n      dir.create(paste(params$plot.path,iFolder,sep=\"\"))\n    }\n  }\n}\n\nread_biom_refs = function(biom_refs, group, ref_type)\n{\n  group = as.character(group)\n  e_blim = 2\n  e_bpa = 3\n  #load up the file with the values in\n  for(iRow in 1:(dim(biom_refs)[1])){\n    if(group == biom_refs[iRow,1]){\n      if (ref_type == \"blim\") return (biom_refs[iRow, e_blim])\n      if (ref_type == \"bpa\") return (biom_refs[iRow, e_bpa])\n      break\n    }\n    if (iRow == (dim(biom_refs)[1])){\n      print (paste(\"Did not find biomrefs for \", group, \"group specified\"))\n      return (NA)\n    }\n  }\n}",
+    "created" : 1487600004913.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2456058122",
+    "id" : "AAA4E394",
+    "lastKnownWriteTime" : 1487600228,
+    "last_content_update" : 1487600228570,
+    "path" : "C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting/plot_tools.R",
+    "project_path" : "plot_tools.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 6,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
