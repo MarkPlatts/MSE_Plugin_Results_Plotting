@@ -1,78 +1,75 @@
 #Graphs frotx1K_km2m results of the Harvest Control Rules - Steve Mack, Mark Platts
 #generic code - Silvia Hadeler March 2013
-
+#print(this.dir)
 
 # Initialisation ----------------------------------------------------------
 
 #to clear any previous calculation which may interfere with the current one 
-#rm(list=ls())
+rm(list=ls())
+
+#load libraries
+#loading packages which will be used in the following calculations
+library(ggplot2)
+library(dplyr)
+#library(plyr)
 
 #load sources
-this.dir <- dirname(parent.frame(2)$ofile)
+this.dir <- dirname(sys.frame(1)$ofile)
 setwd(this.dir)
 source("PlotEndDistributions.r")
 source("https://raw.githubusercontent.com/ggrothendieck/gsubfn/master/R/list.R")
 
 #Set paths
-rootpath = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1 and 3_141216/"
+rootpath = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/"
 results_folder_path = paste(rootpath,"Results/",sep="")
 results_csv_inc_path = paste(results_folder_path,"Results.csv", sep="")
 plots_folder_path = paste(rootpath,"Plots/",sep="")
 biomrefs_csv_inc_path = paste(plots_folder_path,"Biom_refs.csv", sep="")
 output_folder = paste(plots_folder_path,"OUTPUT_END_DISTRIBUTIONS/", sep="")
+output_csv_folder = paste(plots_folder_path,"Tables/", sep="")
 
 #init plot variables
 plotdata = list()
 number_bins = 30
 
-#loading packages which will be used in the following calculations
-library(ggplot2)
-library(plyr)
+
+#FUNCTIONS =========================================================================================================================
+PrepareResults = function(results)
+{
+  results.t<- as.matrix(as.numeric(results$Value)) # biomass and catch in t/km^2
+  results.t<-results.t * 570
+  results.t<-cbind(results, results.t)
+  colnames(results.t)<-c("Iteration","Strategy","GroupNumber", "GroupName","ResultName","value_t","tx1K_km2")
+  return(results.t)
+}
+
+# =========================================================================================================================
+
+
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 #~~~~~~~~~~ start programme ~~~~~~~~~~#
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
-# Loading Excel results file.csv
-results<-read.csv(results_csv_inc_path, sep=",", header=TRUE, skip=7)
 
-# Loading Excel reference points Blim and Bmax
-# data from NorthSea_HCRinfo_SteveUpdate.xlsx
-# column 4 is the index which points to the right species found
-# in the Results.csv file above
-blim.bpa<-read.csv(biomrefs_csv_inc_path,sep=",", header=TRUE)
 
-#######################################
-####### DATA MANIPULATION #############
-####### t/km^2 into kTons #############
-##### in entire North Sea #############
-#######################################
+
+
+############### Data manipulation ############################################################
+
 #adding extra colum to facilitate further manipulation
-#results$HCR<-as.character(results$Strategy)
-#StrategyNames = c("high_weak_cod","low_weak_cod")
-#results$HCR[results$HCR==StrategyNames[1]]<-"HCR1"
-#results$HCR[results$HCR==StrategyNames[2]]<-"HCR2"
-
-
 # Transforming Biomass and catch from t/km^2 into 1000 t and add as another column to the data
 # to convert minimum biomass and catch from  t/km2 into 1000t (ie. kTon) multiply by the area
 # of North Sea = 570000 km2 and divide by 1000, i.e. multiply by 570
-results.t<- as.matrix(as.numeric(results$Value)) # biomass and catch in t/km^2
-results.t<-results.t * 570
-results.t<-cbind(results, results.t)
-colnames(results.t)<-c("Iteration","Strategy","GroupNumber", "GroupName","ResultName","value_t","tx1K_km2")
+results<-read.csv(results_csv_inc_path, sep=",", header=TRUE, skip=7)
+results.t = PrepareResults(results)
 
-# some data in results.t is very large (when the code didn't converge) -> let's cut this output
-#results.t<-subset(results.t, tx1K_km2<1000000)
+# Loading Excel reference points Blim and Bmax
+blim.bpa<-read.csv(biomrefs_csv_inc_path,sep=",", header=TRUE)
 
 # IMPORTANT: from now we are working with results.t, last column contains biomass and catch in kTons 
-#head(results.t)
 
-#######################################
-##########  SELECT RESULTS  ###########
-#######################################
-
-
+##########  SELECT RESULTS  #######################################################################
 
 # which ResultNames do we have in Results.csv?
 plotdata$result.names<-levels(results.t$ResultName)
@@ -126,9 +123,10 @@ if (plotdata$result.names[result.index]=="TotalEndValue"){
 #ResultMean.species <- ddply(plotdata$results.species, .(Strategy), summarise, mean.species=mean(tx1K_km2))
 #ResultMean.species
 plotdata$ResultMedian.species<-ddply(plotdata$results.species, .(Strategy), summarise, median.species=median(tx1K_km2))
-plotdata$ResultMedian.species
-ResultQuantile.species<-ddply(plotdata$results.species, .(Strategy), summarise, quantile.species=quantile(tx1K_km2))
-ResultQuantile.species
+#plotdata$ResultMedian.species
+#ResultQuantile.species<-ddply(plotdata$results.species, .(Strategy), summarise, quantile.species=quantile(tx1K_km2))
+ResultQuantile.species<-ddply(plotdata$results.species, .(Strategy, GroupName), function(x) quantile(x$tx1K_km2))
+#ResultQuantile.species
 
 UniqueGroupNames = unique(subset(results.t, ResultName=="BiomassMin")$GroupName)
 UniqueFleetNames = unique(subset(results.t, ResultName=="TotalEndValue")$GroupName)
@@ -177,16 +175,18 @@ if (plotdata$result.names[result.index]=="BiomassEnd" || plotdata$result.names[r
   SumBpa=list()   #The number of results that are above Bpa
   percBpa=list()  #The percentage of the results above Bpa
   
+  df.perc.Blim = data.frame("StrategyName" = NULL, "Group" = NULL, "Percentage.Below" = NULL)
+  df.perc.Bpa = data.frame("StrategyName" = NULL, "Group" = NULL, "Percentage.Below" = NULL)
+  
   for (iStrategy in 1:NumberUniqueStrategyNames){
     SumBlim[iStrategy]<-list(sum(n[[iStrategy]]$tx1K_km2>=Blim.species))  # percentage of "trials" bigger than Blim 
     percBlim[iStrategy]<-list((SumBlim[[iStrategy]]*100)/nrow(n[[iStrategy]]))
-    percBlim[iStrategy]
+    
     
     #percentage of iterations=trials bigger than the Bpa for each harvest control rules strategy
     #Harvest Control Rule
     SumBpa[iStrategy]<-list(sum(n[[iStrategy]]$tx1K_km2>=Bpa.species))  # percentage of "trials" bigger than Bpa 
     percBpa[iStrategy]<-list((SumBpa[[iStrategy]]*100)/nrow(n[[iStrategy]]))
-    percBpa[iStrategy]
     
   }
   
@@ -392,7 +392,6 @@ for (iStrategy in 1:length(UniqueStrategyNames)){
   quantile.xaxis<-rbind(quantile.xaxis,data.frame(Strategy=UniqueStrategyNames[iStrategy], lq.axis=ResultQuantile.species[5*iStrategy-3,2], uq.axis=ResultQuantile.species[5*iStrategy-1,2]))
 }
 
-
 plotdata$results.species = Add_Reg(plotdata$results.species)
 plotdata$blim.species3.lab = Add_Reg(plotdata$blim.species3.lab)
 plotdata$bpa.species3.lab = Add_Reg(plotdata$bpa.species3.lab)
@@ -401,6 +400,44 @@ plotdata$blim.bpa.xaxis = Add_Reg(plotdata$blim.bpa.xaxis)
 plotdata$b.species4.lab = Add_Reg(plotdata$b.species4.lab)
 plotdata$bpa.species5.lab = Add_Reg(plotdata$bpa.species5.lab)
 plotdata$blim.species5.lab = Add_Reg(plotdata$blim.species5.lab)
+
+
+#Write % below Blim and Bpa to tables and out to csv
+# df.perc.Blim and df.perc.Bpa = data.frame("StrategyName" = NULL, "Group" = NULL, "Percentage.Below" = NULL)
+for (iStrategy in 1:NumberUniqueStrategyNames){
+  
+  StrategyName = UniqueStrategyNames[iStrategy]
+  species.name = plotdata$species_in_resultsfile[species.index[1]]
+
+  perc.below.Blim = 100 - percBlim[[iStrategy]]
+  df.perc.Blim = rbind(df.perc.Blim, data.frame("StrategyName" = StrategyName, "Group" = species.name, "Percentage.Below" = perc.below.Blim))
+  
+  perc.below.Bpa = 100 - percBpa[[iStrategy]]
+  df.perc.Bpa = rbind(df.perc.Bpa, data.frame("StrategyName" = StrategyName, "Group" = species.name, "Percentage.Below" = perc.below.Bpa))
+  
+  
+}
+
+if(file.exists(paste(output_csv_folder, "Blim.csv", sep="")))
+{
+  write.table(df.perc.Blim, file=paste(output_csv_folder, "Blim.csv", sep=""), sep=",", append = T, row.names=F, col.names = F)
+} else {
+  write.table(df.perc.Blim, file=paste(output_csv_folder, "Blim.csv", sep=""), sep=",", append = T, row.names=F)
+}
+
+if(file.exists(paste(output_csv_folder, "Bpa.csv", sep="")))
+{
+  write.table(df.perc.Bpa, file=paste(output_csv_folder, "Bpa.csv", sep=""), sep=",", append = T, row.names=F, col.names = F)
+} else {
+  write.table(df.perc.Bpa, file=paste(output_csv_folder, "Bpa.csv", sep=""), sep=",", append = T, row.names=F)
+}
+
+if(file.exists(paste(output_csv_folder, "B_Quartiles.csv", sep="")))
+{
+  write.table(ResultQuantile.species, file=paste(output_csv_folder, "B_Quartiles.csv", sep=""), sep=",", append = T, row.names=F, col.names = F)
+} else {
+  write.table(ResultQuantile.species, file=paste(output_csv_folder, "B_Quartiles.csv", sep=""), sep=",", append = T, row.names=F)
+}
 
 #Reorder Strategy levels so that regulation types are plotted in specified order
 plotdata$blim.species3.lab$Regulation = factor(plotdata$blim.species3.lab$Regulation, levels = c("Weakest stock", "Selective", "Highest value", "Other"))
@@ -427,6 +464,8 @@ if (plotdata$result.names[result.index]=="BiomassEnd" || plotdata$result.names[r
     B_SPECIES = B_SPECIES + geom_text(data = plotdata$blim.species5.lab, aes(x = x, y = y, label = lab), size = 2, angle=90, vjust=-0.5)
 
   }
+  
+  
 
   ggsave(B_SPECIES, file=paste(output_folder, plotdata$species_in_resultsfile[species.index[1]],"_",plotdata$result.names[result.index],".png", sep=""), width=6, height=length(UniqueStrategyNames)*1.5, limitsize = FALSE)
 }  

@@ -47,7 +47,6 @@ plot_biomass_trajectories <- function(params){
     blim = read_biom_refs(biom_refs, GroupName, "blim")   #Needs to be specified in the file as kt
     
     #now summary plot
-    #par(mar=c(5.1, 4.1, 4.1, 20), xpd=TRUE)
     par(mar=c(5.1, 4.1, 4.1, 16), xpd=TRUE)
     
     #figure out what the highest value the y-axis needs to be

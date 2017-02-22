@@ -11,7 +11,8 @@ create.plot.dirs = function(params){
                   "EFFORT", "VALUE", "BIOMASS", 
                   "HIGHEST_VALUE", "CHOKE_GROUPS", 
                   "AverageQuota_EachFleet",
-                  "Tables")
+                  "Tables", 
+                  "OUTPUT_END_DISTRIBUTIONS")
   for (iFolder in FolderNames){
     if (!dir.exists(paste(params$plot.path,iFolder,sep=""))){
       dir.create(paste(params$plot.path,iFolder,sep=""))

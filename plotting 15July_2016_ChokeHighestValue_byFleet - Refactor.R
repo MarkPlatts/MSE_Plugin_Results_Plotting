@@ -135,7 +135,7 @@ plot_type = function(type2plot) {
   
 }
 
-for(iplot in c(14:16)){
+for(iplot in c(1:13)){
   print(paste("Currently plotting type", iplot))
   plot_type(iplot)
 }

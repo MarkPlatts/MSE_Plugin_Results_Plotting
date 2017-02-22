@@ -35,7 +35,8 @@ initialise_params = function(params){
     results<-results[results$Strategy!="Z",]#odd one in _SR_final
     params$strats <- as.character(unique(results$Strategy))  # 10/15 strategies
     params$strats <- params$strats[params$strats != "NONE"]
-    params$strats <- params$strats[1:10]
+    params$strats <- params$strats[40:length(params$strats)]
+    #params$strats <- params$strats[21:40]
   #plot strats in this vector
     # params$strats <- c("12 NSMAP 2020_TargetF_Highest value", "T3_14 NSMAP 2020_HighF_Highest value")
   #plot strats chosen interactively
