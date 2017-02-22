@@ -1,3 +1,5 @@
+# INITIALISATION START ===============================================================================================
+
 rm(list = ls())
 
 source("share_tools.R")
@@ -9,11 +11,15 @@ library(data.table)
 root.plot = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Plots/"
 root.results = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Results/"
 
+# INITIALISATION END ===============================================================================================
+
+
+# FUNCTIONS START ===============================================================================================
+
 calcLast5YearSum = function(folder.and.filename, val.col.name, path.to.results.folder)
+#outputs as a table the total catch or landings for the last 5 years
 {
-
-  #path.to.results.folder = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Results/"
-
+  
   #load the quota
   dt = fread(paste(path.to.results.folder, folder.and.filename, sep=""), skip=7, header=T)
   
@@ -49,6 +55,11 @@ isValidValuesInFile = function(file.name.with.path, col.data.starts)
   return (file.valid)
 }
 
+# FUNCTIONS END ===============================================================================================
+
+
+# SCRIPT START  ===============================================================================================
+
 #get a list of all the groups
 unique.groups = LoadUniqueGroups(root.results)
 
@@ -69,33 +80,36 @@ for(igroup in unique.groups)
   if(!isValidValuesInFile(file.name.with.path = hcr.quota.targ.file, col.data.starts = 6)) next
   if(!isValidValuesInFile(file.name.with.path = catches.file, col.data.starts = 6)) next
   
+  #load the files and sum
   quota = calcLast5YearSum("HCRQuota_Targ/HCR_Quota_Targ_Cod (adult)_GroupNo14_AllFleets.csv", "quota.last5yearsum", root.results)
   catch = calcLast5YearSum("CatchTrajectories/TotalCatchYearly_Cod (adult)_GroupNo14_AllFleets.csv", "catch.last5yearsum", root.results)
   
+  #merge the two together so that we can easily calculate the difference between two columns
   dt = merge(quota, catch, by = c("StrategyName", "ModelID"))
-  
   dt[, "diff"] = dt[,"catch.last5yearsum"] - dt[,"quota.last5yearsum"]
   
+  #Check where the catch is greater than or less than the quota
   dt[, "Catch.greater.than.quota"] = dt$diff>=0
   dt[, "Catch.less.than.quota"] = dt$diff<0
   
+  #For each strategy count how many models with catches above and below quota and merge them together
   NumberAbove = dt[,.(NumberAbove=sum(Catch.greater.than.quota)), by=.(StrategyName)]
   NumberBelow = dt[,.(NumberBelow=sum(Catch.less.than.quota)), by=.(StrategyName)]
-  
   dt.counts.temp = merge(NumberAbove,NumberBelow, by = c("StrategyName"))
   
+  #Create new column that turns the counts into percentages
   dt.counts.temp$PercentAbove = dt.counts.temp$NumberAbove/(dt.counts.temp$NumberAbove+dt.counts.temp$NumberBelow)*100
   dt.counts.temp$PercentBelow = dt.counts.temp$NumberBelow/(dt.counts.temp$NumberAbove+dt.counts.temp$NumberBelow)*100
 
   #add column with groupname to differentiate after binding
   dt.counts.temp = cbind(data.table(GroupName = rep(igroup, dim(dt.counts.temp)[1])), dt.counts.temp) 
   
-  print(dt.counts.temp)
-  
+  #bind them all together ready to be saved to csv
   dt.all = rbind(dt.all, dt.counts.temp)
   
 }
 
+#finally save the table to csv
 write.csv(dt.all, paste(root.plot, "Tables/Percentage_Catches_Above_Below_Quota.csv", sep=""))
 
-
+# SCRIPT END  ===============================================================================================
