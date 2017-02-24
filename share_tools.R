@@ -1,4 +1,51 @@
 library(dplyr)
+library(reshape2)
+library(data.table)
+
+isNotAllNeg9999 = function(file.name.with.path, col.data.starts)
+  #count how many values aren't NA and if there is at least one then return that file is valid
+{
+  dt = fread(file.name.with.path, skip=7, header=T)
+  data.only = dt[, col.data.starts:ncol(dt)]
+  file.valid = FALSE
+  if(sum(data.only!=-9999)>0) {file.valid = TRUE}
+  return (file.valid)
+}
+
+calcLast5Year = function(filename.with.path, val.col.name, ncols.before.timeseries, function.type)
+  #outputs as a table the total catch or landings for the last 5 years when total number of years is 20
+  # ncols.before.timeseries is the number of columns with information such as group strategy modelID prior 
+  #to the values in the time series
+  #if function.type == 1 then sum, if function.type == 2 then mean
+{
+
+  #load the quota
+  dt = fread(filename.with.path, skip=7, header=T)
+  dt.melted = melt(dt, id=names(dt)[1:ncols.before.timeseries])
+  
+  #change name of timestep column to be more relevant
+  names(dt.melted)[names(dt.melted)=="variable"] = "TimeStep"
+  
+  #Change type of column
+  dt.melted$TimeStep = as.numeric(dt.melted$TimeStep)
+  
+  #filter out the last 5 years
+  dt.melted = dt.melted[TimeStep>15]
+  #calc sum by strategy
+  if(function.type==1){
+    dt.Last5YearSum.byStrategy = dt.melted[,.(Last5YearSum=sum(value)), by=.(StrategyName,ModelID)]
+  } else if(function.type==2){
+    dt.Last5YearSum.byStrategy = dt.melted[,.(Last5YearSum=mean(value)), by=.(StrategyName,ModelID)]
+  }
+
+  
+  #change the name of the column to one specified in params so that when we merge two tables
+  #we have column names that refer to data that the last 5 year mean was calculated for
+  names(dt.Last5YearSum.byStrategy)[names(dt.Last5YearSum.byStrategy)=="Last5YearSum"] = val.col.name
+  
+  return(dt.Last5YearSum.byStrategy)
+  
+}
 
 initialise_plotting_params = function(folder_name, params){
   #init plotting params
