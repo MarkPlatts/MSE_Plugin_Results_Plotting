@@ -37,16 +37,7 @@ groupsWithHcr = function(hcr.folders){
 
 }
 
-appendVariableToDataTable = function(dt, variable, variablename, beg, end){
-  #append a single value to a column either before the first column or after the last depending on whether beg or end is TRUE
 
-  nrows.table = dim(dt)[1]
-  if(beg) dt.appended = cbind(data.table(x = rep(variable, nrows.table)), dt)
-  if(end) dt.appended = cbind(dt, data.table(x = rep(variable, nrows.table)))
-  names(dt.appended)[names(dt.appended) == "x"] = variablename
-  
-  return(dt.appended)
-}
 
 
 getStrategyTable = function(hcr.folders){
