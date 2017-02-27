@@ -8,7 +8,7 @@ plot_effort_trajectories <- function(params){
   #setwd(paste(params$RootPath,"\\Effort", sep=''))
   
   #initialise plotting params
-  plotting_params = initialise_plotting_params("Effort", params)
+  plotting_params = initialise_plotting_params("Effort", params$plot_each_timestep, params$StartRun_Year, params$EndRun_Year, params$RootPath)
   
   for(G in plotting_params$g){
     

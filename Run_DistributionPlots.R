@@ -51,10 +51,6 @@ PrepareResults = function(results)
 #~~~~~~~~~~ start programme ~~~~~~~~~~#
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
-
-
-
-
 ############### Data manipulation ############################################################
 
 #adding extra colum to facilitate further manipulation

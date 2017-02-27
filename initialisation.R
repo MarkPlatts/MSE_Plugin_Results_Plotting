@@ -1,4 +1,4 @@
-initialise_params = function(params){
+initialise_params = function(){
   params = list()
   
   params$plot_each_timestep = FALSE;
@@ -19,10 +19,10 @@ initialise_params = function(params){
   params$Area = 570000
   
   #Select groups and fleets to plot
-  #params$Groups2Plot = c("GroupNo14")
-  params$Groups2Plot = c("GroupNo16","GroupNo14","GroupNo18","GroupNo20","GroupNo21","GroupNo23","GroupNo29","GroupNo30",
-                         "GroupNo31","GroupNo33","GroupNo34","GroupNo38","GroupNo42","GroupNo22","GroupNo26","GroupNo32",
-                         "GroupNo35","GroupNo39","GroupNo41","GroupNo55")
+  params$Groups2Plot = c("GroupNo14")
+  # params$Groups2Plot = c("GroupNo16","GroupNo14","GroupNo18","GroupNo20","GroupNo21","GroupNo23","GroupNo29","GroupNo30",
+  #                        "GroupNo31","GroupNo33","GroupNo34","GroupNo38","GroupNo42","GroupNo22","GroupNo26","GroupNo32",
+  #                        "GroupNo35","GroupNo39","GroupNo41","GroupNo55")
   #params$Fleets2Plot = c("AllFleets", "FleetNo1")
   params$Fleets2Plot = c("AllFleets", "FleetNo1", "FleetNo2", "FleetNo3", "FleetNo4", "FleetNo5", "FleetNo6", "FleetNo7",
   "FleetNo8", "FleetNo9", "FleetNo10", "FleetNo11", "FleetNo12")
@@ -31,18 +31,20 @@ initialise_params = function(params){
   
   ### Load results files to get unique strats (comment/uncomment to select method of choosing strategies to plot)
   #plot all strats
-    results<-read.table("Results.csv",sep=',',skip=8,col.names=c("Model","Strategy","GroupID","GroupName","Variable","Value"), fill=T)
-    results<-results[results$Strategy!="Z",]#odd one in _SR_final
-    params$strats <- as.character(unique(results$Strategy))  # 10/15 strategies
-    params$strats <- params$strats[params$strats != "NONE"]
-    params$strats <- params$strats[40:length(params$strats)]
-    #params$strats <- params$strats[21:40]
+  results<-read.table("Results.csv",sep=',',skip=8,col.names=c("Model","Strategy","GroupID","GroupName","Variable","Value"), fill=T)
+  results<-results[results$Strategy!="Z",]#odd one in _SR_final
+  params$strats <- as.character(unique(results$Strategy))  # 10/15 strategies
+  params$strats <- params$strats[params$strats != "NONE"]
+  #params$strats <- params$strats[41:length(params$strats)]
+  #params$strats <- params$strats[21:40]
+  params$strats <- params$strats[1:20]
   #plot strats in this vector
-    # params$strats <- c("12 NSMAP 2020_TargetF_Highest value", "T3_14 NSMAP 2020_HighF_Highest value")
+  # params$strats <- c("12 NSMAP 2020_TargetF_Highest value", "T3_14 NSMAP 2020_HighF_Highest value")
   #plot strats chosen interactively
-    # params$strats <- create_list_strategies(params$RootPath)
+  # params$strats <- create_list_strategies(params$RootPath)
+
     
-    params$reg.types = c("Weakest stock", "Highest value", "Selective")
+  params$reg.types = c("Weakest stock", "Highest value", "Selective")
     
   params$lineweight = 0.3
   params$legend_x_inset2 = -0.45
