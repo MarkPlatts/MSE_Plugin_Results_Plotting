@@ -2,6 +2,19 @@ library(dplyr)
 library(reshape2)
 library(data.table)
 
+
+appendVariableToDataTable = function(dt, variable, variablename, beg, end){
+  #append a single value to a column either before the first column or after the last depending on whether beg or end is TRUE
+  
+  nrows.table = dim(dt)[1]
+  if(beg) dt.appended = cbind(data.table(x = rep(variable, nrows.table)), dt)
+  if(end) dt.appended = cbind(dt, data.table(x = rep(variable, nrows.table)))
+  names(dt.appended)[names(dt.appended) == "x"] = variablename
+  
+  return(dt.appended)
+}
+
+
 isNotAllNeg9999 = function(file.name.with.path, col.data.starts)
   #count how many values aren't NA and if there is at least one then return that file is valid
 {
@@ -13,7 +26,7 @@ isNotAllNeg9999 = function(file.name.with.path, col.data.starts)
 }
 
 calcLast5Year = function(filename.with.path, val.col.name, ncols.before.timeseries, function.type)
-  #outputs as a table the total catch or landings for the last 5 years when total number of years is 20
+  #outputs as a table the total catch or landings for the last 5 years
   # ncols.before.timeseries is the number of columns with information such as group strategy modelID prior 
   #to the values in the time series
   #if function.type == 1 then sum, if function.type == 2 then mean
@@ -29,8 +42,11 @@ calcLast5Year = function(filename.with.path, val.col.name, ncols.before.timeseri
   #Change type of column
   dt.melted$TimeStep = as.numeric(dt.melted$TimeStep)
   
+  #find the maximum timestep
+  nTimeSteps = max(dt.melted$TimeStep)
+  
   #filter out the last 5 years
-  dt.melted = dt.melted[TimeStep>15]
+  dt.melted = dt.melted[TimeStep>nTimeSteps-5]
   #calc sum by strategy
   if(function.type==1){
     dt.Last5YearSum.byStrategy = dt.melted[,.(Last5YearSum=sum(value)), by=.(StrategyName,ModelID)]
@@ -47,18 +63,15 @@ calcLast5Year = function(filename.with.path, val.col.name, ncols.before.timeseri
   
 }
 
-initialise_plotting_params = function(folder_name, params){
+initialise_plotting_params = function(folder.name, plot.each.timestep, start.run.year, end.run.year, root.path){
   #init plotting params
   plotting_params = list()
   
   #Create a vector of x vals at either yearly or monthly intervals
-  plotting_params$TimeStepVals = get_timestep_vals(params$plot_each_timestep, params$StartRun_Year, params$EndRun_Year)
-  
-  #reset the director
-  #setwd(paste(params$RootPath,"\\",folder_name, sep=''))
+  plotting_params$TimeStepVals = get_timestep_vals(plot.each.timestep, start.run.year, end.run.year)
   
   #get a list of all the files in the Biomass folder
-  plotting_params$g <- list.files(paste(params$RootPath,"\\",folder_name, sep=''))
+  plotting_params$g <- list.files(paste(params$RootPath,"\\",folder.name, sep=''))
   
   return(plotting_params)
 }

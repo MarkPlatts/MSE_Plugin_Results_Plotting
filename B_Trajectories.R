@@ -8,7 +8,7 @@ plot_biomass_trajectories <- function(params){
   biom_refs = read.csv(paste(params$plot.path,"/Biom_refs.csv",sep=''))
   
   #initialise plotting params
-  plotting_params = initialise_plotting_params("Biomass", params)
+  plotting_params = initialise_plotting_params("Biomass", params$plot_each_timestep, params$StartRun_Year, params$EndRun_Year, params$RootPath)
 
   for(G in plotting_params$g){
     
@@ -28,10 +28,10 @@ plot_biomass_trajectories <- function(params){
     }
     if (DontPlot==TRUE) next
 
+    #Setup the connection for saving plots to file
     png(filename = paste(params$plot.path,"/BIOMASS/",FILENAME,"_PERCS.png",sep=""), res=900, width=8, height=4, units='in')
     
     #Load the data from file
-
     plotting_params$dat <- read.csv(paste(params$RootPath,"/Biomass/",G, sep=''),skip=7, head=T)
 
     #Modify the values so that they are for the entire region

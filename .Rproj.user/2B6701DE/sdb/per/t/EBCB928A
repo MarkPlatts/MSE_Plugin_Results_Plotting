@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "initialise_params = function(){\n  params = list()\n  \n  params$plot_each_timestep = FALSE;\n  params$PLOT_CONFIDENCE_INTERVALS = F;\n  params$Plot_yearly_files = TRUE\n  \n  params$plot.path = \"C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Plots/\"\n  params$RootPath =  \"C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Results/\"\n  \n  params$Base_NYears = 23\n  params$Projected_NYears = 20\n  params$StartRun_Year = 1991\n  \n  params$nYrs = params$Base_NYears + params$Projected_NYears\n  params$StartProjection_Year = params$StartRun_Year + params$nYrs - params$Projected_NYears\n  params$EndRun_Year = params$StartRun_Year + params$nYrs\n  \n  params$Area = 570000\n  \n  #Select groups and fleets to plot\n  params$Groups2Plot = c(\"GroupNo14\")\n  # params$Groups2Plot = c(\"GroupNo16\",\"GroupNo14\",\"GroupNo18\",\"GroupNo20\",\"GroupNo21\",\"GroupNo23\",\"GroupNo29\",\"GroupNo30\",\n  #                        \"GroupNo31\",\"GroupNo33\",\"GroupNo34\",\"GroupNo38\",\"GroupNo42\",\"GroupNo22\",\"GroupNo26\",\"GroupNo32\",\n  #                        \"GroupNo35\",\"GroupNo39\",\"GroupNo41\",\"GroupNo55\")\n  #params$Fleets2Plot = c(\"AllFleets\", \"FleetNo1\")\n  params$Fleets2Plot = c(\"AllFleets\", \"FleetNo1\", \"FleetNo2\", \"FleetNo3\", \"FleetNo4\", \"FleetNo5\", \"FleetNo6\", \"FleetNo7\",\n  \"FleetNo8\", \"FleetNo9\", \"FleetNo10\", \"FleetNo11\", \"FleetNo12\")\n\n  setwd(params$RootPath)\n  \n  ### Load results files to get unique strats (comment/uncomment to select method of choosing strategies to plot)\n  #plot all strats\n  results<-read.table(\"Results.csv\",sep=',',skip=8,col.names=c(\"Model\",\"Strategy\",\"GroupID\",\"GroupName\",\"Variable\",\"Value\"), fill=T)\n  results<-results[results$Strategy!=\"Z\",]#odd one in _SR_final\n  params$strats <- as.character(unique(results$Strategy))  # 10/15 strategies\n  params$strats <- params$strats[params$strats != \"NONE\"]\n  #params$strats <- params$strats[41:length(params$strats)]\n  #params$strats <- params$strats[21:40]\n  params$strats <- params$strats[1:20]\n  #plot strats in this vector\n  # params$strats <- c(\"12 NSMAP 2020_TargetF_Highest value\", \"T3_14 NSMAP 2020_HighF_Highest value\")\n  #plot strats chosen interactively\n  # params$strats <- create_list_strategies(params$RootPath)\n\n    \n  params$reg.types = c(\"Weakest stock\", \"Highest value\", \"Selective\")\n    \n  params$lineweight = 0.3\n  params$legend_x_inset2 = -0.45\n  params$COL = rep(1:8,10)[1:length(params$strat)]\n  params$LTY<- c(rep(1,8),rep(2,8),rep(3,8),rep(4,8),rep(5,8),rep(6,8),rep(7,8),rep(8,8))[1:length(params$strats)]\n  params$WRITE<-F\n  params$SAVE<-T\n  params$LEGEND<-T\n  \n  params$MORT_HCRF_Cons <- F\n  params$MORT_HCRF_Targ<- F\n  params$QUOTA_HCRF_Cons<- F\n  params$QUOTA_HCRF_Targ<- F\n  params$MORT_REAL_LandF <- F\n  params$MORT_REAL_DiscF <- F\n  params$MORT_REAL_F <- F\n  \n  params$CATCH <-F\n  params$LANDING <- F\n  params$DISCARD <- F\n  \n  params$EFFORT <-F\n  params$VALUE <- F\n  params$BIOMASS <-F\n  \n  params$HIGHEST_VALUE <- F\n  params$CHOKE_GROUPS <- F\n  \n  params$AverageQuota_EachFleet <- F\n  \n  return(params)\n}",
+    "created" : 1488017638090.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4220827121",
+    "id" : "EBCB928A",
+    "lastKnownWriteTime" : 1488226813,
+    "last_content_update" : 1488226813639,
+    "path" : "C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting/initialisation.R",
+    "project_path" : "initialisation.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

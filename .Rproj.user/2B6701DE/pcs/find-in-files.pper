@@ -1,0 +1,10 @@
+{
+    "dialog-state" : {
+        "caseSensitive" : false,
+        "filePatterns" : [
+        ],
+        "path" : "C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting",
+        "query" : "initialise_params",
+        "regex" : false
+    }
+}
