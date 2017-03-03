@@ -2,6 +2,47 @@
 library(reshape2)
 library(dtplyr)
 
+groupsWithHcr = function(hcr.folders){
+  #compiles a list of all the unique groups with a hcr in the location of folders  
+  
+  hcr.file.list = list.files(hcr.folders, full.names = TRUE)
+  
+  groups.list = vector()
+  for(iFile in hcr.file.list){
+    dt = fread(iFile, skip=1, header=T)
+    groups.list = c(groups.list, dt$GroupNameForF)
+  }
+  
+  groups.unique.in.hcrs = unique(groups.list)
+  
+  return(groups.unique.in.hcrs)
+  
+}
+
+
+getStrategyTable = function(hcr.folders){
+  #load up all the hcrs into memory so that we can access and use the values when comparing with realised F's
+  
+  #compile a vector with the filenames and associated paths for all hcr files
+  hcr.file.list = list.files(hcr.folders, full.names = TRUE)
+  
+  strategies = data.table()
+  
+  for(iStrategy in hcr.file.list){
+    #get strategy name and the hcrs it contains
+    strategy.name = sub(pattern = "(.*)\\..*$", replacement = "\\1", basename(iStrategy))
+    strategy.name = gsub("_hcr", "", strategy.name)
+    strategy.table = fread(iStrategy, skip=1, header=T)
+    
+    #create table from strategy name and hcrs and append to overall strategies data.table
+    strategy.table = appendVariableToDataTable(strategy.table, strategy.name, variablename = "StrategyName", beg=TRUE, end=FALSE)
+    strategies = rbind(strategies, strategy.table)
+  }
+  
+  return (strategies)
+  
+}
+
 
 appendVariableToDataTable = function(dt, variable, variablename, beg, end){
   #append a single value to a column either before the first column or after the last depending on whether beg or end is TRUE
