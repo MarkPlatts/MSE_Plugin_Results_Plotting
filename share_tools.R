@@ -1,6 +1,6 @@
-library(dplyr)
+#library(dplyr)
 library(reshape2)
-library(data.table)
+library(dtplyr)
 
 
 appendVariableToDataTable = function(dt, variable, variablename, beg, end){
@@ -54,7 +54,6 @@ calcLast5Year = function(filename.with.path, val.col.name, ncols.before.timeseri
     dt.Last5YearSum.byStrategy = dt.melted[,.(Last5YearSum=mean(value)), by=.(StrategyName,ModelID)]
   }
 
-  
   #change the name of the column to one specified in params so that when we merge two tables
   #we have column names that refer to data that the last 5 year mean was calculated for
   names(dt.Last5YearSum.byStrategy)[names(dt.Last5YearSum.byStrategy)=="Last5YearSum"] = val.col.name
