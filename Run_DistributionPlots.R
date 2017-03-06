@@ -60,7 +60,7 @@ PrepareResults = function(results)
 results<-read.csv(results_csv_inc_path, sep=",", header=TRUE, skip=7)
 results.t = PrepareResults(results)
 
-# Loading Excel reference points Blim and Bmax
+# Loading reference points Blim and Bpa
 blim.bpa<-read.csv(biomrefs_csv_inc_path,sep=",", header=TRUE)
 
 # IMPORTANT: from now we are working with results.t, last column contains biomass and catch in kTons 

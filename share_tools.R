@@ -1,16 +1,26 @@
 #library(dplyr)
 library(reshape2)
 library(dtplyr)
+library(dplyr)
+library(data.table)
 
-groupsWithHcr = function(hcr.folders){
+countColsWithVals = function(file.name, ncols_no_vals, lines.to.skip){
+  file.to.inspect = read.csv(file.name, skip=lines.to.skip)
+  nCols = ncol(file.to.inspect)-ncols_no_vals
+  return(nCols)
+}
+
+
+groupsWithHcr = function(hcr.folders, groups.for.f.or.biomass){
   #compiles a list of all the unique groups with a hcr in the location of folders  
-  
+
   hcr.file.list = list.files(hcr.folders, full.names = TRUE)
   
   groups.list = vector()
   for(iFile in hcr.file.list){
     dt = fread(iFile, skip=1, header=T)
-    groups.list = c(groups.list, dt$GroupNameForF)
+    if(groups.for.f.or.biomass=="f") groups.list = c(groups.list, dt$GroupNameForF)
+    if(groups.for.f.or.biomass=="biomass") groups.list = c(groups.list, dt$GroupNameForBiomass)
   }
   
   groups.unique.in.hcrs = unique(groups.list)
@@ -22,7 +32,7 @@ groupsWithHcr = function(hcr.folders){
 
 getStrategyTable = function(hcr.folders){
   #load up all the hcrs into memory so that we can access and use the values when comparing with realised F's
-  
+
   #compile a vector with the filenames and associated paths for all hcr files
   hcr.file.list = list.files(hcr.folders, full.names = TRUE)
   
@@ -56,17 +66,52 @@ appendVariableToDataTable = function(dt, variable, variablename, beg, end){
 }
 
 
-isNotAllNeg9999 = function(file.name.with.path, col.data.starts)
+isNotAll = function(dt, col.data.starts, val.to.check)
   #count how many values aren't NA and if there is at least one then return that file is valid
 {
-  dt = fread(file.name.with.path, skip=7, header=T)
+
   data.only = dt[, col.data.starts:ncol(dt)]
   file.valid = FALSE
-  if(sum(data.only!=-9999)>0) {file.valid = TRUE}
+  if(sum(data.only!=val.to.check)>0) {file.valid = TRUE}
   return (file.valid)
 }
 
-calcLast5Year = function(filename.with.path, val.col.name, ncols.before.timeseries, function.type)
+GetiYearCatch = function(dt, iYear, ncols.before.timeseries){
+  
+  #load the quota
+  dt.melted = melt(dt, id=names(dt)[1:ncols.before.timeseries])
+  
+  #change name of columns to be more relevant
+  names(dt.melted)[names(dt.melted)=="variable"] = "TimeStep"
+  names(dt.melted)[names(dt.melted)=="value"] = paste("Year", iYear, sep="")
+  
+  #Change type of column
+  dt.melted$TimeStep = as.numeric(dt.melted$TimeStep)
+  
+  #find the maximum timestep
+  #nTimeSteps = max(dt.melted$TimeStep)
+  
+  #filter for iYear
+  dt.melted = dt.melted[TimeStep==iYear]
+  # #calc sum by strategy
+  # if(function.type==1){
+  #   dt.Last5YearSum.byStrategy = dt.melted[,.(Last5YearSum=sum(value)), by=.(StrategyName,ModelID)]
+  # } else if(function.type==2){
+  #   dt.Last5YearSum.byStrategy = dt.melted[,.(Last5YearSum=mean(value)), by=.(StrategyName,ModelID)]
+  # }
+  dt.melted[, TimeStep:=NULL]
+  
+  #change the name of the column to one specified in params so that when we merge two tables
+  #we have column names that refer to data that the last 5 year mean was calculated for
+  #names(dt.Last5YearSum.byStrategy)[names(dt.Last5YearSum.byStrategy)=="Last5YearSum"] = val.col.name
+  
+  #return(dt.Last5YearSum.byStrategy)
+  return(dt.melted)
+  
+}
+
+
+calcLast5Year = function(dt, val.col.name, ncols.before.timeseries, function.type)
   #outputs as a table the total catch or landings for the last 5 years
   # ncols.before.timeseries is the number of columns with information such as group strategy modelID prior 
   #to the values in the time series
@@ -74,7 +119,6 @@ calcLast5Year = function(filename.with.path, val.col.name, ncols.before.timeseri
 {
 
   #load the quota
-  dt = fread(filename.with.path, skip=7, header=T)
   dt.melted = melt(dt, id=names(dt)[1:ncols.before.timeseries])
   
   #change name of timestep column to be more relevant

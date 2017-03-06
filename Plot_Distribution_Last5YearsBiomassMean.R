@@ -3,7 +3,6 @@
 #==========================================================
 
 
-
 if(TRUE){
   
   # INITIALISATION START ===============================================================================================
@@ -25,15 +24,7 @@ if(TRUE){
   params = initialise_params()
   output_folder = paste(params$plot.path,"OUTPUT_END_DISTRIBUTIONS/", sep="")
   biomrefs_csv_inc_path = paste(params$plot.path,"Biom_refs.csv", sep="")
-  #root results path
-  # root.plot =     "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Plots/"
-  # RootPath =  "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Results/"
-  
-  # hcr.folders = c("C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/NorthSea Model/2015 FINAL Key Run/DATA/HCRs/Type1_BmsytoZero",
-  #                 "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/NorthSea Model/2015 FINAL Key Run/DATA/HCRs/Type2_BmsyBlimClifftoZero",
-  #                 "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/NorthSea Model/2015 FINAL Key Run/DATA/HCRs/Type3_BmsytoZeroatBlim",
-  #                 "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/NorthSea Model/2015 FINAL Key Run/DATA/HCRs/Type4_BmsyBlimClifftoFmin")
-  
+
   # INITIALISATION END ===============================================================================================
   
   
@@ -56,12 +47,6 @@ if(TRUE){
   
   #get a list of all the groups
   unique.groups = LoadUniqueGroups(params$RootPath)
-  
-  # #get a list of strategy.tables with strategy name
-  # strategies.table = getStrategyTable(hcr.folders)
-  
-  # #remove all conservation hcrs from strategy table
-  # strategies.table = filter(strategies.table, Target_or_Conservation==0)
   
   # Loading reference points Blim and Bpa
   biom_refs<-read.csv(biomrefs_csv_inc_path,sep=",", header=TRUE)
@@ -87,8 +72,11 @@ if(TRUE){
     #check whether group is listed to be plotted
     if(isNotGroupToPlot(biomass.file.name)) next
     
+    #Load the file
+    biomass = fread(biomass.file.name, skip=7, header=T)
+    
     #load the files and sum
-    biomass = calcLast5Year(biomass.file.name, "biomass.last5yearmean", 4, function.type = 2)
+    biomass = calcLast5Year(biomass, "biomass.last5yearmean", 4, function.type = 2)
     
     #filter for the strategies selected in initialisation.R
     biomass = biomass[biomass$StrategyName %in% params$strats, ]
@@ -102,8 +90,8 @@ if(TRUE){
     max.axis.x = max(biomass$biomass.last5yearmean)
     
     #Calc the percent below Bpa & Blim
-    bpa = biom_refs[biom_refs$Group=="Cod (adult)",]$Bpa
-    blim = biom_refs[biom_refs$Group=="Cod (adult)",]$Blim
+    bpa = biom_refs[biom_refs$Group==igroup,]$Bpa
+    blim = biom_refs[biom_refs$Group==igroup,]$Blim
     
     biomass$below.bpa = biomass$biomass.last5yearmean<bpa
     biomass$above.bpa = biomass$biomass.last5yearmean>=bpa
@@ -125,22 +113,6 @@ if(TRUE){
     biomass.summary.by.strategy = appendVariableToDataTable(biomass.summary.by.strategy, igroup, "GroupName", beg=TRUE, end=FALSE)
     
     summary.dt = rbind(summary.dt, biomass.summary.by.strategy)
-    
-
-    
-    #nBelow.bpa = length(biomass[biomass.last5yearmean<Bpa, by=""])
-    #nBelow.blim = length(biomass[biomass.last5yearmean<Blim])
-    
-    # for (iStrategy in 1:nUniqueStrategies){
-    #   SumBlim[iStrategy]<-list(sum(n[[iStrategy]]$tx1K_km2>=Blim.species))  # percentage of "trials" bigger than Blim 
-    #   percBlim[iStrategy]<-list((SumBlim[[iStrategy]]*100)/nrow(n[[iStrategy]]))
-    #   
-    #   #percentage of iterations=trials bigger than the Bpa for each harvest control rules strategy
-    #   #Harvest Control Rule
-    #   SumBpa[iStrategy]<-list(sum(n[[iStrategy]]$tx1K_km2>=Bpa.species))  # percentage of "trials" bigger than Bpa 
-    #   percBpa[iStrategy]<-list((SumBpa[[iStrategy]]*100)/nrow(n[[iStrategy]]))
-    #   
-    # }
 
     #get 10th of plot width to add this to where the vertical lines are
     distance.from.vlines = max.axis.x/100
@@ -189,73 +161,7 @@ if(TRUE){
   
   write.csv(summary.dt, file = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Plots/Tables/biomass_5NoSummary.csv")
   
-
-  # B_SPECIES = B_SPECIES + ylab("Density") + xlab(plotdata$xaxis.label[result.index]) #xlab("Minimum Biomass (1000 t)")
-  # B_SPECIES = B_SPECIES + labs(title=paste(plotdata$species_in_resultsfile[species.index[1]], "\n", plotdata$result.names[result.index], sep=""))
-  # B_SPECIES = B_SPECIES + theme(strip.text = element_text(size=6), panel.background = element_blank(), panel.grid.major=element_blank(), panel.grid.minor=element_blank(),axis.line=element_line(colour="Black"), axis.text=element_text(colour="Black", size=6))
-  # if(plotdata$result.names[result.index] =="BiomassEnd" || plotdata$result.names[result.index]=="BiomassMin"){
-
-  # }
-  # B_SPECIES = B_SPECIES + coord_cartesian(ylim = c(0, as.numeric(plotdata$max.axis$y)*1.1), xlim = c(0, as.numeric(plotdata$max.axis$x)))
-  # # median, Blim and Bpa lines and labels
-  # B_SPECIES = B_SPECIES + geom_vline(data=plotdata$ResultMedian.species, aes(xintercept=median.species),linetype="dotted", size=0.15)
-  # B_SPECIES = B_SPECIES + geom_text(data = plotdata$b.species4.lab, aes(x = x, y = y, label = lab), size = 2, angle=90, vjust=-0.5)
-  # if(plotdata$result.names[result.index]=="DiscardMortalities" || plotdata$result.names[result.index]=="DiscardSurvivals" || plotdata$result.names[result.index]=="Landings"){
-  #   geom_text(data = plotdata$c.species4.lab, aes(x = x, y = y, label = lab), size = 2, angle=90, vjust=-0.5)+
-  #     geom_text(data = plotdata$c.species5.lab, aes(x = x, y = y, label = lab), size = 2, angle=90, vjust=-0.5)+
-  #     geom_text(data = plotdata$c.species6.lab, aes(x = x, y = y, label = lab), size = 2, angle=90, vjust=-0.5)
-  # }
   
-
-  
-}
-  
-
-
-
-  
-
-  
-if(FALSE){
-  
-
-  
-  #Load up biomass reference file
-  biom_refs = read.csv(paste(params$plot.path,"/Biom_refs.csv",sep=''))
-  
-  #initialise plotting params
-  plotting_params = initialise_plotting_params("Biomass", params$plot_each_timestep, params$StartRun_Year, params$EndRun_Year, params$RootPath)
-  
-  for(G in plotting_params$g){
-    
-    #Get the filename to be used to check whether yearly in name, to name files of plots and to add text to plots
-    FILENAME = substr(G,1,nchar(G)-4)
-    
-    #Only use year files
-    if(IsIncorrectFileType_YearlyMonthly(FILENAME, plot_yearly == T)) next
-    
-    #Setup the connection for saving plots to file
-    png(filename = paste(params$plot.path,"/OUTPUT_END_DISTRIBUTIONS/",FILENAME,"_5YrMean.png",sep=""), res=900, width=8, height=4, units='in')
-    
-    #Load the data from file
-    plotting_params$dat <- read.csv(paste(params$RootPath,"/Biomass/",G, sep=''),skip=7, head=T)
-    
-    #Modify the values so that they are for the entire region
-    plotting_params$dat[,-c(1:4)] <- plotting_params$dat[,-c(1:4)]*params$Area/1000 #Multiplying it by area gives absolute biomass across area
-                                                                                    #Dividing by 1000 gives value in kt - we do this to prevent scientific units
-    
-    Biomass.file = GetFileName_ContainsStrings(FolderPath = paste(params$RootPath, "/Biomass/", sep=""), 
-                                                 Strings = c(igroup), WithPath=T)
-    
-
-    
-    #load the files and sum
-    realised.f = calcLast5Year(realisedF.file, "realised.f.last5yearsum", 5, function.type = 2)
-    
-  }
-  
-  
-
 }
 
 
