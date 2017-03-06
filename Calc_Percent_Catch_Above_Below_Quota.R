@@ -29,13 +29,16 @@ for(igroup in unique.groups)
   catches.file = GetFileName_ContainsStrings(FolderPath = paste(root.results, "/CatchTrajectories/", sep=""), 
                                              Strings = c("AllFleets", igroup), WithPath=T)
   
+  quota = fread(hcr.quota.targ.file, skip=7, header=T)
+  catch = fread(catches.file, skip=7, header=T)
+  
   #Determine file is valid
-  if(!isNotAllNeg9999(file.name.with.path = hcr.quota.targ.file, col.data.starts = 6)) next
-  if(!isNotAllNeg9999(file.name.with.path = catches.file, col.data.starts = 6)) next
+  if(!isNotAll(dt = quota, col.data.starts = 6, val.to.check = -9999)) next
+  if(!isNotAll(dt = catch, col.data.starts = 6, val.to.check = -9999)) next
   
   #load the files and sum
-  quota = calcLast5Year(hcr.quota.targ.file, "quota.last5yearsum", 5, function.type=1)
-  catch = calcLast5Year(catches.file, "catch.last5yearsum", 5, function.type=1)
+  quota = calcLast5Year(quota, "quota.last5yearsum", 5, function.type=1)
+  catch = calcLast5Year(catch, "catch.last5yearsum", 5, function.type=1)
   
   #merge the two together so that we can easily calculate the difference between two columns
   dt = merge(quota, catch, by = c("StrategyName", "ModelID"))
