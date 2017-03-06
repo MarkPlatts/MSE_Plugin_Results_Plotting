@@ -11,7 +11,7 @@ rm(list=ls())
 #loading packages which will be used in the following calculations
 library(ggplot2)
 library(dplyr)
-#library(plyr)
+library(plyr)
 
 #load sources
 this.dir <- dirname(sys.frame(1)$ofile)
@@ -164,27 +164,26 @@ if (plotdata$result.names[result.index]=="BiomassEnd" || plotdata$result.names[r
   Bpa.species<-as.vector(subset(blim.bpa, Group==levels(blim.bpa[,1])[species.index[2]])[1,3])
   Catch.species<-as.vector(subset(blim.bpa, Group==levels(blim.bpa[,1])[species.index[2]])[1,5])
   
-  ### percentage of iterations=trials bigger than the Blim for each harvest control rules strategy
-  # note that in the following 3 lines hc1 was capitalised HC1
-  SumBlim=list()  #The number of results that are above the Blim
-  percBlim=list() #The percentage of the results above Blim
-  SumBpa=list()   #The number of results that are above Bpa
-  percBpa=list()  #The percentage of the results above Bpa
+  # ### percentage of iterations=trials bigger than the Blim for each harvest control rules strategy
+  # SumBlim=list()  #The number of results that are above the Blim
+  # percBlim=list() #The percentage of the results above Blim
+  # SumBpa=list()   #The number of results that are above Bpa
+  # percBpa=list()  #The percentage of the results above Bpa
   
-  df.perc.Blim = data.frame("StrategyName" = NULL, "Group" = NULL, "Percentage.Below" = NULL)
-  df.perc.Bpa = data.frame("StrategyName" = NULL, "Group" = NULL, "Percentage.Below" = NULL)
+  # df.perc.Blim = data.frame("StrategyName" = NULL, "Group" = NULL, "Percentage.Below" = NULL)
+  # df.perc.Bpa = data.frame("StrategyName" = NULL, "Group" = NULL, "Percentage.Below" = NULL)
   
-  for (iStrategy in 1:NumberUniqueStrategyNames){
-    SumBlim[iStrategy]<-list(sum(n[[iStrategy]]$tx1K_km2>=Blim.species))  # percentage of "trials" bigger than Blim 
-    percBlim[iStrategy]<-list((SumBlim[[iStrategy]]*100)/nrow(n[[iStrategy]]))
-    
-    
-    #percentage of iterations=trials bigger than the Bpa for each harvest control rules strategy
-    #Harvest Control Rule
-    SumBpa[iStrategy]<-list(sum(n[[iStrategy]]$tx1K_km2>=Bpa.species))  # percentage of "trials" bigger than Bpa 
-    percBpa[iStrategy]<-list((SumBpa[[iStrategy]]*100)/nrow(n[[iStrategy]]))
-    
-  }
+  # for (iStrategy in 1:NumberUniqueStrategyNames){
+  #   SumBlim[iStrategy]<-list(sum(n[[iStrategy]]$tx1K_km2>=Blim.species))  # percentage of "trials" bigger than Blim 
+  #   percBlim[iStrategy]<-list((SumBlim[[iStrategy]]*100)/nrow(n[[iStrategy]]))
+  #   
+  #   
+  #   #percentage of iterations=trials bigger than the Bpa for each harvest control rules strategy
+  #   #Harvest Control Rule
+  #   SumBpa[iStrategy]<-list(sum(n[[iStrategy]]$tx1K_km2>=Bpa.species))  # percentage of "trials" bigger than Bpa 
+  #   percBpa[iStrategy]<-list((SumBpa[[iStrategy]]*100)/nrow(n[[iStrategy]]))
+  #   
+  # }
   
 }
 
@@ -224,20 +223,20 @@ for (iStrategy in 1:NumberUniqueStrategyNames){
 #plotdata$ResultMedian.species.hc1.string<-format(plotdata$ResultMedian.species[1,2], digits=3, nsmall=0)
 #plotdata$ResultMedian.species.hc2.string<-format(plotdata$ResultMedian.species[2,2], digits=3, nsmall=0)
 
-Larger.than.Blim.hcr.string = list()
-Larger.than.Bpa.hcr.string = list()
-if (plotdata$result.names[result.index]=="BiomassEnd" || plotdata$result.names[result.index]=="BiomassMin" ||
-    plotdata$result.names[result.index]=="DiscardMortalities" || plotdata$result.names[result.index]=="DiscardSurvivals" ||
-    plotdata$result.names[result.index]=="Landings"){ # i.e. 1 or 2
-  for (iStrategy in 1:NumberUniqueStrategyNames){
-    Larger.than.Blim.hcr.string[iStrategy]<-format(percBlim[iStrategy], digits=1, nsmall=0)
-    Larger.than.Bpa.hcr.string[iStrategy]<-format(percBpa[iStrategy], digits=1, nsmall=0)
-  }
-  #Larger.than.Blim.hc1.string<-format(percBlim.hc1, digits=1, nsmall=0)
-  #Larger.than.Blim.hc2.string<-format(percBlim.hc2, digits=1, nsmall=0)
-  #Larger.than.Bpa.hc1.string<-format(percBpa.hc1, digits=1, nsmall=0)
-  #Larger.than.Bpa.hc2.string<-format(percBpa.hc2, digits=1, nsmall=0)
-}  
+# Larger.than.Blim.hcr.string = list()
+# Larger.than.Bpa.hcr.string = list()
+# if (plotdata$result.names[result.index]=="BiomassEnd" || plotdata$result.names[result.index]=="BiomassMin" ||
+#     plotdata$result.names[result.index]=="DiscardMortalities" || plotdata$result.names[result.index]=="DiscardSurvivals" ||
+#     plotdata$result.names[result.index]=="Landings"){ # i.e. 1 or 2
+#   for (iStrategy in 1:NumberUniqueStrategyNames){
+#     Larger.than.Blim.hcr.string[iStrategy]<-format(percBlim[iStrategy], digits=1, nsmall=0)
+#     Larger.than.Bpa.hcr.string[iStrategy]<-format(percBpa[iStrategy], digits=1, nsmall=0)
+#   }
+#   #Larger.than.Blim.hc1.string<-format(percBlim.hc1, digits=1, nsmall=0)
+#   #Larger.than.Blim.hc2.string<-format(percBlim.hc2, digits=1, nsmall=0)
+#   #Larger.than.Bpa.hc1.string<-format(percBpa.hc1, digits=1, nsmall=0)
+#   #Larger.than.Bpa.hc2.string<-format(percBpa.hc2, digits=1, nsmall=0)
+# }  
 # do i need the following?
 #Catch.string<-format(percBlim.hc1, digits=1, nsmall=0)
 
@@ -400,40 +399,39 @@ plotdata$blim.species5.lab = Add_Reg(plotdata$blim.species5.lab)
 
 #Write % below Blim and Bpa to tables and out to csv
 # df.perc.Blim and df.perc.Bpa = data.frame("StrategyName" = NULL, "Group" = NULL, "Percentage.Below" = NULL)
-for (iStrategy in 1:NumberUniqueStrategyNames){
-  
-  StrategyName = UniqueStrategyNames[iStrategy]
-  species.name = plotdata$species_in_resultsfile[species.index[1]]
+# for (iStrategy in 1:NumberUniqueStrategyNames){
+# browser()
+#   StrategyName = UniqueStrategyNames[iStrategy]
+#   species.name = plotdata$species_in_resultsfile[species.index[1]]
+# 
+#   perc.below.Blim = 100 - percBlim[[iStrategy]]
+#   df.perc.Blim = rbind(df.perc.Blim, data.frame("StrategyName" = StrategyName, "Group" = species.name, "Percentage.Below" = perc.below.Blim))
+#   
+#   perc.below.Bpa = 100 - percBpa[[iStrategy]]
+#   df.perc.Bpa = rbind(df.perc.Bpa, data.frame("StrategyName" = StrategyName, "Group" = species.name, "Percentage.Below" = perc.below.Bpa))
+#   
+# }
 
-  perc.below.Blim = 100 - percBlim[[iStrategy]]
-  df.perc.Blim = rbind(df.perc.Blim, data.frame("StrategyName" = StrategyName, "Group" = species.name, "Percentage.Below" = perc.below.Blim))
-  
-  perc.below.Bpa = 100 - percBpa[[iStrategy]]
-  df.perc.Bpa = rbind(df.perc.Bpa, data.frame("StrategyName" = StrategyName, "Group" = species.name, "Percentage.Below" = perc.below.Bpa))
-  
-  
-}
-
-if(file.exists(paste(output_csv_folder, "Blim.csv", sep="")))
-{
-  write.table(df.perc.Blim, file=paste(output_csv_folder, "Blim.csv", sep=""), sep=",", append = T, row.names=F, col.names = F)
-} else {
-  write.table(df.perc.Blim, file=paste(output_csv_folder, "Blim.csv", sep=""), sep=",", append = T, row.names=F)
-}
-
-if(file.exists(paste(output_csv_folder, "Bpa.csv", sep="")))
-{
-  write.table(df.perc.Bpa, file=paste(output_csv_folder, "Bpa.csv", sep=""), sep=",", append = T, row.names=F, col.names = F)
-} else {
-  write.table(df.perc.Bpa, file=paste(output_csv_folder, "Bpa.csv", sep=""), sep=",", append = T, row.names=F)
-}
-
-if(file.exists(paste(output_csv_folder, "B_Quartiles.csv", sep="")))
-{
-  write.table(ResultQuantile.species, file=paste(output_csv_folder, "B_Quartiles.csv", sep=""), sep=",", append = T, row.names=F, col.names = F)
-} else {
-  write.table(ResultQuantile.species, file=paste(output_csv_folder, "B_Quartiles.csv", sep=""), sep=",", append = T, row.names=F)
-}
+# if(file.exists(paste(output_csv_folder, "Blim.csv", sep="")))
+# {
+#   write.table(df.perc.Blim, file=paste(output_csv_folder, "Blim.csv", sep=""), sep=",", append = T, row.names=F, col.names = F)
+# } else {
+#   write.table(df.perc.Blim, file=paste(output_csv_folder, "Blim.csv", sep=""), sep=",", append = T, row.names=F)
+# }
+# 
+# if(file.exists(paste(output_csv_folder, "Bpa.csv", sep="")))
+# {
+#   write.table(df.perc.Bpa, file=paste(output_csv_folder, "Bpa.csv", sep=""), sep=",", append = T, row.names=F, col.names = F)
+# } else {
+#   write.table(df.perc.Bpa, file=paste(output_csv_folder, "Bpa.csv", sep=""), sep=",", append = T, row.names=F)
+# }
+# 
+# if(file.exists(paste(output_csv_folder, "B_Quartiles.csv", sep="")))
+# {
+#   write.table(ResultQuantile.species, file=paste(output_csv_folder, "B_Quartiles.csv", sep=""), sep=",", append = T, row.names=F, col.names = F)
+# } else {
+#   write.table(ResultQuantile.species, file=paste(output_csv_folder, "B_Quartiles.csv", sep=""), sep=",", append = T, row.names=F)
+# }
 
 #Reorder Strategy levels so that regulation types are plotted in specified order
 plotdata$blim.species3.lab$Regulation = factor(plotdata$blim.species3.lab$Regulation, levels = c("Weakest stock", "Selective", "Highest value", "Other"))
