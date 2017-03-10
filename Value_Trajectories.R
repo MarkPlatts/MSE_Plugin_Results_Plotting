@@ -61,6 +61,8 @@ plot_value_trajectories <- function(params){
     dat<-read.csv(G,skip=6, head=T)
     FLEET<- as.character(unique(dat$FleetName))
     
+    if(isAll(dt = dat, col.data.starts = 6, val.to.check = 0)) next
+    
     #timeseries of FLEET effort by FleetNumber 1:12 for the 10 strategies
     if (!params$plot_each_timestep && !params$Plot_yearly_files) dat<-dat[,c(1:5,5+seq(1,params$Projected_NYears*12,12))] 
     if (params$plot_each_timestep && !params$Plot_yearly_files) dat<-dat[,c(1:5,5+seq(1,params$Projected_NYears*12,1))] 

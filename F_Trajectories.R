@@ -58,13 +58,17 @@ plot_fishing_trajectories <- function(params, folder.to.save.plot){
       groupdat <- read.table(file=paste(G,sep=''),skip=7, header = TRUE, fill = TRUE,sep=",",as.is =T)
       #if all values in the file are -9999 then we need to skip plotting it
       if(any(params$MORT_HCRF_Cons,params$MORT_HCRF_Targ)){
-        testvaliddata <- groupdat[, 5:ncol(groupdat)]
-        if(length(as.matrix(testvaliddata))*-9999==sum(testvaliddata)) {next}
+        if (isAll(dt = groupdat, col.data.starts = 5, val.to.check = -9999)) next
+        # testvaliddata <- groupdat[, 5:ncol(groupdat)]
+        # browser()
+        # if(length(as.matrix(testvaliddata))*-9999==sum(testvaliddata)) {next}
+        # browser()
       }
       
       if(any(params$MORT_REAL_F,params$MORT_REAL_LandF,params$MORT_REAL_DiscF)){
-        testvaliddata<- groupdat[, 5:ncol(groupdat)]
-        if(sum(testvaliddata)==0) {next}
+        if (isAll(dt = groupdat, col.data.starts = 5, val.to.check = 0)) next
+        # testvaliddata<- groupdat[, 5:ncol(groupdat)]
+        # if(sum(testvaliddata)==0) {next}
       }
       
       if(any(params$QUOTA_HCRF_Cons,params$QUOTA_HCRF_Targ)){
