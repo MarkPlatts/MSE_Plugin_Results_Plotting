@@ -2,6 +2,7 @@
 
 rm(list = ls())
 
+setwd("C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting")
 source("share_tools.R")
 
 #root results path
@@ -45,18 +46,25 @@ if(TRUE){
                                                Strings = c("AllFleets", igroup), WithPath=T)
     
     catches = fread(catches.file, skip=7, header=T)
-
+    
+    #Determine file is valid
+    if(!isNotAll(dt = catches, col.data.starts = 6, val.to.check=0)) next
+    if(!isNotAll(dt = catches, col.data.starts = 6, val.to.check = -9999)) next
+    
+    #load the files and sum
+    catches_last5year = calcLast5Year(catches, "catch.last5yearsum", 5, function.type=2)
+    
     #Determine file is valid
     #if(!isNotAll(dt = catches, col.data.starts = 6, val.to.check=-9999)) next
-    if(!isNotAll(dt = catches, col.data.starts = 6, val.to.check=0)) next
 
     #load the catches at the first and last timestep of the forecast
     catch.first.year = GetiYearCatch(catches, iYear=1, ncols.before.timeseries=5)
-    catch.last.year = GetiYearCatch(catches, iYear=nTimeStepsInData, ncols.before.timeseries=5)
-    dt = merge(catch.first.year, catch.last.year, by = names(catch.first.year)[1:5])
+    #catch.last.year = GetiYearCatch(catches, iYear=nTimeStepsInData, ncols.before.timeseries=5)
+
+    dt = merge(catch.first.year, catches_last5year, by = names(catch.first.year)[c(3,4)])
 
     #merge the two together so that we can easily calculate the difference between two columns
-    dt$Ratios = dt$Year20/dt$Year1
+    dt$Ratios = dt$catch.last5yearsum/dt$Year1
     
     #bind them all together ready to be saved to csv
     dt.all = rbind(dt.all, dt)
