@@ -76,6 +76,10 @@ isNotAll = function(dt, col.data.starts, val.to.check)
   return (file.valid)
 }
 
+isAll = function(dt, col.data.starts, val.to.check){
+  return(!isNotAll(dt, col.data.starts, val.to.check))
+}
+
 GetiYearCatch = function(dt, iYear, ncols.before.timeseries){
   
   #load the quota
@@ -155,7 +159,7 @@ initialise_plotting_params = function(folder.name, plot.each.timestep, start.run
   plotting_params$TimeStepVals = get_timestep_vals(plot.each.timestep, start.run.year, end.run.year)
   
   #get a list of all the files in the Biomass folder
-  plotting_params$g <- list.files(paste(params$RootPath,"\\",folder.name, sep=''))
+  plotting_params$g <- list.files(paste(root.path,"\\",folder.name, sep=''))
   
   return(plotting_params)
 }
