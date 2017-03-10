@@ -4,7 +4,7 @@
         "filePatterns" : [
         ],
         "path" : "C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting",
-        "query" : "groupsWithHcr",
+        "query" : "Bpa.csv",
         "regex" : false
     }
 }

@@ -1,21 +1,6 @@
 {
     "debugBreakpointsState" : {
         "breakpoints" : [
-            {
-                "editor_line_number" : 131,
-                "editor_state" : 1,
-                "function_name" : "toplevel",
-                "function_steps" : "",
-                "id" : 1,
-                "is_package_breakpoint" : false,
-                "is_pending_debug_completion" : false,
-                "line_number" : 131,
-                "needs_updated_steps" : true,
-                "package_name" : "",
-                "path" : "C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting/Run_DistributionPlots.R",
-                "state" : 1,
-                "type" : 1
-            }
         ]
     }
 }
