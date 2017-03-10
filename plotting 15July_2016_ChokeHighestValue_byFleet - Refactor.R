@@ -12,8 +12,12 @@ plot_type = function(type2plot) {
   source("plot_tools.R")
   source("share_tools.R")
   source("Calc_average_quota_per_fleet_group_regulation.R")
+  source("Calc_Catch_Start_End_Ratio.R")
+  source("Calc_Percent_Catch_Above_Below_Quota.R")
+  source("Calc_Percent_RealisedF_Above_Below_FMax.R")
+  source("Calc_Percent_Below_Conservation_Limits.R")
   
-  params = initialise_params()
+  params = initialise_params(batch)
 
   create.plot.dirs(params)
   
@@ -131,11 +135,18 @@ plot_type = function(type2plot) {
     Plot_Average_Quotas(results.path = params$RootPath, plot.path = params$plot.path, Groups = params$Groups2Plot, 
                         Fleets = params$Fleets2Plot, TimeSteps =c(1:20), 
                         RegulationTypes = c("Highest value", "Weakest stock", "Selective"))
-    }
+  }
+  
+  ###Plot the biomass for the last 5 year mean
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  if(type2plot==17){
+    source("Plot_Distribution_Last5YearsBiomassMean.R")
+  }
+
   
 }
 
-for(iplot in c(1:13)){
+for(iplot in c(13)){
   print(paste("Currently plotting type", iplot))
   plot_type(iplot)
 }
