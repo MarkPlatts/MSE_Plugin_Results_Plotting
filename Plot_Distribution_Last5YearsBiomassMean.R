@@ -15,8 +15,9 @@ if(TRUE){
   library(stringr)
   
   #load sources
-  source.folder.location = dirname(sys.frame(1)$ofile)
-  setwd(source.folder.location)
+  # source.folder.location = dirname(sys.frame(1)$ofile)
+  # setwd(source.folder.location)
+  setwd("C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting")
   source("share_tools.R")
   source("plot_tools.R")
   source("initialisation.R")
@@ -64,7 +65,7 @@ if(TRUE){
   nUniqueStrategies = unique(params$strats)
   
   for(igroup in unique.groups){
- 
+    
     #get the file in HCRQuota_Targ folder that are for "AllFleets"
     biomass.file.name = GetFileName_ContainsStrings(FolderPath = paste(params$RootPath, "Biomass/", sep=""), 
                                                  Strings = c(igroup), WithPath=T)
@@ -120,19 +121,21 @@ if(TRUE){
     #for each group with a blim or bpa create a table with all the labels in it for plotting vertical lines
     #I believe we need to have a unique row for each strategy because that is how ggplot knows how to plot for each strategy plot with facet
     #Extract reference points
+    nStrategies = length(params$strats)
     if(igroup %in% biom_refs[,"Group"]){
-
-      nStrategies = length(params$strats)
       bpa = read_biom_refs(biom_refs, igroup, "bpa")     #Needs to be specified in the file as kt
       blim = read_biom_refs(biom_refs, igroup, "blim")   #Needs to be specified in the file as kt
       max.axis.x = max(max.axis.x, bpa, blim)
-
       ref.points = data.table(StrategyName = params$strats, 
-                              bpa = rep(bpa, nStrategies), bpa_lab = rep("Bpa", nStrategies), bpa_lab_pos = rep(bpa - distance.from.vlines, nStrategies), 
-                              blim = rep(blim, nStrategies), blim_lab = rep("Blim", nStrategies), blim_lab_pos = rep(blim - distance.from.vlines, nStrategies),
-                              bmedian = biomass.summary.by.strategy$Median, bmedian_lab = rep("Median", nStrategies), bmedian_lab_pos = biomass.summary.by.strategy$Median - distance.from.vlines)
-      
+                            bpa = rep(bpa, nStrategies), bpa_lab = rep("Bpa", nStrategies), bpa_lab_pos = rep(bpa - distance.from.vlines, nStrategies), 
+                            blim = rep(blim, nStrategies), blim_lab = rep("Blim", nStrategies), blim_lab_pos = rep(blim - distance.from.vlines, nStrategies))
     }
+
+    bmedian.dt = data.table(StrategyName = params$strats, 
+                            bmedian = biomass.summary.by.strategy$Median, 
+                            bmedian_lab = rep("Median", nStrategies), 
+                            bmedian_lab_pos = biomass.summary.by.strategy$Median - distance.from.vlines)
+    
     
 
     number_bins = 40
@@ -144,17 +147,22 @@ if(TRUE){
 
     #if the group has a blim and bpa then extract from table and plot
     #species_in_biomrefsfile<-levels(blim.bpa[,"Group"])
-
+    max.y = max(ggplot_build(B_SPECIES)$data[[1]]$density)
     if(igroup %in% biom_refs[,"Group"]){
-      max.y = max(ggplot_build(B_SPECIES)$data[[1]]$density)
       B_SPECIES = B_SPECIES + geom_text(data = ref.points, aes(x = blim_lab_pos, y = max.y*9/10, label = blim_lab), size = 2, angle = 90)
       B_SPECIES = B_SPECIES + geom_text(data = ref.points, aes(x = bpa_lab_pos, y = max.y*9/10, label = bpa_lab), size = 2, angle=90)
-      B_SPECIES = B_SPECIES + geom_text(data = ref.points, aes(x = bmedian_lab_pos, y = max.y*9/10, label = bmedian_lab), size = 2, angle=90)
       B_SPECIES = B_SPECIES + geom_vline(data =ref.points, aes(xintercept=blim),linetype="dotdash", size=0.15)
       B_SPECIES = B_SPECIES + geom_vline(data =ref.points, aes(xintercept=bpa),linetype="longdash", size=0.15)
-      B_SPECIES = B_SPECIES + geom_vline(data =ref.points, aes(xintercept=bmedian),linetype="longdash", size=0.15)
     }
-    
+
+    B_SPECIES = B_SPECIES + geom_text(data = bmedian.dt, 
+                                      aes(x = bmedian_lab_pos, y = max.y*9/10, label = bmedian_lab), 
+                                      size = 2, 
+                                      angle=90)
+    B_SPECIES = B_SPECIES + geom_vline(data =bmedian.dt, 
+                                       aes(xintercept=bmedian),
+                                       linetype="longdash", size=0.15)
+
     ggsave(B_SPECIES, file=paste(output_folder, "Biomass5YearMean_",igroup,".png", sep=""), width=6, height=length(params$strats)*1.5, limitsize = FALSE)
 
   }
