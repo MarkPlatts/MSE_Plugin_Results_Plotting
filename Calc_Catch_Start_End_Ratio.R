@@ -49,7 +49,7 @@ if(TRUE){
     #Determine file is valid
     #if(!isNotAll(dt = catches, col.data.starts = 6, val.to.check=-9999)) next
     if(!isNotAll(dt = catches, col.data.starts = 6, val.to.check=0)) next
-#if (igroup=="Spurdog") browser()
+
     #load the catches at the first and last timestep of the forecast
     catch.first.year = GetiYearCatch(catches, iYear=1, ncols.before.timeseries=5)
     catch.last.year = GetiYearCatch(catches, iYear=nTimeStepsInData, ncols.before.timeseries=5)
