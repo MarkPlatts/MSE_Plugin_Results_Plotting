@@ -23,16 +23,11 @@ groups.for.f.or.biomass = "f"
 # SCRIPT START  ===============================================================================================
 
 if(TRUE){
-  #get a list of all the groups
+
   unique.groups = groupsWithHcr(hcr.folders, groups.for.f.or.biomass)
   
-  #get a list of strategy.tables with strategy name
-  strategies.table = getStrategyTable(hcr.folders)
-  
-  #remove all conservation hcrs from strategy table
-  strategies.table = filter(strategies.table, Target_or_Conservation==0)
-  
-  #Create a data.table in which to compile all the tables from each file ready for saving to csv
+  strategies.table = LoadStrategies(hcr.folders, Target_or_Conservation = "Target")
+
   dt.all = data.table()
   
   for(igroup in unique.groups)
@@ -41,18 +36,14 @@ if(TRUE){
     #get the file in HCRQuota_Targ folder that are for "AllFleets"
     realisedF.file = GetFileName_ContainsStrings(FolderPath = paste(root.results, "/RealisedF/", sep=""), 
                                                  Strings = c(igroup), WithPath=T)
-    #get a list of all the files in CatchTrajectories that are for "AllFleets"
-    # catches.file = GetFileName_ContainsStrings(FolderPath = paste(root.results, "/CatchTrajectories/", sep=""), 
-    #                                            Strings = c("AllFleets", igroup), WithPath=T)
-    #get the hcr
-    
+
     realised.f = fread(realisedF.file, skip=7, header=T)
     
     #Determine file is valid
     if(!isNotAll(dt = realised.f, col.data.starts = 4, val.to.check = -9999)) next
     
     #load the files and sum
-    realised.f = calcLast5Year(realised.f, "realised.f.last5yearsum", 5, function.type = 2)
+    realised.f = calcLast5Year(realised.f, "realised.f.last5yearsum", 4, function.type = 2)
     
     #add a column with the group name - need this to merge with the strategy data.table
     realised.f = appendVariableToDataTable(dt=realised.f, variable=igroup, variablename="GroupNameForF", beg=TRUE, end=FALSE)
@@ -75,7 +66,9 @@ if(TRUE){
     dt.counts.temp$PercentBelow = dt.counts.temp$NumberBelow/(dt.counts.temp$NumberAbove+dt.counts.temp$NumberBelow)*100
     
     #add column with groupname to differentiate after binding
-    dt.counts.temp = cbind(data.table(GroupName = rep(igroup, dim(dt.counts.temp)[1])), dt.counts.temp) 
+    dt.counts.temp = cbind(data.table(GroupNameForF = rep(igroup, dim(dt.counts.temp)[1])), dt.counts.temp)
+    
+    dt.counts.temp = merge(dt.counts.temp, strategies.table[,c("StrategyName", "GroupNameForF", "MaxF")], by=c("GroupNameForF", "StrategyName"))
     
     #bind them all together ready to be saved to csv
     dt.all = rbind(dt.all, dt.counts.temp)
@@ -87,6 +80,23 @@ if(TRUE){
 }
 
 # SCRIPT END  ===============================================================================================
+
+
+# FUNCTIONS START ==================================================================================================
+
+#get a list of target hcrs listed by strategy and group name
+LoadStrategies = function (hcr.folders, Target_or_Conservation){
+  strategies.table = getStrategyTable(hcr.folders)
+  if(Target_or_Conservation == "Target"){
+    strategies.table = filter(strategies.table, Target_or_Conservation==0)
+  } elseif(Target_or_Conservation == "Conservation") {
+    strategies.table = filter(strategies.table, Target_or_Conservation==0)
+  }
+  return(strategies.table)
+  
+}
+
+# FUNCTIONS END ==================================================================================================
 
 
 
