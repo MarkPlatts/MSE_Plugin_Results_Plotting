@@ -59,7 +59,7 @@ for(igroup in unique.groups)
   dt.counts.temp$PercentBelow = dt.counts.temp$NumberBelow/(dt.counts.temp$NumberAbove+dt.counts.temp$NumberBelow)*100
 
   #add column with groupname to differentiate after binding
-  dt.counts.temp = cbind(data.table(GroupName = rep(igroup, dim(dt.counts.temp)[1])), dt.counts.temp) 
+  dt.counts.temp = cbind(data.table(GroupName = rep(igroup, dim(dt.counts.temp)[1])), dt.counts.temp)
   
   #bind them all together ready to be saved to csv
   dt.all = rbind(dt.all, dt.counts.temp)
