@@ -12,10 +12,6 @@ plot_type = function(type2plot) {
   source("plot_tools.R")
   source("share_tools.R")
   source("Calc_average_quota_per_fleet_group_regulation.R")
-  source("Calc_Catch_Start_End_Ratio.R")
-  source("Calc_Percent_Catch_Above_Below_Quota.R")
-  source("Calc_Percent_RealisedF_Above_Below_FMax.R")
-  source("Calc_Percent_Below_Conservation_Limits.R")
   
   params = initialise_params(batch)
 
@@ -146,7 +142,7 @@ plot_type = function(type2plot) {
   
 }
 
-for(iplot in c(13)){
+for(iplot in c(2:13)){
   print(paste("Currently plotting type", iplot))
   plot_type(iplot)
 }
