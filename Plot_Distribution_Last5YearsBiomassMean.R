@@ -22,7 +22,7 @@ if(TRUE){
   source("plot_tools.R")
   source("initialisation.R")
   
-  params = initialise_params()
+  params = initialise_params(batch = "0")
   output_folder = paste(params$plot.path,"OUTPUT_END_DISTRIBUTIONS/", sep="")
   biomrefs_csv_inc_path = paste(params$plot.path,"Biom_refs.csv", sep="")
 
