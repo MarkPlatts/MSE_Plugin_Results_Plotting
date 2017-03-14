@@ -19,7 +19,7 @@ plot_fishing_trajectories <- function(params, folder.to.save.plot){
       #if(G =="HCR_Quota_Cons_Blue whiting_GroupNo22_FleetNo1.csv") browser()
 
       FILENAME <- substr(G,1,nchar(G)-4)
-      print(FILENAME)
+      #print(FILENAME)
 
       #stopifnot(FILENAME!="HCR_F_Cons_Nephrops_GroupsNo55") 
       if (any(params$MORT_REAL_F,params$MORT_REAL_LandF,params$MORT_REAL_DiscF, params$MORT_HCRF_Cons,params$MORT_HCRF_Targ)){
@@ -86,7 +86,7 @@ plot_fishing_trajectories <- function(params, folder.to.save.plot){
       # }
       
       
-      print(paste("The number of open devices is",length(dev.list())))
+      #print(paste("The number of open devices is",length(dev.list())))
       #if(length(dev.list())>1) browser()
       
       if(any(params$MORT_REAL_F,params$MORT_REAL_LandF,params$MORT_REAL_DiscF)){
