@@ -1,4 +1,6 @@
 initialise_params = function(batch){
+  # batch = 0 means plot all strategies in the folder "Plots"
+  
   params = list()
   
   params$plot_each_timestep = FALSE;
