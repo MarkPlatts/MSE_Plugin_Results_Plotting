@@ -22,7 +22,7 @@ if(TRUE){
   source("plot_tools.R")
   source("initialisation.R")
   
-  params = initialise_params(batch = "0")
+  params = initialise_params(batch = "1")
   output_folder = paste(params$plot.path,"OUTPUT_END_DISTRIBUTIONS/", sep="")
   biomrefs_csv_inc_path = paste(params$plot.path,"Biom_refs.csv", sep="")
 
@@ -99,9 +99,9 @@ if(TRUE){
     biomass$below.blim = biomass$biomass.last5yearmean<blim
     biomass$above.blim = biomass$biomass.last5yearmean>=blim
     
-    biomass.percent.below.refpoints = biomass[,list(bpa = sum(below.bpa)/length(below.bpa), 
-                                                    blim = sum(below.blim)/length(below.blim)), by="StrategyName"]
-    
+    # biomass.percent.below.refpoints = biomass[,list(bpa = sum(below.bpa)/length(below.bpa), 
+    #                                                 blim = sum(below.blim)/length(below.blim)), by="StrategyName"]
+    # 
     #calculate the 5 number summary for each strategy
     biomass.summary.by.strategy = biomass[,list(Min = min(biomass.last5yearmean), 
                   LQ = quantile(biomass.last5yearmean, .25, na.rm=TRUE), 
@@ -167,7 +167,7 @@ if(TRUE){
 
   }
   
-  write.csv(summary.dt, file = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Plots/Tables/biomass_5NoSummary.csv")
+  #write.csv(summary.dt, file = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Plots/Tables/biomass_5NoSummary.csv")
   
   
 }
