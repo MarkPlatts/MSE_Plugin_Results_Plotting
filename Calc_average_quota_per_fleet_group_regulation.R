@@ -30,6 +30,8 @@ Average_Quota_Across_Models_And_RegTypes = function(Group, Fleet, RegulationType
 
   FileData = LoadFile_ContainsListStrings(Dir.Path = paste(ResultsPath,"/HCRQuota_Targ/",sep=''), StringsInFileName = c(Group, Fleet))
   
+  if(isAll(FileData, col.data.starts=6, val.to.check=-9999)) return(NA)
+  
   UniqueStrategies = LoadUniqueStrategies(ResultsPath)
   
   Strategies_OfRegType = SubsetVectorStrings_ContainingString(UniqueStrategies, RegulationType)
@@ -57,17 +59,18 @@ Plot_Average_Quotas = function(results.path, plot.path, Groups, Fleets, TimeStep
       for(iRegulation in RegulationTypes)
       {
         temp_mean_vals = Average_Quota_Across_Models_And_RegTypes(iGroup,iFleet,iRegulation,results.path)
+        if(is.na(temp_mean_vals)) next
         temp_mean_vals = temp_mean_vals * Area_km2
         df_Average_Quota = rbind(df_Average_Quota, data.frame(TimeSteps = TimeSteps, GroupName = iGroup, Regulation = iRegulation, AverageQuota = temp_mean_vals))
       }
     }
-  
+
     #use ggplot to plot results - specify legends to be species and a column of different regulation types  
-    #browser()
-    #png(filename = paste(plot.path,"/AVERAGE_REGS/",iFleet,".png",sep=""), res=900, width=8, height=12, units='in')
-    df_Average_Quota[]
-    Plot2Save = qplot(TimeSteps, AverageQuota, data=df_Average_Quota, geom=c("line"), color=GroupName, facets=Regulation~., main=iFleet)
-    
+    # Plot2Save = qplot(TimeSteps, AverageQuota, data=df_Average_Quota, geom=c("line"), color=GroupName, facets=Regulation~., main=iFleet)
+    Plot2Save = ggplot(data=df_Average_Quota, aes(x = TimeSteps, y = AverageQuota, color = GroupName)) + 
+      geom_line(aes(linetype=GroupName)) + 
+      facet_grid(Regulation ~.) + 
+      scale_linetype_manual(values=rep(c("solid", "dashed", "dotted", "dotdash", "longdash", "twodash"), 20))
     ggsave(Plot2Save, file=paste(plot.path,"/AverageQuota_EachFleet/AverageQuota_",iFleet,".png",sep=""), width=6, height=12, limitsize = FALSE)
     
   }
