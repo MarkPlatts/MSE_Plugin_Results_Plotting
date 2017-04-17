@@ -8,6 +8,7 @@ rm(list = ls())
 # setwd(source.folder.location)
 setwd("C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting")
 source("share_tools.R")
+library(reshape)
 #library(reshape)
 
 #root results path
@@ -95,6 +96,8 @@ CreatePercentBelowConservationLimits = function(BLimitType){
   
   #finally save the table to csv
   write.csv(dt.all, paste(root.plot, "Tables/Percentage_ConservationSpecies_Above_Below_B_",BLimitType ,".csv", sep=""))
+  
+  return(dt.all)
 }
 
 # FUNCTION END  ===============================================================================================
@@ -103,8 +106,8 @@ CreatePercentBelowConservationLimits = function(BLimitType){
 
 # FUNCTION CALLS START ===============================================================================================
 
-CreatePercentBelowConservationLimits("LowerLimit")
-CreatePercentBelowConservationLimits("UpperLimit")
+dt = CreatePercentBelowConservationLimits("LowerLimit")
+dt = CreatePercentBelowConservationLimits("UpperLimit")
 
 # FUNCTION CALLS END ===============================================================================================
 

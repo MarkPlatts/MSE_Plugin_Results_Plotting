@@ -22,7 +22,7 @@ if(TRUE){
   source("plot_tools.R")
   source("initialisation.R")
   
-  params = initialise_params(batch = "1")
+  params = initialise_params(batch = "0")
   output_folder = paste(params$plot.path,"OUTPUT_END_DISTRIBUTIONS/", sep="")
   biomrefs_csv_inc_path = paste(params$plot.path,"Biom_refs.csv", sep="")
 
@@ -65,6 +65,7 @@ if(TRUE){
   nUniqueStrategies = unique(params$strats)
   
   for(igroup in unique.groups){
+    if(igroup != "Cod (adult)") next
     
     #get the file in HCRQuota_Targ folder that are for "AllFleets"
     biomass.file.name = GetFileName_ContainsStrings(FolderPath = paste(params$RootPath, "Biomass/", sep=""), 
@@ -103,6 +104,7 @@ if(TRUE){
     #                                                 blim = sum(below.blim)/length(below.blim)), by="StrategyName"]
     # 
     #calculate the 5 number summary for each strategy
+    browser()
     biomass.summary.by.strategy = biomass[,list(Min = min(biomass.last5yearmean), 
                   LQ = quantile(biomass.last5yearmean, .25, na.rm=TRUE), 
                   Median = median(biomass.last5yearmean),
@@ -130,18 +132,20 @@ if(TRUE){
                             bpa = rep(bpa, nStrategies), bpa_lab = rep("Bpa", nStrategies), bpa_lab_pos = rep(bpa - distance.from.vlines, nStrategies), 
                             blim = rep(blim, nStrategies), blim_lab = rep("Blim", nStrategies), blim_lab_pos = rep(blim - distance.from.vlines, nStrategies))
     }
-
-    bmedian.dt = data.table(StrategyName = params$strats, 
-                            bmedian = biomass.summary.by.strategy$Median, 
-                            bmedian_lab = rep("Median", nStrategies), 
-                            bmedian_lab_pos = biomass.summary.by.strategy$Median - distance.from.vlines)
+#browser()
+    # bmedian.dt = data.table(StrategyName = params$strats, 
+    #                         bmedian = biomass.summary.by.strategy$Median, 
+    #                         bmedian_lab = rep("Median", nStrategies), 
+    #                         bmedian_lab_pos = biomass.summary.by.strategy$Median - distance.from.vlines)
+    bmedian.dt = biomass.summary.by.strategy[, bmedian_lab:= "Median"][,bmedian_lab_pos:= biomass.summary.by.strategy$Median - distance.from.vlines]
     
     
 
     number_bins = 40
     
     #plot them  
-    B_SPECIES = ggplot(biomass,aes(x=biomass.last5yearmean))
+    B_SPECIES = ggplot(biomass,aes(x=biomass.last5yearmean)) + labs(title =  paste("Mean Biomass Across the Last 5 Years for", igroup)) +
+                                                                    xlab("Biomass (t)") + ylab("Density")
     B_SPECIES = B_SPECIES + geom_histogram(binwidth = (max.axis.x)/number_bins, aes(y=..density..), colour="darkgreen", fill="lightgreen")
     B_SPECIES = B_SPECIES + facet_wrap(~StrategyName, ncol=1)
 
@@ -159,11 +163,12 @@ if(TRUE){
                                       aes(x = bmedian_lab_pos, y = max.y*9/10, label = bmedian_lab), 
                                       size = 2, 
                                       angle=90)
+
     B_SPECIES = B_SPECIES + geom_vline(data =bmedian.dt, 
-                                       aes(xintercept=bmedian),
+                                       aes(xintercept=Median),
                                        linetype="longdash", size=0.15)
 
-    ggsave(B_SPECIES, file=paste(output_folder, "Biomass5YearMean_",igroup,".png", sep=""), width=6, height=length(params$strats)*1.5, limitsize = FALSE)
+    ggsave(B_SPECIES, file=paste(output_folder, "Biomass5YearMean_",igroup,".png", sep=""), width=6, height=length(params$strats)*2, limitsize = FALSE)
 
   }
   

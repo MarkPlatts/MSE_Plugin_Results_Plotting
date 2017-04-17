@@ -108,6 +108,8 @@ CreateBiomassFiveNumSum = function(){
   
   #finally save the table to csv
   write.csv(summary.dt, file = paste(params$plot.path, "Tables/biomass_5NoSummary.csv", sep=""))
+  
+  return(summary.dt)
 }
 
 # FUNCTION END  ===============================================================================================
@@ -121,6 +123,6 @@ CreateBiomassFiveNumSum = function(){
 
 # FUNCTION CALLS START ===============================================================================================
 
-CreateBiomassFiveNumSum()
+dt = CreateBiomassFiveNumSum()
 
 # FUNCTION CALLS END ===============================================================================================

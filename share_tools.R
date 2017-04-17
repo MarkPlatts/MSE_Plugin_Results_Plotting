@@ -171,7 +171,6 @@ CreateFolderIfDoesntExist = function(folder.name, path){
   }
 }
 
-
 # calculating the upper and lower confidence intervals and median ---------
 calc_vals_for_plotting = function(params, plotting_params){
   

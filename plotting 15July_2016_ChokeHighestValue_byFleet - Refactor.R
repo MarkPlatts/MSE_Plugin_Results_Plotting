@@ -138,11 +138,12 @@ plot_type = function(type2plot) {
   if(type2plot==17){
     source("Plot_Distribution_Last5YearsBiomassMean.R")
   }
-
   
 }
 
-for(iplot in c(2:13)){
+batch = "0"
+
+for(iplot in c(14)){
   print(paste("Currently plotting type", iplot))
   plot_type(iplot)
 }

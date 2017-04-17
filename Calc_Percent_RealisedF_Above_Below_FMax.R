@@ -20,6 +20,23 @@ groups.for.f.or.biomass = "f"
 # INITIALISATION END ===============================================================================================
 
 
+# FUNCTIONS START ==================================================================================================
+
+#get a list of target hcrs listed by strategy and group name
+LoadStrategies = function (hcr.folders, Target_or_Conservation){
+  strategies.table = getStrategyTable(hcr.folders)
+  if(Target_or_Conservation == "Target"){
+    strategies.table = filter(strategies.table, Target_or_Conservation==0)
+  } else if (Target_or_Conservation == "Conservation") {
+    strategies.table = filter(strategies.table, Target_or_Conservation==0)
+  }
+  return(strategies.table)
+  
+}
+
+# FUNCTIONS END ==================================================================================================
+
+
 # SCRIPT START  ===============================================================================================
 
 if(TRUE){
@@ -82,21 +99,6 @@ if(TRUE){
 # SCRIPT END  ===============================================================================================
 
 
-# FUNCTIONS START ==================================================================================================
-
-#get a list of target hcrs listed by strategy and group name
-LoadStrategies = function (hcr.folders, Target_or_Conservation){
-  strategies.table = getStrategyTable(hcr.folders)
-  if(Target_or_Conservation == "Target"){
-    strategies.table = filter(strategies.table, Target_or_Conservation==0)
-  } elseif(Target_or_Conservation == "Conservation") {
-    strategies.table = filter(strategies.table, Target_or_Conservation==0)
-  }
-  return(strategies.table)
-  
-}
-
-# FUNCTIONS END ==================================================================================================
 
 
 
