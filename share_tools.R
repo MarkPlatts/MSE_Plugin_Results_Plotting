@@ -239,8 +239,7 @@ LoadUniqueStrategies = function(path){
   
 }
 
-LoadUniqueGroups = function(path)
-{
+LoadUniqueGroups = function(path){
   if(file.exists(paste(path,"UniqueGroups.csv",sep=""))){
     UniqueGroups = as.matrix(read.csv(paste(path,"UniqueGroups.csv", sep=""),header = T))
   } else {
@@ -249,6 +248,19 @@ LoadUniqueGroups = function(path)
     file.data = filter(file.data, ResultName == "BiomassMin")
     UniqueGroups = as.vector(as.matrix(unique(file.data$GroupName)))
     write.csv(UniqueGroups,paste(path,"UniqueGroups.csv",sep=""), row.names = F)
+  }
+  return(UniqueGroups)
+}
+
+LoadUniqueFleets = function(path){
+  if(file.exists(paste(path,"UniqueFleets.csv",sep=""))){
+    UniqueGroups = as.matrix(read.csv(paste(path,"UniqueFleets.csv", sep=""),header = T))
+  } else {
+    file.path = paste(path,"/Fleet.csv", sep="")
+    file.data = read.csv(file.path, skip=7, header = TRUE)
+    #file.data = filter(file.data, ResultName == "BiomassMin")
+    UniqueFleets = as.vector(as.matrix(unique(file.data$FleetName)))
+    write.csv(UniqueFleets,paste(path,"UniqueFleets.csv",sep=""), row.names = F)
   }
   return(UniqueGroups)
 }
