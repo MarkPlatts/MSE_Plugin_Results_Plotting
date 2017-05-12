@@ -2,7 +2,8 @@ plot_type = function(type2plot) {
   
   options(scipen = 10)
   
-  setwd("C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting/")
+  setwd("C:/Users/Mark/Desktop/Desktop etc/GAP/MSE_Plugin_Results_Plotting/")
+  
   source("initialisation.R")
   source("B_Trajectories.R")
   source("F_Trajectories.R")
@@ -113,7 +114,8 @@ plot_type = function(type2plot) {
   if(type2plot==14){
     params$HIGHEST_VALUE <- T;print("Plotting HIGHEST_VALUE")
     run_plot_pies(params, parents.folder.for.plots = "/HIGHEST_VALUE/", 
-                               results.folder.name = "HighestValueGroup", by.regulations = TRUE)
+                  results.folder.name = "HighestValueGroup", by.regulations = TRUE,
+                  pie.name = "Highest value: percentage of years across all models")
   }
   
   ###CHOKE SPECIES Pie chart
@@ -121,7 +123,8 @@ plot_type = function(type2plot) {
   if(type2plot==15){
     params$CHOKE_GROUPS <- T;print("Plotting CHOKE_GROUPS")
     run_plot_pies(params, parents.folder.for.plots = "/CHOKE_GROUPS/",
-                        results.folder.name = "ChokeGroup", by.regulations = FALSE)
+                  results.folder.name = "ChokeGroup", by.regulations = FALSE,
+                  pie.name = "Choke groups: percentage of years across all years of all models")
   }
   
   ###Plot average target quota across a regulation type and models

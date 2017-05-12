@@ -1,6 +1,6 @@
 ###Pie charts
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-plot_pies <- function(plot.path, fleet.data, file.name){
+plot_pies <- function(plot.path, fleet.data, file.name, pie_name){
   
   Groups = unique(fleet.data)
   slices = vector()
@@ -13,7 +13,7 @@ plot_pies <- function(plot.path, fleet.data, file.name){
   
   pct <- round(slices/sum(slices)*100,1)
   Groups <- paste(Groups, " ", pct, "%", sep='') # add percents to labels
-  pie(slices, labels = Groups, main = "Highest value: percentage of years across all models", col=rainbow(length(Groups)))
+  pie(slices, labels = Groups, main = pie_name, col=rainbow(length(Groups)))
   mtext(file.name)
   
   graphics.off()
@@ -21,7 +21,7 @@ plot_pies <- function(plot.path, fleet.data, file.name){
 }
 
 run_plot_pies <- function(params, parents.folder.for.plots, 
-                                results.folder.name,by.regulations){
+                                results.folder.name, by.regulations, pie.name){
   
   g <- list.files(paste(params$RootPath,"/",results.folder.name, sep=''), full.names = T)     # which groups are there?
   
@@ -37,7 +37,7 @@ run_plot_pies <- function(params, parents.folder.for.plots,
     
     path = paste(params$plot.path, parents.folder.for.plots, sep="")
     
-    plot_pies(path, fleet.data.whole, file.name.without.ext)
+    plot_pies(path, fleet.data.whole, file.name.without.ext, pie.name)
     
     #chop up by strategy and apply=============================
     strategies = unique(fleet.data$StrategyName)
@@ -49,7 +49,7 @@ run_plot_pies <- function(params, parents.folder.for.plots,
       if(length(fleet.data.by.strategy)==0) next
       CreateFolderIfDoesntExist(folder.name = iStrategy, path = paste(params$plot.path,parents.folder.for.plots,sep=""))
       path = paste(params$plot.path, parents.folder.for.plots, iStrategy, "/", sep="")
-      plot_pies(path, fleet.data.by.strategy, file.name.without.ext)
+      plot_pies(path, fleet.data.by.strategy, file.name.without.ext, pie_name = pie.name)
     }
     #=============================================
     if(by.regulations){
@@ -60,7 +60,7 @@ run_plot_pies <- function(params, parents.folder.for.plots,
         if(length(fleet.data.by.regulation)==0) next
         CreateFolderIfDoesntExist(folder.name = iRegulation, path = paste(params$plot.path,parents.folder.for.plots,sep=""))
         path = paste(params$plot.path, parents.folder.for.plots, iRegulation, "/", sep="")
-        plot_pies(path, fleet.data.by.regulation, file.name.without.ext)
+        plot_pies(path, fleet.data.by.regulation, file.name.without.ext, pie_name = pie.name)
       }     
     }
     
