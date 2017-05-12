@@ -1,25 +1,25 @@
 # INITIALISATION START ===============================================================================================
 
 #start with a clean sheet
-rm(list = ls())
+# rm(list = ls())
 
 #load sources
 # source.folder.location = dirname(sys.frame(1)$ofile)
 # setwd(source.folder.location)
-setwd("C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting")
-source("share_tools.R")
+setwd("C:/Users/Mark/Desktop/Desktop etc/GAP/MSE_Plugin_Results_Plotting")
 source("initialisation.R")
+source("share_tools.R")
 #library(reshape)
 params = initialise_params("0")
 
 #root results path
 #root.plot =     "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Plots/"
 #root.results =  "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Results/"
-
-hcr.folders = c("C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/NorthSea Model/2015 FINAL Key Run/DATA/HCRs/Type1_BmsytoZero",
-                "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/NorthSea Model/2015 FINAL Key Run/DATA/HCRs/Type2_BmsyBlimClifftoZero",
-                "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/NorthSea Model/2015 FINAL Key Run/DATA/HCRs/Type3_BmsytoZeroatBlim",
-                "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/NorthSea Model/2015 FINAL Key Run/DATA/HCRs/Type4_BmsyBlimClifftoFmin")
+# 
+# hcr.folders = c("C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/NorthSea Model/2015 FINAL Key Run/DATA/HCRs/Type1_BmsytoZero",
+#                 "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/NorthSea Model/2015 FINAL Key Run/DATA/HCRs/Type2_BmsyBlimClifftoZero",
+#                 "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/NorthSea Model/2015 FINAL Key Run/DATA/HCRs/Type3_BmsytoZeroatBlim",
+#                 "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/NorthSea Model/2015 FINAL Key Run/DATA/HCRs/Type4_BmsyBlimClifftoFmin")
 
 groups.for.f.or.biomass = "biomass"
 
@@ -83,6 +83,7 @@ CreateBiomassFiveNumSum = function(){
     #max.axis.x = max(biomass$biomass.last5yearmean)
     
     #Calc the percent below Bpa & Blim
+    if(igroup=="Whiting (adult)") browser()
     bpa = biom_refs[biom_refs$Group==igroup,]$Bpa
     blim = biom_refs[biom_refs$Group==igroup,]$Blim
     biomass$below.bpa = biomass$biomass.last5yearmean<bpa

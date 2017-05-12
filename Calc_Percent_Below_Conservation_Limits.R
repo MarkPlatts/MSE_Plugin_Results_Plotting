@@ -1,7 +1,7 @@
 # INITIALISATION START ===============================================================================================
 
 #start with a clean sheet
-rm(list = ls())
+# rm(list = ls())
 
 #load sources
 # source.folder.location = dirname(sys.frame(1)$ofile)
@@ -12,13 +12,13 @@ library(reshape)
 #library(reshape)
 
 #root results path
-root.plot =     "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Plots/"
-root.results =  "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Results/"
-
-hcr.folders = c("C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/NorthSea Model/2015 FINAL Key Run/DATA/HCRs/Type1_BmsytoZero",
-                "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/NorthSea Model/2015 FINAL Key Run/DATA/HCRs/Type2_BmsyBlimClifftoZero",
-                "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/NorthSea Model/2015 FINAL Key Run/DATA/HCRs/Type3_BmsytoZeroatBlim",
-                "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/NorthSea Model/2015 FINAL Key Run/DATA/HCRs/Type4_BmsyBlimClifftoFmin")
+# root.plot =     "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Plots/"
+# root.results =  "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Results/"
+# 
+# hcr.folders = c("C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/NorthSea Model/2015 FINAL Key Run/DATA/HCRs/Type1_BmsytoZero",
+#                 "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/NorthSea Model/2015 FINAL Key Run/DATA/HCRs/Type2_BmsyBlimClifftoZero",
+#                 "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/NorthSea Model/2015 FINAL Key Run/DATA/HCRs/Type3_BmsytoZeroatBlim",
+#                 "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/NorthSea Model/2015 FINAL Key Run/DATA/HCRs/Type4_BmsyBlimClifftoFmin")
 
 groups.for.f.or.biomass = "biomass"
 
@@ -29,7 +29,6 @@ groups.for.f.or.biomass = "biomass"
 # FUNCTION START  ===============================================================================================
 
 CreatePercentBelowConservationLimits = function(BLimitType){
-
 
   #get a list of hcrs by listed by strategy and group name with only biomass limits
   strategies.table = getStrategyTable(hcr.folders)
@@ -45,17 +44,17 @@ CreatePercentBelowConservationLimits = function(BLimitType){
   
   for(igroup in unique.groups)
   {
-    
+
     #get a list of all the files in CatchTrajectories that are for "AllFleets"
     biomass.file = GetFileName_ContainsStrings(FolderPath = paste(root.results, "/Biomass/", sep=""),
                                                Strings = c(igroup), WithPath=T)
     
     #Load the file
     biomass = fread(biomass.file, skip=7, header=T)
-    
+
     #Determine file is valid
     if(!isNotAll(dt = biomass, col.data.starts = 4, val.to.check = -9999)) next
-    
+
     #Sum last 5 year
     biomass = calcLast5Year(biomass, "biomass.last5yearsum", 4, function.type = 2)
 

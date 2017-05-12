@@ -20,7 +20,7 @@ if(TRUE){
   setwd("C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting")
   source("share_tools.R")
   source("plot_tools.R")
-  source("initialisation.R")
+  source("initialisation_baltic.R")
   
   params = initialise_params(batch = "0")
   output_folder = paste(params$plot.path,"OUTPUT_END_DISTRIBUTIONS/", sep="")
@@ -65,7 +65,7 @@ if(TRUE){
   nUniqueStrategies = unique(params$strats)
   
   for(igroup in unique.groups){
-    if(igroup != "Cod (adult)") next
+    #if(igroup != "Cod (adult)") next
     
     #get the file in HCRQuota_Targ folder that are for "AllFleets"
     biomass.file.name = GetFileName_ContainsStrings(FolderPath = paste(params$RootPath, "Biomass/", sep=""), 
@@ -104,7 +104,6 @@ if(TRUE){
     #                                                 blim = sum(below.blim)/length(below.blim)), by="StrategyName"]
     # 
     #calculate the 5 number summary for each strategy
-    browser()
     biomass.summary.by.strategy = biomass[,list(Min = min(biomass.last5yearmean), 
                   LQ = quantile(biomass.last5yearmean, .25, na.rm=TRUE), 
                   Median = median(biomass.last5yearmean),
@@ -152,6 +151,10 @@ if(TRUE){
     #if the group has a blim and bpa then extract from table and plot
     #species_in_biomrefsfile<-levels(blim.bpa[,"Group"])
     max.y = max(ggplot_build(B_SPECIES)$data[[1]]$density)
+    
+    print(igroup)
+    browser()
+    
     if(igroup %in% biom_refs[,"Group"]){
       B_SPECIES = B_SPECIES + geom_text(data = ref.points, aes(x = blim_lab_pos, y = max.y*9/10, label = blim_lab), size = 2, angle = 90)
       B_SPECIES = B_SPECIES + geom_text(data = ref.points, aes(x = bpa_lab_pos, y = max.y*9/10, label = bpa_lab), size = 2, angle=90)

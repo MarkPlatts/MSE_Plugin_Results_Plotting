@@ -20,7 +20,9 @@ source("PlotEndDistributions.r")
 source("https://raw.githubusercontent.com/ggrothendieck/gsubfn/master/R/list.R")
 
 #Set paths
-rootpath = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/"
+#rootpath = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/"
+rootpath =  "C:/Users/Mark/Box Sync/Baltic - Stockholm/MSEtest_simlerRules - Copy (2)/"
+
 results_folder_path = paste(rootpath,"Results/",sep="")
 results_csv_inc_path = paste(results_folder_path,"Results.csv", sep="")
 plots_folder_path = paste(rootpath,"Plots/",sep="")

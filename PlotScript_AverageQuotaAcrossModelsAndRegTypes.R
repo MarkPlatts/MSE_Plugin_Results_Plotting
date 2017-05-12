@@ -10,12 +10,17 @@ source("Calc_average_quota_per_fleet_group_regulation.R")
 
 
 #Input======================================================================================================================================================
-Path = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/R Code/TestFolder_R_Plotting_MSE_Plugin/withBiomassForcing_Yearly_Results HCR type1 and 3/Results"
-Groups = c("Cod (adult)", "Haddock (adult)", "Whiting (adult)")
+Root.Path = "C:/Users/Mark/Box Sync/Baltic - Stockholm/MSEtest_simlerRules - Copy (2)/"
+Results.Path = paste(Root.Path, "Results/", sep="")
+Plot.Path = paste(Root.Path, "Plots/", sep="")
+# Groups = c("Cod (adult)", "Haddock (adult)", "Whiting (adult)")
+Groups = LoadUniqueGroups(Results.Path)
 TimeSteps = 1:20
 RegulationTypes = c("Highest value", "Weakest stock", "Selective")
-Fleet = "FleetNo1"
+# Fleet = "FleetNo1"
+Fleets = c("AllFleets", "FleetNo1", "FleetNo2", "FleetNo3", "FleetNo4", "FleetNo5", "FleetNo6", "FleetNo7",
+                       "FleetNo8", "FleetNo9", "FleetNo10")
 
 
 #Plot======================================================================================================================================================
-Plot_Average_Quotas(Path, Groups, Fleet, TimeSteps, RegulationTypes)
+Plot_Average_Quotas(Results.Path, Plot.Path, Groups, Fleets, TimeSteps, RegulationTypes)

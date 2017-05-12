@@ -1,13 +1,13 @@
 # INITIALISATION START ===============================================================================================
 
-rm(list = ls())
+# rm(list = ls())
 
 setwd("C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting")
 source("share_tools.R")
 
 #root results path
-root.plot = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Plots/"
-root.results = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Results/"
+# root.plot = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Plots/"
+# root.results = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Results/"
 
 # INITIALISATION END ===============================================================================================
 
