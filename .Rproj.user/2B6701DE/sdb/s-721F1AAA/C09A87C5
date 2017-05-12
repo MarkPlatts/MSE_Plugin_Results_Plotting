@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "library(data.table)\n\nprepare.landings.quotas.merge = function(dt,  val.name){\n  dt = data.table(dt)\n  dt = rename_timesteps(dt = dt, colstart = 6, yearstart = 1)\n  dt = melt(data = dt, id.vars = 1:5, variable.name = \"TimeStep\", value.name = val.name)\n  dt = dt[, !c(\"ResultType\"), with=FALSE]\n}\n\nroot.path.results = \"C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Results/\"\n\npath.landings = paste(root.path.results, \"LandingsTrajectories/\", sep = \"\")\npath.quota = paste(root.path.results, \"HCRQuota_Targ/\", sep = \"\")\n\ngroup_fleet = c(\"Cod (adult)\", \"FleetNo1\")\n\ndt.landings = LoadFile_ContainsListStrings(Dir.Path = path.landings, \n                                  StringsInFileName = group_fleet)\n\ndt.quota = LoadFile_ContainsListStrings(Dir.Path = path.quota,\n                                        StringsInFileName = group_fleet)\n\ndt.landings = prepare.landings.quotas.merge(dt = dt.landings, val.name = \"landings\")\ndt.quota =    prepare.landings.quotas.merge(dt = dt.quota, val.name = \"quota\")\n\ndt = merge(dt.landings, dt.quota)\ndt$landings.minus.quota = dt$landings - dt$quota\n\n",
+    "created" : 1494507059186.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3247913261",
+    "id" : "C09A87C5",
+    "lastKnownWriteTime" : 1494568517,
+    "last_content_update" : 1494568517100,
+    "path" : "C:/Users/Mark/Desktop/Desktop etc/GAP/MSE_Plugin_Results_Plotting/Create_landings-quota_file.R",
+    "project_path" : "Create_landings-quota_file.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

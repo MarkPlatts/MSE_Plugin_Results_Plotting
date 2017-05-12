@@ -2,32 +2,14 @@ library(dplyr)
 library(reshape)
 library(ggplot2)
 
-setwd("C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting/")
+#setwd("C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting/")
 source("share_tools.R")
-
-
-#Loads the file in folder specified containing all the strings in vector of strings
-LoadFile_ContainsListStrings = function(Dir.Path, StringsInFileName)
-{
-  #Get a list of all the files
-  AllFiles <- list.files(Dir.Path)
-  #Need to loop across all files so that we can extract
-  for (iFile in AllFiles){
-    #Find and load file that contains values for selected group and fleet
-    FoundFile = StringContains_AllStrings(ContainingString=iFile, MultipleStrings2Check=StringsInFileName)
-    if(FoundFile) {
-      iFile.data <- read.csv(paste(Dir.Path,iFile, sep=''),skip=7, head=T)
-      return (iFile.data)
-    }
-  }
-  return(NA)
-  
-}
 
 
 Average_Quota_Across_Models_And_RegTypes = function(Group, Fleet, RegulationType, ResultsPath)
 {
-
+  #if(Group=="AdCod_3" & Fleet=="AllFleets") browser()
+  
   FileData = LoadFile_ContainsListStrings(Dir.Path = paste(ResultsPath,"/HCRQuota_Targ/",sep=''), StringsInFileName = c(Group, Fleet))
   
   if(isAll(FileData, col.data.starts=6, val.to.check=-9999)) return(NA)
@@ -68,6 +50,7 @@ Plot_Average_Quotas = function(results.path, plot.path, Groups, Fleets, TimeStep
     #use ggplot to plot results - specify legends to be species and a column of different regulation types  
     # Plot2Save = qplot(TimeSteps, AverageQuota, data=df_Average_Quota, geom=c("line"), color=GroupName, facets=Regulation~., main=iFleet)
     Plot2Save = ggplot(data=df_Average_Quota, aes(x = TimeSteps, y = AverageQuota, color = GroupName)) + 
+      ggtitle(as.character(iFleet)) +
       geom_line(aes(linetype=GroupName)) + 
       facet_grid(Regulation ~.) + 
       scale_linetype_manual(values=rep(c("solid", "dashed", "dotted", "dotdash", "longdash", "twodash"), 20))

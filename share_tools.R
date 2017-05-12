@@ -10,6 +10,34 @@ countColsWithVals = function(file.name, ncols_no_vals, lines.to.skip){
   return(nCols)
 }
 
+#
+#rename columns for timesteps
+rename_timesteps = function(dt, colstart, yearstart){
+  number.of.columns = ncol(dt)
+  names(dt)[colstart:number.of.columns] = 1:(number.of.columns-colstart+1)
+  return(dt)
+}
+
+
+LoadFile_ContainsListStrings = function(Dir.Path, StringsInFileName)
+#Loads the file in folder specified containing all the strings in vector of strings
+{
+  browser()
+  #Get a list of all the files
+  AllFiles <- list.files(Dir.Path)
+  #Need to loop across all files so that we can extract
+  for (iFile in AllFiles){
+    #Find and load file that contains values for selected group and fleet
+    FoundFile = StringContains_AllStrings(ContainingString=iFile, MultipleStrings2Check=StringsInFileName)
+    if(FoundFile) {
+      iFile.data <- read.csv(paste(Dir.Path,iFile, sep=''),skip=7, head=T)
+      return (iFile.data)
+    }
+  }
+  return(NA)
+  
+}
+
 
 groupsWithHcr = function(hcr.folders, groups.for.f.or.biomass){
   #compiles a list of all the unique groups with a hcr in the location of folders  
@@ -254,7 +282,7 @@ LoadUniqueGroups = function(path){
 
 LoadUniqueFleets = function(path){
   if(file.exists(paste(path,"UniqueFleets.csv",sep=""))){
-    UniqueGroups = as.matrix(read.csv(paste(path,"UniqueFleets.csv", sep=""),header = T))
+    UniqueFleets = as.matrix(read.csv(paste(path,"UniqueFleets.csv", sep=""),header = T))
   } else {
     file.path = paste(path,"/Fleet.csv", sep="")
     file.data = read.csv(file.path, skip=7, header = TRUE)
@@ -262,7 +290,7 @@ LoadUniqueFleets = function(path){
     UniqueFleets = as.vector(as.matrix(unique(file.data$FleetName)))
     write.csv(UniqueFleets,paste(path,"UniqueFleets.csv",sep=""), row.names = F)
   }
-  return(UniqueGroups)
+  return(UniqueFleets)
 }
 
 SubsetVectorStrings_ContainingString = function(VectorStrings, String2Find)
