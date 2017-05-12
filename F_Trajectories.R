@@ -1,4 +1,4 @@
-source("C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting/share_tools.R")
+source("share_tools.R")
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 plot_fishing_trajectories <- function(params, folder.to.save.plot){
