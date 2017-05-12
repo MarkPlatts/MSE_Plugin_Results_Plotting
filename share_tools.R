@@ -18,11 +18,22 @@ rename_timesteps = function(dt, colstart, yearstart){
   return(dt)
 }
 
+delete.files.all.val = function(path, value.to.check, column.where.data.starts){
+  
+  lstfiles = list.files(path = path, full.names = T)
+  
+  for(iFile in lstfiles){
+    dt = read.csv(file = iFile, skip = 7)
+    if(isNotAll(dt, col.data.starts = column.where.data.starts, val.to.check = value.to.check)) next
+    file.remove(iFile)
+  }
+  
+}
+
 
 LoadFile_ContainsListStrings = function(Dir.Path, StringsInFileName)
 #Loads the file in folder specified containing all the strings in vector of strings
 {
-  browser()
   #Get a list of all the files
   AllFiles <- list.files(Dir.Path)
   #Need to loop across all files so that we can extract
