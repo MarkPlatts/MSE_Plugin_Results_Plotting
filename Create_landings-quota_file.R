@@ -12,6 +12,7 @@ prepare.landings.quotas.merge = function(dt,  val.name){
 }
 
 root.path.results = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Results/"
+write.path = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Processed_Results/landings-quota/"
 
 path.landings = paste(root.path.results, "LandingsTrajectories/", sep = "")
 path.quota = paste(root.path.results, "HCRQuota_Targ/", sep = "")
@@ -28,15 +29,24 @@ for(iGroup in unique.groups){
   
   dt.quota = LoadFile_ContainsListStrings(Dir.Path = path.quota,
                                           StringsInFileName = group_fleet)
+
+  if(typeof(dt.landings) != "list") next
+  if(typeof(dt.quota) != "list") next
   
   if(isNotAll(dt.quota, col.data.starts = 6, val.to.check = -9999)){
+    
     dt.landings = prepare.landings.quotas.merge(dt = dt.landings, val.name = "landings")
     dt.quota =    prepare.landings.quotas.merge(dt = dt.quota, val.name = "quota")
-    
     dt = merge(dt.landings, dt.quota)
-    dt$landings.minus.quota = dt$landings - dt$quota
     
-    write.csv(x = dt, file = paste("C:/Users/Mark/Desktop/Test/", iGroup, ".csv", sep=""))
+    dt$landings.minus.quota = dt$landings - dt$quota
+    write.csv(x = dt, file = paste(write.path, "landings-quota_", iGroup, ".csv", sep=""))
+    
+    sum = dt[, .(sum.across.timeseries = sum(landings.minus.quota)), by = list(ModelID, StrategyName)]
+    write.csv(x = sum, file = paste(write.path, "sumByModelID,StrategyName_", iGroup, ".csv", sep=""))
+    
+    average = sum[, .(average.across.models = mean(sum.across.timeseries)), by = list(StrategyName)]
+    write.csv(x = average, file = paste(write.path, "averageAcrossModels_", iGroup, ".csv", sep=""))
   }
   
 }

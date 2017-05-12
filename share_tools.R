@@ -39,7 +39,7 @@ LoadFile_ContainsListStrings = function(Dir.Path, StringsInFileName)
   #Need to loop across all files so that we can extract
   for (iFile in AllFiles){
     #Find and load file that contains values for selected group and fleet
-    FoundFile = StringContains_AllStrings(ContainingString=iFile, MultipleStrings2Check=StringsInFileName)
+    FoundFile = StringContains_AllStrings(ContainingString = iFile, MultipleStrings2Check = StringsInFileName)
     if(FoundFile) {
       iFile.data <- read.csv(paste(Dir.Path,iFile, sep=''),skip=7, head=T)
       return (iFile.data)
