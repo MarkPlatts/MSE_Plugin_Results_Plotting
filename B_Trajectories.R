@@ -1,4 +1,4 @@
-source("C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting/share_tools.R")
+source("share_tools.R")
 
 ###Biomass trajectories
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -58,7 +58,7 @@ plot_biomass_trajectories <- function(params){
 
     #Plot a strategy results
     if(params$PLOT_CONFIDENCE_INTERVALS){
-      plot(plotting_params$TimeStepVals,plotting_params$MEANS[,2],type='l',ylim=c(0,1.25*y_upper),lty=params$LTY[1],col=params$COL[1],ylab="relative biomass (Kt)",xlab="year",font=20,lwd=params$lineweight*3)
+      plot(plotting_params$TimeStepVals,plotting_params$MEANS[,2],type='l',ylim=c(0,1.25*y_upper),lty=params$LTY[1],col=params$COL[1],ylab="biomass (Kt)",xlab="year",font=20,lwd=params$lineweight*3)
       for(i in 3:ncol(plotting_params$MEANS)) {
         lines(plotting_params$TimeStepVals,plotting_params$MEANS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)],lwd=params$lineweight*3)
       }
