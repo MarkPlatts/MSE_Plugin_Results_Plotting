@@ -2,14 +2,14 @@
 
 # rm(list = ls())
 
-setwd("C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting")
+setwd("C:/Users/Mark/Desktop/Desktop etc/GAP/MSE_Plugin_Results_Plotting")
 source("share_tools.R")
 library(profvis)
 
 
 #root results path
-# root.plot = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Plots/"
-# root.results = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Results/"
+root.plot = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Plots/"
+root.results = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Results/"
 
 # INITIALISATION END ===============================================================================================
 
@@ -44,6 +44,8 @@ CreateCatchRatioTables = function(CatchType){
     
     print(iFile.catch)
     
+    if(basename(iFile.catch) != "ValueYearly_AllGroups_FleetNo1.csv") next
+    
     #get file in CatchTrajectories folder that are for "AllFleets" and current igroup
     # catches.file = GetFileName_ContainsStrings(FolderPath = paste(root.results, "CatchTrajectories/", sep=""), 
     #                                            Strings = c(iFleet, igroup), WithPath=T)
@@ -55,14 +57,14 @@ CreateCatchRatioTables = function(CatchType){
     if(!isNotAll(dt = catches, col.data.starts = 6, val.to.check = -9999)) next
     
     #load the files and sum
-    catches_last5year = calcLast5Year(catches, "catch.last5yearsum", 5, function.type=2)
+    catches_last5year = calcLast5Year(catches, "catch.last5yearmean", 5, function.type=2)
     
     #load the catches at the first and last timestep of the forecast
     catch.first.year = GetiYearCatch(catches, iYear=1, ncols.before.timeseries=5)
     
+    #merge the two together so that we can easily calculate the difference between two columns
     dt = merge(catch.first.year, catches_last5year, by = names(catch.first.year)[c(3,4)])
     
-    #merge the two together so that we can easily calculate the difference between two columns
     dt$Ratios = dt$catch.last5yearsum/dt$Year1
     
     #bind them all together ready to be saved to csv
@@ -89,9 +91,9 @@ CreateCatchRatioTables = function(CatchType){
 # SCRIPT START  ===============================================================================================
 # create_start_end_ratio_catch_tables = function(root.plot){
 #   browser()
-  CreateCatchRatioTables(CatchType = "Catch")
-  CreateCatchRatioTables(CatchType = "Landings")
-  CreateCatchRatioTables(CatchType = "Discards")
+  # CreateCatchRatioTables(CatchType = "Catch")
+  # CreateCatchRatioTables(CatchType = "Landings")
+  # CreateCatchRatioTables(CatchType = "Discards")
   CreateCatchRatioTables(CatchType = "Value")
 # }
 
