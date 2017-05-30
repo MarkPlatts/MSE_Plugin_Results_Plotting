@@ -6,15 +6,16 @@ initialise_params = function(batch){
   params$plot_each_timestep = FALSE;
   params$PLOT_CONFIDENCE_INTERVALS = F;
   params$Plot_yearly_files = TRUE
+  
+  path.data.folder = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/"
+  
   switch (batch,
-             "0" = {params$plot.path = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Plots/"}
-            #"0" = {params$plot.path = "C:/Users/Mark/Desktop/Test/"}
-          
-            # "1" = {params$plot.path = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Plots_strats_1-20/"},
-            # "2" = {params$plot.path = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Plots_strats_21-40/"},
-            # "3" = {params$plot.path = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Plots_strats_41-end/"}
+             "0" = {params$plot.path = paste(path.data.folder,"Plots/", sep="")}
+             "1" = {params$plot.path = paste(path.data.folder,"Plots_strats_1-20/", sep="")}
+             "2" = {params$plot.path = paste(path.data.folder,"Plots_strats_21-40/", sep="")},
+             "3" = {params$plot.path = paste(path.data.folder,"Plots_strats_41-end/", sep="")}
   )
-  params$RootPath =  "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Results/"
+  params$RootPath =  paste(path.data.folder, "Results/", sep="")
   
   params$hcr.folders = c("C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/NorthSea Model/2015 FINAL Key Run/DATA/HCRs/Type1_BmsytoZero",
     "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/NorthSea Model/2015 FINAL Key Run/DATA/HCRs/Type2_BmsyBlimClifftoZero",
@@ -38,6 +39,7 @@ initialise_params = function(batch){
   # params$Groups2Plot = c("GroupNo16","GroupNo14","GroupNo18","GroupNo20","GroupNo21","GroupNo23","GroupNo29","GroupNo30",
   #                        "GroupNo31","GroupNo33","GroupNo34","GroupNo38","GroupNo42","GroupNo22","GroupNo26","GroupNo32",
   #                        "GroupNo35","GroupNo39","GroupNo41","GroupNo55")
+  
   #params$Fleets2Plot = c("AllFleets", "FleetNo1")
   params$Fleets2Plot = c("AllFleets", "FleetNo1", "FleetNo2", "FleetNo3", "FleetNo4", "FleetNo5", "FleetNo6", "FleetNo7",
   "FleetNo8", "FleetNo9", "FleetNo10", "FleetNo11")
@@ -46,25 +48,28 @@ initialise_params = function(batch){
   
   ### Load results files to get unique strats (comment/uncomment to select method of choosing strategies to plot)
   #plot all strats
-  # results<-read.table("Results.csv",sep=',',skip=8,col.names=c("Model","Strategy","GroupID","GroupName","Variable","Value"), fill=T)
-  # results<-results[results$Strategy!="Z",]#odd one in _SR_final
-  # params$strats <- as.character(unique(results$Strategy))  # 10/15 strategies
   params$strats = LoadUniqueStrategies(params$RootPath)
   params$strats <- params$strats[params$strats != "NONE"]
   
+  #SPECIFY STRATEGIES TO PLOT ===================================================================
+  #comment/uncomment according to method you want to use for specifying strategies
   
+  # 1. specifying ranges directly ---------------------------------------------------------------
   #params$strats <- params$strats[41:length(params$strats)]
   #params$strats <- params$strats[21:40]
-  switch (batch,
-            "1" = {params$strats <- params$strats[1:20]},
-            "2" = {params$strats <- params$strats[21:40]},
-            "3" = {params$strats <- params$strats[41:length(params$strats)]})
   
-  #plot strats in this vector
+  # 2. running this code in batch mode ----------------------------------------------------------
+  # switch (batch,
+  #           "1" = {params$strats <- params$strats[1:20]},
+  #           "2" = {params$strats <- params$strats[21:40]},
+  #           "3" = {params$strats <- params$strats[41:length(params$strats)]})
+  
+  # 3. specifying a vector of the strategies names -----------
   params$strats <- c("14 NSMAP 2020_HighF_Highest value", "11 NSMAP 2020_HighF_Weakest stock")
-  #plot strats chosen interactively
-  # params$strats <- create_list_strategies(params$RootPath)
   
+  # 4. enabling the stategies to be chosen interactively-----------------------------------------
+  # params$strats <- create_list_strategies(params$RootPath)
+  # =============================================================================================
     
   params$reg.types = c("Weakest stock", "Highest value", "Selective")
     
@@ -96,8 +101,6 @@ initialise_params = function(batch){
   params$CHOKE_GROUPS <- F
   
   params$AverageQuota_EachFleet <- F
-  
-  #browser()
   
   return(params)
 }
