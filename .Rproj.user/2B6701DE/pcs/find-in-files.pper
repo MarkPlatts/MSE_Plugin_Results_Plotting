@@ -3,8 +3,8 @@
         "caseSensitive" : false,
         "filePatterns" : [
         ],
-        "path" : "C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting",
-        "query" : "End biomass (5 year average)",
+        "path" : "C:/Users/Mark/Desktop/Desktop etc/GAP/MSE_Plugin_Results_Plotting",
+        "query" : "isAll",
         "regex" : false
     }
 }

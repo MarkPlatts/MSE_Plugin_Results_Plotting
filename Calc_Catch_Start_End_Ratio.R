@@ -1,11 +1,8 @@
 # INITIALISATION START ===============================================================================================
 
-# rm(list = ls())
-
 setwd("C:/Users/Mark/Desktop/Desktop etc/GAP/MSE_Plugin_Results_Plotting")
 source("share_tools.R")
 library(profvis)
-
 
 #root results path
 root.plot = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Plots/"
@@ -43,12 +40,6 @@ CreateCatchRatioTables = function(CatchType){
   for(iFile.catch in catch.files){
     
     print(iFile.catch)
-    
-    if(basename(iFile.catch) != "ValueYearly_AllGroups_FleetNo1.csv") next
-    
-    #get file in CatchTrajectories folder that are for "AllFleets" and current igroup
-    # catches.file = GetFileName_ContainsStrings(FolderPath = paste(root.results, "CatchTrajectories/", sep=""), 
-    #                                            Strings = c(iFleet, igroup), WithPath=T)
 
     catches = fread(iFile.catch, skip=7, header=T)
     

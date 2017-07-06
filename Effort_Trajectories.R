@@ -4,9 +4,6 @@ source("share_tools.R")
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 plot_effort_trajectories <- function(params){
   
-  #reset the director
-  #setwd(paste(params$RootPath,"\\Effort", sep=''))
-  
   #initialise plotting params
   plotting_params = initialise_plotting_params("Effort", params$plot_each_timestep, params$StartRun_Year, params$EndRun_Year, params$RootPath)
   

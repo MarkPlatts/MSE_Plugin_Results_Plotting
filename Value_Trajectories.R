@@ -91,7 +91,8 @@ plot_value_trajectories <- function(params){
       STRAT<-paste(params$strats[strat_i],sep=' ')
       
       #select subset of data
-      data2plot<- dat[dat$Strategy %in% STRAT,6:ncol(dat)]*570000
+      area <- get_area(params = params, file.name = G)
+      data2plot <- dat[dat$Strategy %in% STRAT,6:ncol(dat)] * area
       
       #quantiles for polygon plot
       perc<-apply(data2plot,2, FUN=function(x){quantile(x,probs=c(0.025,0.5,0.975),na.rm=T)})

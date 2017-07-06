@@ -1,12 +1,24 @@
-source("share_tools.R")
+#' Save biomass trajectories.
+#' 
+#' @details 
+#'
+#' @param params This contains all the parameter settings specified in the file initialisation
+#'
+#'
+library(stringr)
 
-###Biomass trajectories
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
 plot_biomass_trajectories <- function(params){
-  
+
   #Load up biomass reference file
-  biom_refs = read.csv(paste(params$plot.path,"/Biom_refs.csv",sep=''))
-  
+  if(file.exists(paste0(params$plot.path,"/Biom_refs.csv"))){
+    biom_refs = read.csv(paste(params$plot.path,"/Biom_refs.csv",sep=''))
+  } else {
+    biom_refs = NA
+  }
+
   #initialise plotting params
   plotting_params = initialise_plotting_params("Biomass", params$plot_each_timestep, params$StartRun_Year, params$EndRun_Year, params$RootPath)
 
@@ -35,9 +47,9 @@ plot_biomass_trajectories <- function(params){
     plotting_params$dat <- read.csv(paste(params$RootPath,"/Biomass/",G, sep=''),skip=7, head=T)
 
     #Modify the values so that they are for the entire region
-    plotting_params$dat[,-c(1:4)] <- plotting_params$dat[,-c(1:4)]*params$Area/1000 #Multiplying it by area gives absolute biomass across area
+    area <- get_area(params = params, file.name = G)
+    plotting_params$dat[,-c(1:4)] <- plotting_params$dat[,-c(1:4)] * area / 1000 #Multiplying it by area gives absolute biomass across area
                                                                                     #Dividing by 1000 gives value in kt - we do this to prevent scientific units
-    
     #Calculate the values to be plotted
     plotting_params = calc_vals_for_plotting(params, plotting_params)
     

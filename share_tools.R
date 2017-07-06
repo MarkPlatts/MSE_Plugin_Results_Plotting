@@ -4,6 +4,58 @@ library(dtplyr)
 library(dplyr)
 library(data.table)
 
+get_area <- function(params, file.name){
+  stock.areas.file.path <- paste0(params$plot.path, "StockAreas.csv")
+  if(file.exists(stock.areas.file.path)){
+    stock.areas <- read.csv(stock.areas.file.path, stringsAsFactors = F)
+    n.areas <- dim(stock.areas)[1]
+    for(irow in 1:n.areas){
+      if(str_detect(str_to_upper(file.name), str_to_upper(stock.areas[irow,1]))) return (stock.areas[irow, 2])
+    }
+  }
+  return (params$Area)
+}
+
+create.plot.dirs = function(params){
+  if(!dir.exists(params$plot.path)){
+    dir.create(params$plot.path)
+  }
+  FolderNames = c(
+    "HCRF_Cons", "HCRF_Targ", "HCRQuota_Cons", "HCRQuota_Targ", 
+    "RealisedLandedF", "RealisedDiscardedF", "RealisedF", 
+    "CatchTrajectories", "LandingsTrajectories", "DiscardsTrajectories",
+    "EFFORT", "VALUE", "BIOMASS", 
+    "HIGHEST_VALUE", "CHOKE_GROUPS", 
+    "AverageQuota_EachFleet",
+    "Tables", 
+    "OUTPUT_END_DISTRIBUTIONS")
+  for (iFolder in FolderNames){
+    if (!dir.exists(paste(params$plot.path,iFolder,sep=""))){
+      dir.create(paste(params$plot.path,iFolder,sep=""))
+    }
+  }
+}
+
+read_biom_refs = function(biom_refs, group, ref_type)
+{
+  if (is.na(biom_refs)) return (NA)
+  group = as.character(group)
+  e_blim = 2
+  e_bpa = 3
+  #load up the file with the values in
+  for(iRow in 1:(dim(biom_refs)[1])){
+    if(group == biom_refs[iRow,1]){
+      if (ref_type == "blim") return (biom_refs[iRow, e_blim])
+      if (ref_type == "bpa") return (biom_refs[iRow, e_bpa])
+      break
+    }
+    if (iRow == (dim(biom_refs)[1])){
+      print (paste("Did not find biomrefs for ", group, "group specified"))
+      return (NA)
+    }
+  }
+}
+
 countColsWithVals = function(file.name, ncols_no_vals, lines.to.skip){
   file.to.inspect = read.csv(file.name, skip=lines.to.skip)
   nCols = ncol(file.to.inspect)-ncols_no_vals
@@ -108,7 +160,6 @@ appendVariableToDataTable = function(dt, variable, variablename, beg, end){
 isNotAll = function(dt, col.data.starts, val.to.check)
   #count how many values aren't NA and if there is at least one then return that file is valid
 {
-
   data.only = dt[, col.data.starts:ncol(dt)]
   file.valid = FALSE
   if(sum(data.only!=val.to.check)>0) {file.valid = TRUE}
@@ -117,6 +168,11 @@ isNotAll = function(dt, col.data.starts, val.to.check)
 
 isAll = function(dt, col.data.starts, val.to.check){
   return(!isNotAll(dt, col.data.starts, val.to.check))
+}
+
+isAllNA = function(dt, col.data.starts){
+  data.only = dt[, col.data.starts:ncol(dt)]
+  return(all(is.na(data.only)))
 }
 
 GetiYearCatch = function(dt, iYear, ncols.before.timeseries){

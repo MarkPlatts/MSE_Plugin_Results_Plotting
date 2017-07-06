@@ -17,11 +17,12 @@ initialise_params = function(batch){
   )
   params$RootPath =  paste(path.data.folder, "Results/", sep="")
   
+  # I think this is obsolete but I have left it for now just in case ==========================================================
   params$hcr.folders = c("C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/NorthSea Model/2015 FINAL Key Run/DATA/HCRs/Type1_BmsytoZero",
     "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/NorthSea Model/2015 FINAL Key Run/DATA/HCRs/Type2_BmsyBlimClifftoZero",
     "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/NorthSea Model/2015 FINAL Key Run/DATA/HCRs/Type3_BmsytoZeroatBlim",
     "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/NorthSea Model/2015 FINAL Key Run/DATA/HCRs/Type4_BmsyBlimClifftoFmin")
-  
+  # I think this is obsolete but I have left it for now just in case ==========================================================
   
   params$Base_NYears = 23
   params$Projected_NYears = 20

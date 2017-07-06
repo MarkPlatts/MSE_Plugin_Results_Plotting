@@ -1,20 +1,21 @@
 library(reshape)
 library(dplyr)
-#library(data.table)
+library(data.table)
+library(plyr)
 
-source("C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting/share_tools.R")
+source("share_tools.R")
 
 ### Generate tables for the risk-reward plots
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 create_riskreward_table <- function(){
   
-  general.path = "C://Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/Yearly_Results HCR type1 and 3/"
+  general.path = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/"
   plot.path = paste(general.path,"Plots/",sep="")
   RootPath =  paste(general.path,"Results/",sep="")
   
   #Create folder to store the results in
-  dir.create("C://Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/Yearly_Results HCR type1 and 3/Plots/RISK_REWARD_TABLES", showWarnings = FALSE)
-  dir.create("C://Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/Yearly_Results HCR type1 and 3/Plots/RISK_REWARD_TABLES/byGroup", showWarnings = FALSE)
+  dir.create(paste0(plot.path, "RISK_REWARD_TABLES"), showWarnings = FALSE)
+  dir.create(paste0(plot.path, "RISK_REWARD_TABLES/byGroup"), showWarnings = FALSE)
   
   #get a list of all the files in the Biomass folder
   g.biomass.filenames <- list.files(paste(RootPath,"\\Biomass", sep=''), full.names=TRUE)

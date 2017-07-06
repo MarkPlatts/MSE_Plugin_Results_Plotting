@@ -5,8 +5,8 @@
 Extract_BasicInfo = function(params)
 {
   #change this to params$RootPath and plot_path when completed testing and it works
-  test_rootpath = "C://Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/withBiomassForcing_Yearly_Results HCR type1 and 3/Results"
-  test_plotpath = "C://Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/withBiomassForcing_Yearly_Results HCR type1 and 3/Plots/"
+  test_rootpath = "C://Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Results"
+  test_plotpath = "C://Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Plots/"
   
   BasicInfoFile_Exists = file.exists(paste(test_plotpath,"BasicInfo.csv",sep=''))
   

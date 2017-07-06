@@ -9,15 +9,15 @@ initialise_params = function(batch){
   switch (batch,
           # "0" = {params$plot.path = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Plots/"},
           #"0" = {params$plot.path = "C:/Users/Mark/Desktop/Plots for report/"}
-          "0" = {params$plot.path = "C:/Users/Mark/Box Sync/Baltic - Stockholm/MSEtest_simlerRules - Copy (2)/Plots/"}
+          "0" = {params$plot.path = "C:/Users/Mark/Box Sync/Baltic - Stockholm/MSEtest_simlerRules_15_06_2017/Plots/"}
           
           # "1" = {params$plot.path = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Plots_strats_1-20/"},
           # "2" = {params$plot.path = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Plots_strats_21-40/"},
           # "3" = {params$plot.path = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Plots_strats_41-end/"}
   )
-  params$RootPath =  "C:/Users/Mark/Box Sync/Baltic - Stockholm/MSEtest_simlerRules - Copy (2)/Results/"
+  params$RootPath =  "C:/Users/Mark/Box Sync/Baltic - Stockholm/MSEtest_simlerRules_15_06_2017/Results/"
   
-  params$hcr.folders = c("C:/Users/Mark/Box Sync/Baltic - Stockholm/MSEtest_simlerRules - Copy (2)/HCRs/")
+  params$hcr.folders = c("C:/Users/Mark/Box Sync/Baltic - Stockholm/MSEtest_simlerRules_15_06_2017/HCRs/")
 
   params$Base_NYears = 10
   params$Projected_NYears = 19
@@ -27,7 +27,7 @@ initialise_params = function(batch){
   params$StartProjection_Year = params$StartRun_Year + params$nYrs - params$Projected_NYears
   params$EndRun_Year = params$StartRun_Year + params$nYrs
   
-  params$Area = 570000
+  params$Area = 240000
   
   #Select groups and fleets to plot
   params$Groups2Plot = paste("GroupNo", 1:22, sep="")
@@ -94,8 +94,6 @@ initialise_params = function(batch){
   params$CHOKE_GROUPS <- F
   
   params$AverageQuota_EachFleet <- F
-  
-  #browser()
   
   return(params)
 }

@@ -2,8 +2,12 @@
     "path" : "C:/Users/Mark/Desktop/Desktop etc/GAP/MSE_Plugin_Results_Plotting",
     "sortOrder" : [
         {
-            "ascending" : false,
+            "ascending" : true,
             "columnIndex" : 2
+        },
+        {
+            "ascending" : false,
+            "columnIndex" : 3
         }
     ]
 }
