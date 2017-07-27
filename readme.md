@@ -90,6 +90,7 @@ Plot_Distribution_Last5YearsBiomassMean.R
 Plots the distribution of the last 5 year biomass mean for each group strategy combination. Calculates the last 5 year mean biomass and then from this the 5 number summary, mean and the percent of models below bpa and blim and adds to plots.
 Run_DistributionPlots.R
 Creates distributions for the biomass end, biomass minimum, discard mortalities, discard survivals and landings stored in the results.csv file.
+
 PlotEndDistributions.r
 Plots the distribution of the biomass’ at the last time step. This should also work for other data types but it doesn’t work at the moment.
 

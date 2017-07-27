@@ -6,18 +6,21 @@ initialise_params = function(batch){
   params$plot_each_timestep = FALSE;
   params$PLOT_CONFIDENCE_INTERVALS = F;
   params$Plot_yearly_files = TRUE
+  
+  path.data.folder = "C:/Users/Mark/Desktop/Testing more contrasting HCRs/"
+  
   switch (batch,
           # "0" = {params$plot.path = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Plots/"},
           #"0" = {params$plot.path = "C:/Users/Mark/Desktop/Plots for report/"}
-          "0" = {params$plot.path = "C:/Users/Mark/Box Sync/Baltic - Stockholm/MSEtest_simlerRules_15_06_2017/Plots/"}
+          "0" = {params$plot.path = paste0(path.data.folder, "Plots/")}
           
           # "1" = {params$plot.path = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Plots_strats_1-20/"},
           # "2" = {params$plot.path = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Plots_strats_21-40/"},
           # "3" = {params$plot.path = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Plots_strats_41-end/"}
   )
-  params$RootPath =  "C:/Users/Mark/Box Sync/Baltic - Stockholm/MSEtest_simlerRules_15_06_2017/Results/"
-  
-  params$hcr.folders = c("C:/Users/Mark/Box Sync/Baltic - Stockholm/MSEtest_simlerRules_15_06_2017/HCRs/")
+  #params$RootPath =  "C:/Users/Mark/Desktop/Testing more contrasting HCRs/Results/"
+  params$RootPath =  paste0(path.data.folder, "Results/")
+  params$hcr.folders = paste0(path.data.folder, "HCRs/")
 
   params$Base_NYears = 10
   params$Projected_NYears = 19

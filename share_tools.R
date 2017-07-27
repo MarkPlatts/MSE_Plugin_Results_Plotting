@@ -1,11 +1,11 @@
-#library(dplyr)
+library(stringr)
 library(reshape2)
 library(dtplyr)
 library(dplyr)
 library(data.table)
 
-get_area <- function(params, file.name){
-  stock.areas.file.path <- paste0(params$plot.path, "StockAreas.csv")
+get_area <- function(plot.path, file.name, Area){
+  stock.areas.file.path <- paste0(plot.path, "StockAreas.csv")
   if(file.exists(stock.areas.file.path)){
     stock.areas <- read.csv(stock.areas.file.path, stringsAsFactors = F)
     n.areas <- dim(stock.areas)[1]
@@ -13,7 +13,7 @@ get_area <- function(params, file.name){
       if(str_detect(str_to_upper(file.name), str_to_upper(stock.areas[irow,1]))) return (stock.areas[irow, 2])
     }
   }
-  return (params$Area)
+  return (Area)
 }
 
 create.plot.dirs = function(params){

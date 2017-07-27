@@ -6,8 +6,6 @@
 #load sources
 # source.folder.location = dirname(sys.frame(1)$ofile)
 # setwd(source.folder.location)
-setwd("C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting")
-source("share_tools.R")
 library(reshape)
 #library(reshape)
 
@@ -19,8 +17,6 @@ library(reshape)
 #                 "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/NorthSea Model/2015 FINAL Key Run/DATA/HCRs/Type2_BmsyBlimClifftoZero",
 #                 "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/NorthSea Model/2015 FINAL Key Run/DATA/HCRs/Type3_BmsytoZeroatBlim",
 #                 "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/NorthSea Model/2015 FINAL Key Run/DATA/HCRs/Type4_BmsyBlimClifftoFmin")
-
-groups.for.f.or.biomass = "biomass"
 
 # INITIALISATION END ===============================================================================================
 
@@ -90,34 +86,12 @@ CreatePercentBelowConservationLimits = function(BLimitType){
 
     #bind them all together ready to be saved to csv
     dt.all = rbind(dt.all, dt.counts.temp)
+
     
   }
-  
   #finally save the table to csv
   write.csv(dt.all, paste(root.plot, "Tables/Percentage_ConservationSpecies_Above_Below_B_",BLimitType ,".csv", sep=""))
-  
-  return(dt.all)
+
 }
 
 # FUNCTION END  ===============================================================================================
-
-
-
-# FUNCTION CALLS START ===============================================================================================
-
-dt = CreatePercentBelowConservationLimits("LowerLimit")
-dt = CreatePercentBelowConservationLimits("UpperLimit")
-
-# FUNCTION CALLS END ===============================================================================================
-
-
-
-# TESTING START ===================================================================================================
-
-if(FALSE){
-  
-  print(getStrategyTable(hcr.folders))
-  
-}
-
-# TESTING END ===================================================================================================

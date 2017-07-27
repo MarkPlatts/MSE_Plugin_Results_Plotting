@@ -91,7 +91,7 @@ plot_value_trajectories <- function(params){
       STRAT<-paste(params$strats[strat_i],sep=' ')
       
       #select subset of data
-      area <- get_area(params = params, file.name = G)
+      area <- get_area(plot.path = params$plot.path, file.name = G, Area = params$Area)
       data2plot <- dat[dat$Strategy %in% STRAT,6:ncol(dat)] * area
       
       #quantiles for polygon plot

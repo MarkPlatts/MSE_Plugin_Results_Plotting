@@ -8,8 +8,6 @@
 library(stringr)
 
 
-
-
 plot_biomass_trajectories <- function(params){
 
   #Load up biomass reference file
@@ -47,7 +45,7 @@ plot_biomass_trajectories <- function(params){
     plotting_params$dat <- read.csv(paste(params$RootPath,"/Biomass/",G, sep=''),skip=7, head=T)
 
     #Modify the values so that they are for the entire region
-    area <- get_area(params = params, file.name = G)
+    area <- get_area(plot.path = params$plot.path, file.name = G, Area = params$Area)
     plotting_params$dat[,-c(1:4)] <- plotting_params$dat[,-c(1:4)] * area / 1000 #Multiplying it by area gives absolute biomass across area
                                                                                     #Dividing by 1000 gives value in kt - we do this to prevent scientific units
     #Calculate the values to be plotted

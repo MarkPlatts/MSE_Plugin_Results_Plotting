@@ -40,7 +40,7 @@ Plot_Average_Quotas = function(results.path, plot.path, Groups, Fleets, TimeStep
       print(paste("Group =", iGroup, "Fleet =",iFleet))
       for(iRegulation in RegulationTypes)
       {
-        temp_mean_vals = Average_Quota_Across_Models_And_RegTypes(iGroup,iFleet,iRegulation,results.path)
+        temp_mean_vals = Average_Quota_Across_Models_And_RegTypes(iGroup, iFleet, iRegulation, results.path)
         if(is.na(temp_mean_vals)) next
         temp_mean_vals = temp_mean_vals * Area_km2
         df_Average_Quota = rbind(df_Average_Quota, data.frame(TimeSteps = TimeSteps, GroupName = iGroup, Regulation = iRegulation, AverageQuota = temp_mean_vals))

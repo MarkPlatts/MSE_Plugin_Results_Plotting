@@ -152,7 +152,7 @@ plot_type = function(type2plot) {
 batch = "0"
 
 # already done plot types: 11, 13
-vector_indices_plot_types = 12
+vector_indices_plot_types = 13
 
 for(iplot in vector_indices_plot_types){
   print(paste("Currently plotting type", iplot))

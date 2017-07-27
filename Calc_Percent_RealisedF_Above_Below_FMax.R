@@ -16,10 +16,7 @@ LoadStrategies = function (hcr.folders, Target_or_Conservation){
 
 # FUNCTIONS END ==================================================================================================
 
-
-# SCRIPT START  ===============================================================================================
-
-if(TRUE){
+CreatePercentRealisedLandedFAboveBelowFMax = function(root.plot, root.results){
 
   unique.groups = groupsWithHcr(hcr.folders, groups.for.f.or.biomass)
   
@@ -75,19 +72,3 @@ if(TRUE){
   #finally save the table to csv
   write.csv(dt.all, paste(root.plot, "Tables/Percentage_RealisedLandedF_Above_Below_maxF.csv", sep=""))
 }
-
-# SCRIPT END  ===============================================================================================
-
-
-
-
-
-# TESTING START ===================================================================================================
-
-if(FALSE){
-  
-  print(getStrategyTable(hcr.folders))
-  
-}
-
-# TESTING END ===================================================================================================

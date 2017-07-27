@@ -1,12 +1,11 @@
 # INITIALISATION START ===============================================================================================
 
-setwd("C:/Users/Mark/Desktop/Desktop etc/GAP/MSE_Plugin_Results_Plotting")
-source("share_tools.R")
-library(profvis)
-
-#root results path
-root.plot = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Plots/"
-root.results = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Results/"
+# setwd("C:/Users/Mark/Desktop/Desktop etc/GAP/MSE_Plugin_Results_Plotting")
+# source("share_tools.R")
+# 
+# #root results path
+# root.plot = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Plots/"
+# root.results = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Results/"
 
 # INITIALISATION END ===============================================================================================
 
@@ -20,7 +19,7 @@ CountTimestepsFile = function(igroup, resultfolder, ncols_no_vals){
   return(nTimeStepsInData)
 }
 
-CreateCatchRatioTables = function(CatchType){
+CreateCatchRatioTables = function(CatchType, root.plot, root.results){
   
   folder.name = paste(CatchType,"Trajectories", sep="")
   
@@ -38,8 +37,6 @@ CreateCatchRatioTables = function(CatchType){
   catch.files = list.files(path = paste(root.results, folder.name, "/", sep=""), full.names = T)
   
   for(iFile.catch in catch.files){
-    
-    print(iFile.catch)
 
     catches = fread(iFile.catch, skip=7, header=T)
     
@@ -56,8 +53,9 @@ CreateCatchRatioTables = function(CatchType){
     #merge the two together so that we can easily calculate the difference between two columns
     dt = merge(catch.first.year, catches_last5year, by = names(catch.first.year)[c(3,4)])
     
-    dt$Ratios = dt$catch.last5yearsum/dt$Year1
-    
+    dt$Ratios = dt$catch.last5yearmean/dt$Year1
+    dt <- dt[complete.cases(dt), ]
+
     #bind them all together ready to be saved to csv
     dt.all = rbind(dt.all, dt)
     
@@ -85,7 +83,7 @@ CreateCatchRatioTables = function(CatchType){
   # CreateCatchRatioTables(CatchType = "Catch")
   # CreateCatchRatioTables(CatchType = "Landings")
   # CreateCatchRatioTables(CatchType = "Discards")
-  CreateCatchRatioTables(CatchType = "Value")
+  # CreateCatchRatioTables(CatchType = "Value")
 # }
 
 # SCRIPT END  ===============================================================================================

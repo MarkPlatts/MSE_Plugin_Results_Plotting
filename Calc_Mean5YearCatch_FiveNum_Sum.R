@@ -1,20 +1,6 @@
-# INITIALISATION START ===============================================================================================
-
-# rm(list = ls())
-
-setwd("C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting")
-source("share_tools.R")
-
-#root results path
-# root.plot = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Plots/"
-# root.results = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Results/"
-
-# INITIALISATION END ===============================================================================================
-
-
 # FUNCTION START ===============================================================================================
 
-CreateCatchTables = function(CatchType){
+CreateCatchTables = function(CatchType, root.results, root.plot){
   
   folder.name = paste(CatchType,"Trajectories", sep="")
   
@@ -57,19 +43,10 @@ CreateCatchTables = function(CatchType){
                                                  Mean = mean(catch.last5yearsum), 
                                                  UQ = quantile(catch.last5yearsum, .75, na.rm=TRUE),
                                                  Max = max(catch.last5yearsum)), by=c("StrategyName", "GroupName", "FleetName")]
-  browser()
+
   #finally save the table to csv
   write.csv(catch.ratio.summary.by.strategy, paste(root.plot, "Tables/",CatchType,"_5NumSum.csv", sep=""))
   
 }
 
 # FUNCTION END ===============================================================================================
-
-
-
-# SCRIPT START  ===============================================================================================
-CreateCatchTables(CatchType = "Catch")
-CreateCatchTables(CatchType = "Landings")
-CreateCatchTables(CatchType = "Discards")
-CreateCatchTables(CatchType = "Value")
-# SCRIPT END  ===============================================================================================

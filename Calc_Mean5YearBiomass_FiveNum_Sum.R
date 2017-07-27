@@ -1,14 +1,5 @@
 # INITIALISATION START ===============================================================================================
 
-#load sources
-# source.folder.location = dirname(sys.frame(1)$ofile)
-# setwd(source.folder.location)
-setwd("C:/Users/Mark/Desktop/Desktop etc/GAP/MSE_Plugin_Results_Plotting")
-source("initialisation.R")
-source("share_tools.R")
-#library(reshape)
-params = initialise_params("0")
-
 #root results path
 #root.plot =     "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Plots/"
 #root.results =  "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Results/"
@@ -18,24 +9,23 @@ params = initialise_params("0")
 #                 "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/NorthSea Model/2015 FINAL Key Run/DATA/HCRs/Type3_BmsytoZeroatBlim",
 #                 "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/NorthSea Model/2015 FINAL Key Run/DATA/HCRs/Type4_BmsyBlimClifftoFmin")
 
-groups.for.f.or.biomass = "biomass"
-
-biomrefs_csv_inc_path = paste(params$plot.path,"Biom_refs.csv", sep="")
-
 # INITIALISATION END ===============================================================================================
 
 
 
 # FUNCTION START  ===============================================================================================
 
-CreateBiomassFiveNumSum = function(){
-  
-  params = initialise_params("0")
-  
+CreateBiomassFiveNumSum = function(plot.path, area){
+
   unique.groups = LoadUniqueGroups(params$RootPath)
   
   # Loading reference points Blim and Bpa
-  biom_refs<-read.csv(biomrefs_csv_inc_path,sep=",", header=TRUE)
+  biomrefs_csv_inc_path = paste(plot.path,"Biom_refs.csv", sep="")
+  if(file.exists(biomrefs_csv_inc_path)){
+    biom_refs = read.csv(biomrefs_csv_inc_path)
+  } else {
+    biom_refs = NA
+  }
   
   summary.dt = data.table()
   
@@ -72,27 +62,33 @@ CreateBiomassFiveNumSum = function(){
     biomass = appendVariableToDataTable(dt=biomass, variable=igroup, variablename="GroupName", beg=TRUE, end=FALSE)
 
     #Modify the values so that they are for the entire region
-    biomass$biomass.last5yearmean = biomass$biomass.last5yearmean*params$Area/1000
+    area <- get_area(plot.path = params$plot.path, file.name = igroup, Area = params$Area)
+    biomass$biomass.last5yearmean = biomass$biomass.last5yearmean * params$Area / 1000
     
     #add the group name to a column because I'm going to facet plot using this
     biomass = appendVariableToDataTable(dt = biomass, variable = igroup, variablename = "GroupName", beg=TRUE, end=FALSE)
     
-    #max.axis.x = max(biomass$biomass.last5yearmean)
-    
     #Calc the percent below Bpa & Blim
-    if(igroup=="Whiting (adult)") browser()
-    bpa = biom_refs[biom_refs$Group==igroup,]$Bpa
-    blim = biom_refs[biom_refs$Group==igroup,]$Blim
-    biomass$below.bpa = biomass$biomass.last5yearmean<bpa
-    biomass$above.bpa = biomass$biomass.last5yearmean>=bpa
-    biomass$below.blim = biomass$biomass.last5yearmean<blim
-    biomass$above.blim = biomass$biomass.last5yearmean>=blim
+    if(!is.na(biom_refs)){
+      bpa = biom_refs[biom_refs$Group==igroup,]$Bpa
+      blim = biom_refs[biom_refs$Group==igroup,]$Blim
+      biomass$below.bpa = biomass$biomass.last5yearmean<bpa
+      biomass$above.bpa = biomass$biomass.last5yearmean>=bpa
+      biomass$below.blim = biomass$biomass.last5yearmean<blim
+      biomass$above.blim = biomass$biomass.last5yearmean>=blim
+    }
     
-    # biomass.percent.below.refpoints = biomass[,list(bpa = sum(below.bpa)/length(below.bpa), 
-    #                                                 blim = sum(below.blim)/length(below.blim)), by="StrategyName"]
-    # 
+
     #calculate the 5 number summary for each strategy
-    biomass.summary.by.strategy = biomass[,list(Min = min(biomass.last5yearmean), 
+    if(is.na(biom_refs)){
+      biomass.summary.by.strategy = biomass[,list(Min = min(biomass.last5yearmean), 
+                                                  LQ = quantile(biomass.last5yearmean, .25, na.rm=TRUE), 
+                                                  Median = median(biomass.last5yearmean),
+                                                  UQ = quantile(biomass.last5yearmean, .75, na.rm=TRUE),
+                                                  Max = max(biomass.last5yearmean),
+                                                  Mean = mean(biomass.last5yearmean)), by="StrategyName"]
+    } else {
+      biomass.summary.by.strategy = biomass[,list(Min = min(biomass.last5yearmean), 
                                                 LQ = quantile(biomass.last5yearmean, .25, na.rm=TRUE), 
                                                 Median = median(biomass.last5yearmean),
                                                 UQ = quantile(biomass.last5yearmean, .75, na.rm=TRUE),
@@ -100,21 +96,13 @@ CreateBiomassFiveNumSum = function(){
                                                 Mean = mean(biomass.last5yearmean),
                                                 Percent.Below.Bpa = sum(below.bpa)/length(above.bpa),
                                                 Percent.Below.Blim = sum(below.blim)/length(below.blim)), by="StrategyName"]
+    }
     biomass.summary.by.strategy = appendVariableToDataTable(biomass.summary.by.strategy, igroup, "GroupName", beg=TRUE, end=FALSE)
     summary.dt = rbind(summary.dt, biomass.summary.by.strategy)
   }
   
   #finally save the table to csv
   write.csv(summary.dt, file = paste(params$plot.path, "Tables/biomass_5NoSummary.csv", sep=""))
-  
-  return(summary.dt)
 }
 
 # FUNCTION END  ===============================================================================================
-  
-
-# FUNCTION CALLS START ===============================================================================================
-
-dt = CreateBiomassFiveNumSum()
-
-# FUNCTION CALLS END ===============================================================================================
