@@ -1,6 +1,7 @@
 # FUNCTION START ===============================================================================================
 
 CreateCatchTables = function(CatchType, root.results, root.plot){
+  #Tested by hand - correct MP 14/8/17
   
   folder.name = paste(CatchType,"Trajectories", sep="")
   
@@ -28,7 +29,7 @@ CreateCatchTables = function(CatchType, root.results, root.plot){
     if(!isNotAll(dt = catches, col.data.starts = 6, val.to.check = -9999)) next
     
     #load the files and sum
-    catches_last5year = calcLast5Year(catches, "catch.last5yearsum", 5, function.type=2)
+    catches_last5year = calcLast5Year(catches, "catch.last5yearsum", 5, function.type="mean")
     
     dt = merge(catches[,1:5], catches_last5year, by = c("ModelID", "StrategyName"))
     
@@ -37,7 +38,7 @@ CreateCatchTables = function(CatchType, root.results, root.plot){
 
   }
   
-  catch.ratio.summary.by.strategy = dt.all[,list(Min = min(catch.last5yearsum), 
+  catch.summary.by.strategy = dt.all[,list(Min = min(catch.last5yearsum), 
                                                  LQ = quantile(catch.last5yearsum, .25, na.rm=TRUE), 
                                                  Median = median(catch.last5yearsum),
                                                  Mean = mean(catch.last5yearsum), 
@@ -45,7 +46,7 @@ CreateCatchTables = function(CatchType, root.results, root.plot){
                                                  Max = max(catch.last5yearsum)), by=c("StrategyName", "GroupName", "FleetName")]
 
   #finally save the table to csv
-  write.csv(catch.ratio.summary.by.strategy, paste(root.plot, "Tables/",CatchType,"_5NumSum.csv", sep=""))
+  write.csv(catch.summary.by.strategy, paste(root.plot, "Tables/",CatchType,"_5NumSum.csv", sep=""))
   
 }
 

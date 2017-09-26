@@ -18,104 +18,81 @@ plot_type = function(type2plot) {
   source("Pies.R")
   source("share_tools.R")
   source("Calc_average_quota_per_fleet_group_regulation.R")
+  source("Plot_Distribution_Last5YearsBiomassMean.R")
  
   params = initialise_params(batch)
 
   create.plot.dirs(params)
   
   ###HCR F Cons trajectories
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
   if(type2plot==1){
-    params$MORT_HCRF_Cons <- T;  if(params$MORT_HCRF_Cons) {setwd("HCRF_Cons");params$YLAB<-"F";print("Plotting MORT_HCRF_Cons")} # what are these?
-    plot_fishing_trajectories(params, "HCRF_Cons")
+    plot_fishing_trajectories(params, folder.to.save.plot = "HCRF_Cons", y_label = "F", plot_type = "mort_hcrf_cons")
   }
   
   ###HCR F Targ trajectories
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
   if(type2plot==2){
-    params$MORT_HCRF_Targ<- T;   if(params$MORT_HCRF_Targ) {setwd("HCRF_Targ");params$YLAB<-"F";print("Plotting HCRF_Targ")} # what are these?
-    plot_fishing_trajectories(params, "HCRF_Targ")
+    plot_fishing_trajectories(params, folder.to.save.plot = "HCRF_Targ", y_label = "F", plot_type = "mort_hcrf_targ")
   }
   
   ###HCR Quota Cons trajectories
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
   if(type2plot==3){
-    params$QUOTA_HCRF_Cons<- T;  if(params$QUOTA_HCRF_Cons) {setwd("HCRQuota_Cons");params$YLAB<-"Quota (t)";print("Plotting HCRQuota_Cons")} # what are these?
-    plot_fishing_trajectories(params, "HCRQuota_Cons")
+    plot_fishing_trajectories(params, folder.to.save.plot = "HCRQuota_Cons", y_label = "Quota (t)", plot_type = "quota_hcrf_cons")
   }  
   
   ###HCR Quota Targ trajectories
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
   if(type2plot==4){
-    params$QUOTA_HCRF_Targ<- T;  if(params$QUOTA_HCRF_Targ) {setwd("HCRQuota_Targ");params$YLAB<-"Quota (t)";print("Plotting HCRQuota_Targ")} # what are these?
-    plot_fishing_trajectories(params, "HCRQuota_Targ")
+    plot_fishing_trajectories(params, folder.to.save.plot = "HCRQuota_Targ", y_label = "Quota (t)", plot_type = "quota_hcrf_targ")
   }
   
   ###Real Landed F trajectories
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
   if(type2plot==5){
-    params$MORT_REAL_LandF <- T; if(params$MORT_REAL_LandF) {setwd("RealisedLandedF");params$YLAB<-"F";print("Plotting MORT_REAL_LandF")}
-    plot_fishing_trajectories(params, "RealisedLandedF")
+    plot_fishing_trajectories(params, folder.to.save.plot = "RealisedLandedF", y_label = "F", plot_type = "mort_real_landf")
   }
   
   ###Real Discard F trajectories
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
   if(type2plot==6){
-    params$MORT_REAL_DiscF <- T; if(params$MORT_REAL_DiscF) {setwd("RealisedDiscardedF");params$YLAB<-"F";print("Plotting MORT_REAL_DiscF")}
-    plot_fishing_trajectories(params, "RealisedDiscardedF")
+    plot_fishing_trajectories(params, folder.to.save.plot = "RealisedDiscardedF", y_label = "F", plot_type = "mort_real_discf")
   }
   
   ###Real F trajectories
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
   if(type2plot==7){
-    params$MORT_REAL_F <- T;     if(params$MORT_REAL_F) {setwd("RealisedF");params$YLAB<-"F";print("Plotting MORT_REAL_F")}
-    plot_fishing_trajectories(params, "RealisedF")
+    plot_fishing_trajectories(params, folder.to.save.plot = "RealisedF", y_label = "F", plot_type = "mort_real_f")    
   }
   
   ###Catch trajectories
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
   if(type2plot==8){
-    params$CATCH <-T;    if(params$CATCH) {setwd("CatchTrajectories"); params$YLAB<-"Catch (t/year)";print("Plotting CATCH")}
-    plot_fishing_trajectories(params, "CatchTrajectories")
+    plot_fishing_trajectories(params, folder.to.save.plot = "CatchTrajectories", y_label = "Catch (t/year)", plot_type = "catch")    
   }
   
   ###Landed trajectories
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
   if(type2plot==9){
-    params$LANDING <- T; if(params$LANDING) {setwd("LandingsTrajectories"); params$YLAB<-"Landings (t/year)";print("Plotting LANDING")}
-    plot_fishing_trajectories(params, "LandingsTrajectories")
+    plot_fishing_trajectories(params, folder.to.save.plot = "LandingsTrajectories", y_label = "Landings (t/year)", plot_type = "landings")
   }
   
   ###Discard trajectories
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
   if(type2plot==10){
-    params$DISCARD <- T; if(params$DISCARD) {setwd("DiscardsTrajectories"); params$YLAB<-"Discards (t/year)";print("Plotting DISCARD")}
-    plot_fishing_trajectories(params, "DiscardsTrajectories")
+    plot_fishing_trajectories(params, folder.to.save.plot = "DiscardsTrajectories", y_label = "Discards (t/year)", plot_type = "discards")
   }
   
   ###Effort trajectories
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
   if(type2plot==11){
     params$EFFORT <-T;print("Plotting EFFORT")
     plot_effort_trajectories(params)
   }
   
   ###Value trajectories
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
   if(type2plot==12){
     params$VALUE <- T;print("Plotting VALUE")
     plot_value_trajectories(params)
   }
   
   ###Biomass trajectoreis
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
   if(type2plot==13){
     params$BIOMASS <-T;print("Plotting BIOMASS")
     plot_biomass_trajectories(params)
   }
   
   ###HIGHEST_VALUE Pie chart
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   if(type2plot==14){
     params$HIGHEST_VALUE <- T;print("Plotting HIGHEST_VALUE")
     run_plot_pies(params, parents.folder.for.plots = "/HIGHEST_VALUE/", 
@@ -124,7 +101,6 @@ plot_type = function(type2plot) {
   }
   
   ###CHOKE SPECIES Pie chart
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   if(type2plot==15){
     params$CHOKE_GROUPS <- T;print("Plotting CHOKE_GROUPS")
     run_plot_pies(params, parents.folder.for.plots = "/CHOKE_GROUPS/",
@@ -133,7 +109,6 @@ plot_type = function(type2plot) {
   }
   
   ###Plot average target quota across a regulation type and models
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   if(type2plot==16){
     params$AverageQuota_EachFleet <- T; params$YLAB<-"t/km2";print("Plotting AverageQuota_EachFleet")
     Plot_Average_Quotas(results.path = params$RootPath, plot.path = params$plot.path, Groups = params$Groups2Plot, 
@@ -142,9 +117,9 @@ plot_type = function(type2plot) {
   }
   
   ###Plot the biomass for the last 5 year mean
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   if(type2plot==17){
-    source("Plot_Distribution_Last5YearsBiomassMean.R")
+    #source("Plot_Distribution_Last5YearsBiomassMean.R")
+    Plot_Distribution_Last5YearsBiomassMean(params)
   }
   
 }
@@ -152,9 +127,9 @@ plot_type = function(type2plot) {
 batch = "0"
 
 # already done plot types: 11, 13
-vector_indices_plot_types = 13
+vector_indices_plot_types = 17
 
 for(iplot in vector_indices_plot_types){
-  print(paste("Currently plotting type", iplot))
+  #print(paste("Currently plotting type", iplot))
   plot_type(type2plot = iplot)
 }

@@ -54,4 +54,3 @@ CreateCatchTables(CatchType = "Landings", root.results, root.plot)
 CreateCatchTables(CatchType = "Discards", root.results, root.plot)
 CreateCatchTables(CatchType = "Value", root.results, root.plot)
 
-

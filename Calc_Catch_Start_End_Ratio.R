@@ -20,6 +20,7 @@ CountTimestepsFile = function(igroup, resultfolder, ncols_no_vals){
 }
 
 CreateCatchRatioTables = function(CatchType, root.plot, root.results){
+  #Tested by hand - correct MP 14/8/17
   
   folder.name = paste(CatchType,"Trajectories", sep="")
   
@@ -45,7 +46,7 @@ CreateCatchRatioTables = function(CatchType, root.plot, root.results){
     if(!isNotAll(dt = catches, col.data.starts = 6, val.to.check = -9999)) next
     
     #load the files and sum
-    catches_last5year = calcLast5Year(catches, "catch.last5yearmean", 5, function.type=2)
+    catches_last5year = calcLast5Year(catches, "catch.last5yearmean", 5, function.type="mean")
     
     #load the catches at the first and last timestep of the forecast
     catch.first.year = GetiYearCatch(catches, iYear=1, ncols.before.timeseries=5)

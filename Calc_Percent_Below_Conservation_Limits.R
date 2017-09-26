@@ -25,6 +25,7 @@ library(reshape)
 # FUNCTION START  ===============================================================================================
 
 CreatePercentBelowConservationLimits = function(BLimitType){
+  #Tested by hand - correct MP 14/8/17
 
   #get a list of hcrs by listed by strategy and group name with only biomass limits
   strategies.table = getStrategyTable(hcr.folders)
@@ -52,7 +53,7 @@ CreatePercentBelowConservationLimits = function(BLimitType){
     if(!isNotAll(dt = biomass, col.data.starts = 4, val.to.check = -9999)) next
 
     #Sum last 5 year
-    biomass = calcLast5Year(biomass, "biomass.last5yearsum", 4, function.type = 2)
+    biomass = calcLast5Year(biomass, "biomass.last5yearsum", 4, function.type = "mean")
 
     #add a column with the group name - need this to merge with the strategy data.table
     biomass = appendVariableToDataTable(dt=biomass, variable=igroup, variablename="GroupName", beg=TRUE, end=FALSE)

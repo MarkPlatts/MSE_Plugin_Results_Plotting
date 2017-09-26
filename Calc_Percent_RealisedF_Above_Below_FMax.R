@@ -17,6 +17,7 @@ LoadStrategies = function (hcr.folders, Target_or_Conservation){
 # FUNCTIONS END ==================================================================================================
 
 CreatePercentRealisedLandedFAboveBelowFMax = function(root.plot, root.results){
+  #Tested by hand - correct MP 14/8/17
 
   unique.groups = groupsWithHcr(hcr.folders, groups.for.f.or.biomass)
   
@@ -37,7 +38,7 @@ CreatePercentRealisedLandedFAboveBelowFMax = function(root.plot, root.results){
     if(!isNotAll(dt = realised.landed.f, col.data.starts = 4, val.to.check = -9999)) next
     
     #load the files and sum
-    realised.landed.f = calcLast5Year(realised.landed.f, "realised.landed.f.last5yearsum", 4, function.type = 2)
+    realised.landed.f = calcLast5Year(realised.landed.f, "realised.landed.f.last5yearsum", 4, function.type = "mean")
     
     #add a column with the group name - need this to merge with the strategy data.table
     realised.landed.f = appendVariableToDataTable(dt=realised.landed.f, variable=igroup, variablename="GroupNameForF", beg=TRUE, end=FALSE)

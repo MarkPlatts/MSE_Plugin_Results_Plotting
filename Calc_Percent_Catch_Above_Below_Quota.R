@@ -1,4 +1,5 @@
 CreatePercentCatchAboveBelowQuotaTable = function(root.plot, root.results){
+  #Tested by hand - correct MP
   
   #get a list of all the groups
   unique.groups = LoadUniqueGroups(root.results)
@@ -24,8 +25,8 @@ CreatePercentCatchAboveBelowQuotaTable = function(root.plot, root.results){
     if(!isNotAll(dt = catch, col.data.starts = 6, val.to.check = -9999)) next
     
     #load the files and sum
-    quota = calcLast5Year(quota, "quota.last5yearsum", 5, function.type=1)
-    catch = calcLast5Year(catch, "catch.last5yearsum", 5, function.type=1)
+    quota = calcLast5Year(quota, "quota.last5yearsum", 5, function.type="sum")
+    catch = calcLast5Year(catch, "catch.last5yearsum", 5, function.type="sum")
     
     #merge the two together so that we can easily calculate the difference between two columns
     dt = merge(quota, catch, by = c("StrategyName", "ModelID"))

@@ -10,8 +10,8 @@ initialise_params = function(batch){
   path.data.folder = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/"
   
   switch (batch,
-             "0" = {params$plot.path = paste(path.data.folder,"Plots/", sep="")}
-             "1" = {params$plot.path = paste(path.data.folder,"Plots_strats_1-20/", sep="")}
+             "0" = {params$plot.path = paste(path.data.folder,"Plots/", sep="")},
+             "1" = {params$plot.path = paste(path.data.folder,"Plots_strats_1-20/", sep="")},
              "2" = {params$plot.path = paste(path.data.folder,"Plots_strats_21-40/", sep="")},
              "3" = {params$plot.path = paste(path.data.folder,"Plots_strats_41-end/", sep="")}
   )

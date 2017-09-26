@@ -16,6 +16,7 @@
 # FUNCTION START  ===============================================================================================
 
 CreateBiomassFiveNumSum = function(plot.path, area){
+  #Tested by hand - correct MP 14/8/17
 
   unique.groups = LoadUniqueGroups(params$RootPath)
   
@@ -56,14 +57,14 @@ CreateBiomassFiveNumSum = function(plot.path, area){
     if(!isNotAll(dt = biomass, col.data.starts = 4, val.to.check = -9999)) next
     
     #Calc mean last 5 year
-    biomass = calcLast5Year(biomass, "biomass.last5yearmean", 4, function.type = 2)
+    biomass = calcLast5Year(biomass, "biomass.last5yearmean", 4, function.type = "mean")
     
     #add a column with the group name - need this to merge with the strategy data.table
     biomass = appendVariableToDataTable(dt=biomass, variable=igroup, variablename="GroupName", beg=TRUE, end=FALSE)
 
     #Modify the values so that they are for the entire region
     area <- get_area(plot.path = params$plot.path, file.name = igroup, Area = params$Area)
-    biomass$biomass.last5yearmean = biomass$biomass.last5yearmean * params$Area / 1000
+    biomass$biomass.last5yearmean = biomass$biomass.last5yearmean * area / 1000
     
     #add the group name to a column because I'm going to facet plot using this
     biomass = appendVariableToDataTable(dt = biomass, variable = igroup, variablename = "GroupName", beg=TRUE, end=FALSE)
@@ -94,12 +95,13 @@ CreateBiomassFiveNumSum = function(plot.path, area){
                                                 UQ = quantile(biomass.last5yearmean, .75, na.rm=TRUE),
                                                 Max = max(biomass.last5yearmean),
                                                 Mean = mean(biomass.last5yearmean),
-                                                Percent.Below.Bpa = sum(below.bpa)/length(above.bpa),
-                                                Percent.Below.Blim = sum(below.blim)/length(below.blim)), by="StrategyName"]
+                                                Percent.Below.Bpa = 100 * sum(below.bpa)/length(above.bpa),
+                                                Percent.Below.Blim = 100 * sum(below.blim)/length(below.blim)), by="StrategyName"]
     }
     biomass.summary.by.strategy = appendVariableToDataTable(biomass.summary.by.strategy, igroup, "GroupName", beg=TRUE, end=FALSE)
     summary.dt = rbind(summary.dt, biomass.summary.by.strategy)
   }
+  browser()
   
   #finally save the table to csv
   write.csv(summary.dt, file = paste(params$plot.path, "Tables/biomass_5NoSummary.csv", sep=""))

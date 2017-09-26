@@ -3,7 +3,7 @@
 #==========================================================
 
 
-if(TRUE){
+Plot_Distribution_Last5YearsBiomassMean = function(params){
   
   # INITIALISATION START ===============================================================================================
   
@@ -17,14 +17,16 @@ if(TRUE){
   #load sources
   # source.folder.location = dirname(sys.frame(1)$ofile)
   # setwd(source.folder.location)
-  setwd("C:/Users/Mark/Desktop/MSE_Plugin_Results_Plotting")
-  source("share_tools.R")
-  source("plot_tools.R")
-  source("initialisation_baltic.R")
   
-  params = initialise_params(batch = "0")
+  # params = initialise_params(batch = "0")
   output_folder = paste(params$plot.path,"OUTPUT_END_DISTRIBUTIONS/", sep="")
-  biomrefs_csv_inc_path = paste(params$plot.path,"Biom_refs.csv", sep="")
+  # biomrefs_csv_inc_path = paste(params$plot.path,"Biom_refs.csv", sep="")
+  #Load up biomass reference file
+  if(file.exists(paste0(params$plot.path,"/Biom_refs.csv"))){
+    biom_refs = read.csv(paste(params$plot.path,"/Biom_refs.csv",sep=''))
+  } else {
+    biom_refs = NA
+  }
 
   # INITIALISATION END ===============================================================================================
   
@@ -43,17 +45,14 @@ if(TRUE){
   
   # FUNCTIONS END  ===============================================================================================
   
-  
-  #RootPath =  "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Results/"
-  
   #get a list of all the groups
   unique.groups = LoadUniqueGroups(params$RootPath)
   
   # Loading reference points Blim and Bpa
-  biom_refs<-read.csv(biomrefs_csv_inc_path,sep=",", header=TRUE)
+  # biom_refs<-read.csv(biomrefs_csv_inc_path,sep=",", header=TRUE)
+
   
   summary.dt = data.table()
-  
   
   #Configure the tables and variables for calculating percent <Blim & Bpa
   SumBlim=list()  #The number of results that are above the Blim
@@ -78,7 +77,7 @@ if(TRUE){
     biomass = fread(biomass.file.name, skip=7, header=T)
     
     #load the files and sum
-    biomass = calcLast5Year(biomass, "biomass.last5yearmean", 4, function.type = 2)
+    biomass = calcLast5Year(biomass, "biomass.last5yearmean", 4, function.type = "mean")
     
     #filter for the strategies selected in initialisation.R
     biomass = biomass[biomass$StrategyName %in% params$strats, ]
@@ -92,8 +91,10 @@ if(TRUE){
     max.axis.x = max(biomass$biomass.last5yearmean)
     
     #Calc the percent below Bpa & Blim
-    bpa = biom_refs[biom_refs$Group==igroup,]$Bpa
-    blim = biom_refs[biom_refs$Group==igroup,]$Blim
+    bpa = read_biom_refs(biom_refs, igroup, "bpa")     #Needs to be specified in the file as kt
+    blim = read_biom_refs(biom_refs, igroup, "blim")   #Needs to be specified in the file as kt
+    # bpa = biom_refs[biom_refs$Group==igroup,]$Bpa
+    # blim = biom_refs[biom_refs$Group==igroup,]$Blim
     
     biomass$below.bpa = biomass$biomass.last5yearmean<bpa
     biomass$above.bpa = biomass$biomass.last5yearmean>=bpa
@@ -153,7 +154,6 @@ if(TRUE){
     max.y = max(ggplot_build(B_SPECIES)$data[[1]]$density)
     
     print(igroup)
-    browser()
     
     if(igroup %in% biom_refs[,"Group"]){
       B_SPECIES = B_SPECIES + geom_text(data = ref.points, aes(x = blim_lab_pos, y = max.y*9/10, label = blim_lab), size = 2, angle = 90)

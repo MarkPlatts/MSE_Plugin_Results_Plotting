@@ -4,7 +4,7 @@
         "filePatterns" : [
         ],
         "path" : "C:/Users/Mark/Desktop/Desktop etc/GAP/MSE_Plugin_Results_Plotting",
-        "query" : "isAll",
+        "query" : "calcLast5Year",
         "regex" : false
     }
 }

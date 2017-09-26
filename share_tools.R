@@ -160,6 +160,7 @@ appendVariableToDataTable = function(dt, variable, variablename, beg, end){
 isNotAll = function(dt, col.data.starts, val.to.check)
   #count how many values aren't NA and if there is at least one then return that file is valid
 {
+
   data.only = dt[, col.data.starts:ncol(dt)]
   file.valid = FALSE
   if(sum(data.only!=val.to.check)>0) {file.valid = TRUE}
@@ -232,9 +233,9 @@ calcLast5Year = function(dt, val.col.name, ncols.before.timeseries, function.typ
   #filter out the last 5 years
   dt.melted = dt.melted[TimeStep>nTimeSteps-5]
   #calc sum by strategy
-  if(function.type==1){
+  if(function.type=="sum"){
     dt.Last5YearSum.byStrategy = dt.melted[,.(Last5YearSum=sum(value)), by=.(StrategyName,ModelID)]
-  } else if(function.type==2){
+  } else if(function.type=="mean"){
     dt.Last5YearSum.byStrategy = dt.melted[,.(Last5YearSum=mean(value)), by=.(StrategyName,ModelID)]
   }
 

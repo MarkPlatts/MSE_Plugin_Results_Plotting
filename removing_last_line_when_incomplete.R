@@ -19,14 +19,14 @@ cleanfolder = function(folder_2_clean){
   
 }
 
-RootFolder = "C:/Users/Mark/Desktop/1000Models_May2016/Results"
+RootFolder = "C:/Users/Mark/Box Sync/Baltic - Stockholm/Results-and-plots-2017-09-08/Results"
 
 cleanfolder(paste(RootFolder,"/Biomass", sep=""))
 cleanfolder(paste(RootFolder,"/CatchTrajectories", sep=""))
 cleanfolder(paste(RootFolder,"/DiscardsTrajectories", sep=""))
 cleanfolder(paste(RootFolder,"/ChokeGroup", sep=""))
 cleanfolder(paste(RootFolder,"/Effort", sep=""))
-# cleanfolder(paste(RootFolder,"/HCRF_Cons", sep=""))
+cleanfolder(paste(RootFolder,"/HCRF_Cons", sep=""))
 cleanfolder(paste(RootFolder,"/HCRF_Targ", sep=""))
 cleanfolder(paste(RootFolder,"/HCRQuota_Cons", sep=""))
 cleanfolder(paste(RootFolder,"/HCRQuota_Targ", sep=""))

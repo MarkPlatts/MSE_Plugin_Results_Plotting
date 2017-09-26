@@ -7,7 +7,8 @@ initialise_params = function(batch){
   params$PLOT_CONFIDENCE_INTERVALS = F;
   params$Plot_yearly_files = TRUE
   
-  path.data.folder = "C:/Users/Mark/Desktop/Testing more contrasting HCRs/"
+  path.data.folder = "C:/Users/Mark/Box Sync/Baltic - Stockholm/Results-and-plots-2017-09-08/"
+  
   
   switch (batch,
           # "0" = {params$plot.path = "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Plots/"},
