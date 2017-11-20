@@ -1,4 +1,6 @@
 library(ggplot2)
+library(data.table)
+library(RColorBrewer)
 
 ###Pie charts
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -30,12 +32,56 @@ run_plot_pies <- function(params, parents.folder.for.plots,
   
   g <- list.files(paste(params$RootPath,"/",results.folder.name, sep=''), full.names = T)     # which groups are there?
   
-  for (G in g){
+  fleet.data <- NULL
+  
+  for(G in g) {
     
     file.name.without.path = basename(G)
     file.name.without.ext <- substr(basename(file.name.without.path),1,nchar(file.name.without.path)-4)
     
-    fleet.data = read.csv(G, skip=6, head=T)
+    fleet.temp = fread(G, skip=6, head=T)
+    fleet.data <- rbind(fleet.data, fleet.temp)
+    
+  }
+  
+  fleet.data <- melt(data = fleet.data, 
+                     measure.vars = names(fleet.data)[5:ncol(fleet.data)], 
+                     variable.name = "Year",
+                     value.name = "Group")
+  
+
+  temp_colors <- palette(c(rgb(170,167,216, maxColorValue = 255),
+  rgb(203,83,53, maxColorValue = 255),
+  rgb(113,102,217, maxColorValue = 255),
+  rgb(94,176,74, maxColorValue = 255),
+  rgb(171,86,192, maxColorValue = 255),
+  rgb(188,177,69, maxColorValue = 255),
+  rgb(202,71,156, maxColorValue = 255),
+  rgb(81,175,138, maxColorValue = 255),
+  rgb(213,69,107, maxColorValue = 255),
+  rgb(111,124,54, maxColorValue = 255),
+  rgb(109,115,189, maxColorValue = 255),
+  rgb(197,131,67, maxColorValue = 255),
+  rgb(205,135,196, maxColorValue = 255),
+  rgb(182,98,112, maxColorValue = 255)))
+  
+  getPalette = colorRampPalette(brewer.pal(8, "Accent"))
+  
+  dt_plot <- na.omit(fleet.data[StrategyName == "T4_9 NSMAP 2020_TargetF_Weakest stock"])
+
+  ggsave(filename = "test.pdf", 
+         plot = ggplot(data = dt_plot, aes(x = FleetName, fill = factor(Group))) +
+           geom_bar(position = "fill") +
+           theme_bw() +
+           theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 9), text = element_text(size = 9), 
+                 legend.key.size = unit(0.3, "cm")) +
+           labs(y = "Percentage of Time", x = "Fleet", fill = "Functional Group") + 
+           scale_fill_manual(values = getPalette(15))
+         )
+  browser()
+  for (G in g){
+    
+    
     
     fleet.data.whole = as.vector(as.matrix(fleet.data[!is.na(fleet.data$X1),5:ncol(fleet.data)]))
     if(length(fleet.data.whole)==0) next
@@ -47,7 +93,7 @@ run_plot_pies <- function(params, parents.folder.for.plots,
     #chop up by strategy and apply=============================
     strategies = unique(fleet.data$StrategyName)
     
-    browser()
+    browser
     
     #filter by strategy and plot
     for(iStrategy in strategies){

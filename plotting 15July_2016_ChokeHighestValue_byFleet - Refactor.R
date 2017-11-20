@@ -10,12 +10,12 @@ plot_type = function(type2plot) {
   
   setwd("C:/Users/Mark/Desktop/Desktop etc/GAP/MSE_Plugin_Results_Plotting/")
   
-  source("initialisation_baltic.R")
+  source("initialisation.R")
   source("B_Trajectories.R")
   source("F_Trajectories.R")
   source("Value_Trajectories.R")
   source("Effort_Trajectories.R")
-  source("Pies.R")
+  source("Pies2.R")
   source("share_tools.R")
   source("Calc_average_quota_per_fleet_group_regulation.R")
   source("Plot_Distribution_Last5YearsBiomassMean.R")
@@ -127,7 +127,7 @@ plot_type = function(type2plot) {
 batch = "0"
 
 # already done plot types: 11, 13
-vector_indices_plot_types = 17
+vector_indices_plot_types = 15
 
 for(iplot in vector_indices_plot_types){
   #print(paste("Currently plotting type", iplot))

@@ -1,20 +1,6 @@
-# INITIALISATION START ===============================================================================================
-
-#root results path
-#root.plot =     "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Plots/"
-#root.results =  "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/North Sea MultiAnnual Plan/ResultsType1-4_220117/Results/"
-# 
-# hcr.folders = c("C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/NorthSea Model/2015 FINAL Key Run/DATA/HCRs/Type1_BmsytoZero",
-#                 "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/NorthSea Model/2015 FINAL Key Run/DATA/HCRs/Type2_BmsyBlimClifftoZero",
-#                 "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/NorthSea Model/2015 FINAL Key Run/DATA/HCRs/Type3_BmsytoZeroatBlim",
-#                 "C:/Users/Mark/Dropbox/GAP2_MSE Plugin2/NorthSea Model/2015 FINAL Key Run/DATA/HCRs/Type4_BmsyBlimClifftoFmin")
-
-# INITIALISATION END ===============================================================================================
-
-
+library(data.table)
 
 # FUNCTION START  ===============================================================================================
-
 CreateBiomassFiveNumSum = function(plot.path, area){
   #Tested by hand - correct MP 14/8/17
 
@@ -101,7 +87,6 @@ CreateBiomassFiveNumSum = function(plot.path, area){
     biomass.summary.by.strategy = appendVariableToDataTable(biomass.summary.by.strategy, igroup, "GroupName", beg=TRUE, end=FALSE)
     summary.dt = rbind(summary.dt, biomass.summary.by.strategy)
   }
-  browser()
   
   #finally save the table to csv
   write.csv(summary.dt, file = paste(params$plot.path, "Tables/biomass_5NoSummary.csv", sep=""))

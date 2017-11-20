@@ -185,41 +185,44 @@ plot_fishing_trajectories <- function(params, folder.to.save.plot, y_label, plot
       }
 
       par(mar=c(5.1, 4.1, 4.1, 15), xpd=TRUE)
-      if(params$PLOT_CONFIDENCE_INTERVALS){
-        plot(TimeStepVals,MEANS[,2],type='l',ylim=c(0,1.25*(max(MEANS[,-1],UPPS[,-1],na.rm=T))),lty=params$LTY[1],col=params$COL[1],ylab=y_label,xlab="year",font=20,lwd=params$lineweight)
-        if(ncol(MEANS)>2){
-          for(i in 3:ncol(MEANS)) {
-            lines(TimeStepVals,MEANS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)],lwd=params$lineweight)
+      # if(plot_type == "quota_hcrf_cons" | plot_type == "quota_hcrf_targ"){
+      #   
+      # } else {
+        if(params$PLOT_CONFIDENCE_INTERVALS){
+          plot(TimeStepVals,MEANS[,2],type='l',ylim=c(0,1.25*(max(MEANS[,-1],UPPS[,-1],na.rm=T))),lty=params$LTY[1],col=params$COL[1],ylab=y_label,xlab="year",font=20,lwd=params$lineweight)
+          if(ncol(MEANS)>2){
+            for(i in 3:ncol(MEANS)) {
+              lines(TimeStepVals,MEANS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)],lwd=params$lineweight)
+            }
+          }
+          for(i in 2:ncol(LOWS)) {
+            lines(TimeStepVals,LOWS[,i],lty=params$LTY[(i)],col=params$COL[(i-1)],lwd=params$lineweight*0.5)
+            lines(TimeStepVals,UPPS[,i],lty=params$LTY[(i)],col=params$COL[(i-1)],lwd=params$lineweight*0.5)
+          }
+        } else {
+          plot(TimeStepVals,MEANS[,2],type='l',ylim=c(0,1.25*(max(MEANS[,-1],na.rm = T))),lty=params$LTY[1],col=params$COL[1],ylab=y_label,xlab="year",font=20,lwd=params$lineweight)
+          if(ncol(MEANS)>2){
+            for(i in 3:ncol(MEANS)) {
+              lines(TimeStepVals,MEANS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)],lwd=params$lineweight)
+            }
           }
         }
-        for(i in 2:ncol(LOWS)) {
-          lines(TimeStepVals,LOWS[,i],lty=params$LTY[(i)],col=params$COL[(i-1)],lwd=params$lineweight*0.5)
-          lines(TimeStepVals,UPPS[,i],lty=params$LTY[(i)],col=params$COL[(i-1)],lwd=params$lineweight*0.5)
-        }
-      } else {
-        plot(TimeStepVals,MEANS[,2],type='l',ylim=c(0,1.25*(max(MEANS[,-1],na.rm = T))),lty=params$LTY[1],col=params$COL[1],ylab=y_label,xlab="year",font=20,lwd=params$lineweight)
-        if(ncol(MEANS)>2){
-          for(i in 3:ncol(MEANS)) {
-            lines(TimeStepVals,MEANS[,i],lty=params$LTY[(i-1)],col=params$COL[(i-1)],lwd=params$lineweight)
-          }
-        }
-      }
-      #Changed all the source paths from absolute path to relative path
-      if(any(plot_type == "mort_real_f",plot_type == "mort_real_landf",plot_type == "mort_real_discf")) title(c("F trajectory (mean) by strategy",FILENAME),font.main=20)#only individual plots   
-      if(any(plot_type == "catch",plot_type == "discards",plot_type == "landings"))   title(c("Catch (mean) by strategy",FILENAME),font.main=20)
-      if(any(plot_type == "mort_hcrf_cons",plot_type == "mort_hcrf_targ",plot_type == "quota_hcrf_cons",plot_type == "quota_hcrf_targ")) title(FILENAME,font.main=20)
-      
-      if(params$LEGEND){
-        legend('topright',params$strat,col = params$COL,lty =params$LTY,inset=c(params$legend_x_inset2,-0.2),lwd=1,text.font=3,pt.cex = 1,cex=0.5)
-      }
-      if (any(plot_type == "mort_real_f", plot_type == "mort_real_landf", plot_type == "mort_real_discf")){
-        if(params$WRITE) write.csv(PERCS[,-1],paste(params$plot.path, "\\OUTPUT_FcatchBySTRATEGIES\\", FILENAME, ".csv", sep=""))
-      } else if (any(plot_type == "catch",plot_type == "discards",plot_type == "landings")) {
+        #Changed all the source paths from absolute path to relative path
+        if(any(plot_type == "mort_real_f",plot_type == "mort_real_landf",plot_type == "mort_real_discf")) title(c("F trajectory (mean) by strategy",FILENAME),font.main=20)#only individual plots   
+        if(any(plot_type == "catch",plot_type == "discards",plot_type == "landings"))   title(c("Catch (mean) by strategy",FILENAME),font.main=20)
+        if(any(plot_type == "mort_hcrf_cons",plot_type == "mort_hcrf_targ",plot_type == "quota_hcrf_cons",plot_type == "quota_hcrf_targ")) title(FILENAME,font.main=20)
         
-      } else if (any(plot_type == "mort_hcrf_cons", plot_type == "mort_hcrf_targ", plot_type == "quota_hcrf_cons",plot_type == "quota_hcrf_targ")) {
-        
-      }
-      
+        if(params$LEGEND){
+          legend('topright',params$strat,col = params$COL,lty =params$LTY,inset=c(params$legend_x_inset2,-0.2),lwd=1,text.font=3,pt.cex = 1,cex=0.5)
+        }
+        if (any(plot_type == "mort_real_f", plot_type == "mort_real_landf", plot_type == "mort_real_discf")){
+          if(params$WRITE) write.csv(PERCS[,-1],paste(params$plot.path, "\\OUTPUT_FcatchBySTRATEGIES\\", FILENAME, ".csv", sep=""))
+        } else if (any(plot_type == "catch",plot_type == "discards",plot_type == "landings")) {
+          
+        } else if (any(plot_type == "mort_hcrf_cons", plot_type == "mort_hcrf_targ", plot_type == "quota_hcrf_cons",plot_type == "quota_hcrf_targ")) {
+          
+        }
+      # }
       graphics.off()
     }#next G
     if(!params$SAVE) dev.off()

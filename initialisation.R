@@ -66,7 +66,7 @@ initialise_params = function(batch){
   #           "3" = {params$strats <- params$strats[41:length(params$strats)]})
   
   # 3. specifying a vector of the strategies names -----------
-  params$strats <- c("14 NSMAP 2020_HighF_Highest value", "11 NSMAP 2020_HighF_Weakest stock")
+  # params$strats <- c("14 NSMAP 2020_HighF_Highest value", "11 NSMAP 2020_HighF_Weakest stock")
   
   # 4. enabling the stategies to be chosen interactively-----------------------------------------
   # params$strats <- create_list_strategies(params$RootPath)

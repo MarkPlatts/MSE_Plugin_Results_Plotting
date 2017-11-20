@@ -4,7 +4,6 @@
 rm(list = ls())
 
 #load libraries & sources
-setwd("C:/Users/Mark/Desktop/Desktop etc/GAP/MSE_Plugin_Results_Plotting")
 source("share_tools.R")
 source("initialisation_baltic.R")
 
@@ -17,8 +16,6 @@ root.results <- params$RootPath
 hcr.folders = params$hcr.folders
 
 groups.for.f.or.biomass = "f"
-
-setwd("C:/Users/Mark/Desktop/Desktop etc/GAP/MSE_Plugin_Results_Plotting")
 
 # INITIALISATION END ===============================================================================================
 

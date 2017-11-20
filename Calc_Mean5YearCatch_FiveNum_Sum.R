@@ -1,5 +1,6 @@
-# FUNCTION START ===============================================================================================
+library(data.table)
 
+# FUNCTION START ===============================================================================================
 CreateCatchTables = function(CatchType, root.results, root.plot){
   #Tested by hand - correct MP 14/8/17
   
